@@ -49,3 +49,6 @@ temp/
 # Uploads (if you implement file uploads)
 uploads/*
 !uploads/.gitkeep
+
+#MongoDB
+/Mongo
