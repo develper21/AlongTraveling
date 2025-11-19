@@ -18,7 +18,7 @@ function Register() {
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const iitrEmailRegex = /^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]+\.)*iitr\.ac\.in$/
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -29,8 +29,8 @@ function Register() {
     event.preventDefault()
     setError('')
 
-    if (!iitrEmailRegex.test(formData.email)) {
-      setError('Please use your IITR email address ending with .iitr.ac.in')
+    if (!emailRegex.test(formData.email)) {
+      setError('Please enter a valid email address')
       return
     }
 
@@ -91,10 +91,10 @@ function Register() {
               </h1>
             </div>
             <p className="text-2xl text-gray-700 font-semibold">
-              Start Your Journey with Fellow IITR Students
+              Start Your Journey with Fellow Travelers
               </p>
             <p className="text-lg text-gray-600">
-              Create an account with your IITR email, discover trips, and plan adventures with the campus community.
+              Create an account with your email, discover trips, and plan adventures with a trusted community.
             </p>
           </div>
 
@@ -125,7 +125,7 @@ function Register() {
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900">Verified Community</h3>
-                <p className="text-gray-600 text-sm">Travel with trusted IITR students using institute email addresses.</p>
+                <p className="text-gray-600 text-sm">Travel with trusted community members using verified email addresses.</p>
               </div>
             </div>
           </div>
@@ -138,7 +138,7 @@ function Register() {
                 <h1 className="text-4xl font-bold gradient-text mb-2">HopAlong</h1>
               </div>
               <h2 className="text-3xl font-bold text-gray-900">Create Your Account</h2>
-              <p className="text-gray-600">Use your IITR email to get started</p>
+              <p className="text-gray-600">Use your email to get started</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-3">
@@ -161,7 +161,7 @@ function Register() {
 
               <div>
                 <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
-                  IITR Email Address
+                  Email Address
                 </label>
                 <div className="relative">
                   <input
@@ -170,12 +170,12 @@ function Register() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder="yourname@dept.iitr.ac.in"
+                    placeholder="yourname@example.com"
                     className="input-field"
                     required
                     disabled={isSubmitting}
                   />
-                  {formData.email && iitrEmailRegex.test(formData.email) && (
+                  {formData.email && emailRegex.test(formData.email) && (
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                       <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
                         <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">

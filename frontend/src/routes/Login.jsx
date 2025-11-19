@@ -12,15 +12,14 @@ function Login() {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
-  const iitrEmailRegex = /^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]+\.)*iitr\.ac\.in$/
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
 
-    // Validate IITR email
-    if (!iitrEmailRegex.test(email)) {
-      setError('Please use your IITR email address ending with .iitr.ac.in')
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email address')
       return
     }
 
@@ -39,7 +38,7 @@ function Login() {
       }
     } catch (err) {
       if (err.status === 401) {
-        setError('Invalid credentials. Please check your IITR email and password.')
+        setError('Invalid credentials. Please check your email and password.')
       } else {
         setError(err.error || err.message || 'Unable to reach the server. Please try again later.')
       }
@@ -94,7 +93,7 @@ function Login() {
               Your Travel Companion Awaits
             </p>
             <p className="text-lg text-gray-600">
-              Connect with fellow IIT Roorkee students, share adventures, and create unforgettable memories together.
+              Connect with fellow travelers, share adventures, and create unforgettable memories together.
             </p>
           </div>
 
@@ -125,7 +124,7 @@ function Login() {
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900">Stay Safe</h3>
-                <p className="text-gray-600 text-sm">Travel with verified IITR students you can trust</p>
+                <p className="text-gray-600 text-sm">Travel with verified community members you can trust</p>
               </div>
             </div>
           </div>
@@ -139,13 +138,13 @@ function Login() {
                 <h1 className="text-4xl font-bold gradient-text mb-2">HopAlong</h1>
               </div>
               <h2 className="text-3xl font-bold text-gray-900">Welcome Back!</h2>
-              <p className="text-gray-600">Sign in with your IITR email to continue</p>
+              <p className="text-gray-600">Sign in with your email to continue</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
-                  IITR Email Address
+                  Email Address
                 </label>
                 <div className="relative">
                   <input
@@ -153,12 +152,12 @@ function Login() {
                     id="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="yourname@iitr.ac.in"
+                    placeholder="yourname@example.com"
                     className="input-field"
                     required
                     disabled={isLoading}
                   />
-                  {email && iitrEmailRegex.test(email) && (
+                  {email && emailRegex.test(email) && (
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                       <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
                         <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -225,9 +224,9 @@ function Login() {
             {/* Quick login buttons for demo */}
             {/* <div className="space-y-2">
               {[
-                { name: 'Rahul Sharma', email: 'rahul.sharma@iitr.ac.in' },
-                { name: 'Priya Patel', email: 'priya.patel@iitr.ac.in' },
-                { name: 'Arjun Kumar', email: 'arjun.kumar@iitr.ac.in' }
+                { name: 'Rahul Sharma', email: 'rahul.sharma@example.com' },
+                { name: 'Priya Patel', email: 'priya.patel@example.com' },
+                { name: 'Arjun Kumar', email: 'arjun.kumar@example.com' }
               ].map((user) => (
                 <button
                   key={user.email}
@@ -250,7 +249,7 @@ function Login() {
                 </button>
               ))}
               <p className="text-xs text-center text-gray-500 mt-2">
-                Demo password: password123. New here? Use your IITR email above to register, then sign in with the same password.
+                Demo password: password123. New here? Register above, then sign in with the same password.
               </p>
             </div> */}
 

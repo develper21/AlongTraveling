@@ -146,7 +146,7 @@ const Home = () => {
           </h1>
           
           <p className="text-lg sm:text-xl text-gray-700 max-w-3xl mx-auto mb-10 leading-relaxed">
-            Connect with fellow IITR students, share travel costs, and make unforgettable memories together on your next adventure.
+            Connect with fellow travelers, share travel costs, and make unforgettable memories together on your next adventure.
           </p>
           
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-12">

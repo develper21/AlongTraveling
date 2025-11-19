@@ -28,10 +28,10 @@ function Footer() {
               </span>
             </div>
             <p className="text-gray-600 text-sm leading-relaxed">
-              Connecting IITR students for memorable journeys. Find travel companions, share rides, and explore together.
+              Connecting travelers for memorable journeys. Find companions, share rides, and explore together.
             </p>
             <p className="text-sm text-gray-500 mt-6">
-              © {currentYear} HopAlong • Built for the IIT Roorkee community
+              © {currentYear} HopAlong • Built for the travel community
             </p>
           </div>
 
@@ -72,7 +72,7 @@ function Footer() {
             <div className="flex items-center space-x-2 text-sm text-gray-500">
               <span>Made with</span>
               <HeartIcon className="w-4 h-4 text-red-500 animate-pulse" />
-              <span>for the IITR community</span>
+              <span>for travelers everywhere</span>
             </div>
             <div className="flex space-x-4 items-center">
               <a 

@@ -45,7 +45,7 @@ function CreateTrip() {
             Plan Your Next Adventure
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Share your travel plans and connect with fellow IITR students for an unforgettable journey together.
+            Share your travel plans and connect with fellow travelers for an unforgettable journey together.
           </p>
         </div>
 
