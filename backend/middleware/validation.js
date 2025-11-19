@@ -1,5 +1,4 @@
 const { body, param, query, validationResult } = require('express-validator');
-const { isIITREmail } = require('../utils/emailValidator');
 
 /**
  * Check validation results
@@ -27,12 +26,6 @@ const registerValidation = [
     .trim()
     .notEmpty().withMessage('Email is required')
     .isEmail().withMessage('Please provide a valid email')
-    .custom((value) => {
-      if (!isIITREmail(value)) {
-        throw new Error('Please use a valid IITR email address (@iitr.ac.in)');
-      }
-      return true;
-    })
     .normalizeEmail(),
   body('password')
     .notEmpty().withMessage('Password is required')
