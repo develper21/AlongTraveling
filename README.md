@@ -1,8 +1,53 @@
 # HopAlong
 
-**A Travel Companion Platform for IIT Roorkee Students**
+**Your Travel Companion Platform**
 
-HopAlong is a comprehensive web application designed to connect IIT Roorkee students for shared travel experiences. The platform enables students to discover travel companions, organize trips, manage join requests, and communicate in real-time through an intuitive and secure interface.
+### ⚙️ Tech Stack
+
+<div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin:18px auto 8px; max-width:860px;">
+  <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
+    <img src="https://skillicons.dev/icons?i=react" height="22" alt="React icon" /> React 18
+  </span>
+  <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
+    <img src="https://skillicons.dev/icons?i=vite" height="22" alt="Vite icon" /> Vite
+  </span>
+  <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
+    <img src="https://skillicons.dev/icons?i=tailwind" height="22" alt="Tailwind CSS icon" /> Tailwind CSS
+  </span>
+  <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
+    <img src="https://skillicons.dev/icons?i=nodejs" height="22" alt="Node.js icon" /> Node.js
+  </span>
+  <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
+    <img src="https://skillicons.dev/icons?i=express" height="22" alt="Express icon" /> Express.js
+  </span>
+  <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
+    <img src="https://skillicons.dev/icons?i=mongodb" height="22" alt="MongoDB icon" /> MongoDB & Mongoose
+  </span>
+  <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
+    <img src="https://skillicons.dev/icons?i=socketio" height="22" alt="Socket.IO icon" /> Socket.IO
+  </span>
+  <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
+    <img src="https://skillicons.dev/icons?i=jwt" height="22" alt="JWT icon" /> JWT Auth
+  </span>
+  <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
+    <img src="https://skillicons.dev/icons?i=axios" height="22" alt="Axios icon" /> Axios + Interceptors
+  </span>
+  <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
+    <img src="https://skillicons.dev/icons?i=git" height="22" alt="Git icon" /> DevOps Tooling
+  </span>
+</div>
+
+### ✨ Feature Highlights
+
+- Collaborative trip planning with advanced filters and smart search
+- Secure auth with token storage, profile management, and statistics tracking
+- Real-time chat, typing indicators, and request notifications via Socket.IO
+- Glassmorphism UI, responsive layouts, skeleton loaders, and rich toasts
+
+
+[![HopAlong Dashboard](frontend/src/assets/dashboard.png)](https://alontraveling.netlify.app/ "Open the live HopAlong experience")
+
+HopAlong is a comprehensive web application designed to connect travelers for shared journeys. The platform enables users to discover travel companions, organize trips, manage join requests, and communicate in real-time through an intuitive and secure interface.
 
 ---
 
