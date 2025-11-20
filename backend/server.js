@@ -34,7 +34,14 @@ const httpServer = createServer(app);
 
 // Determine allowed origins for CORS
 const DEFAULT_ORIGIN = process.env.FRONTEND_URL || 'http://localhost:3000';
-const ALLOWED_ORIGINS = [DEFAULT_ORIGIN, 'http://localhost:3001'];
+const ADDITIONAL_ORIGINS = process.env.FRONTEND_URLS
+  ? process.env.FRONTEND_URLS.split(',').map(origin => origin.trim()).filter(Boolean)
+  : [];
+const ALLOWED_ORIGINS = Array.from(new Set([
+  DEFAULT_ORIGIN,
+  'http://localhost:3001',
+  ...ADDITIONAL_ORIGINS
+]));
 
 // Initialize Socket.IO
 const io = new Server(httpServer, {
