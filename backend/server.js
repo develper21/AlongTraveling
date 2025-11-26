@@ -129,7 +129,18 @@ app.use('/api/trips', tripRoutes);
 app.use('/api/requests', requestRoutes);
 app.use('/api/messages', messageRoutes);
 
-// Health check route
+// Health check route for Render
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Server is healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV
+  });
+});
+
+// Health check route for API
 app.get('/api/health', (req, res) => {
   res.status(200).json({
     success: true,
@@ -250,12 +261,43 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-httpServer.listen(PORT, () => {
-  console.log(
-    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
-  );
-  console.log(`API Documentation: http://localhost:${PORT}/`.cyan.underline);
-});
+// Graceful startup
+const startServer = async () => {
+  try {
+    // Test database connection
+    await connectDB();
+    console.log('Database connection verified'.green);
+    
+    httpServer.listen(PORT, '0.0.0.0', () => {
+      console.log(
+        `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
+      );
+      console.log(`API Documentation: http://localhost:${PORT}/`.cyan.underline);
+      
+      // Signal that server is ready
+      if (process.env.NODE_ENV === 'production') {
+        console.log('Server is ready to accept connections'.green.bold);
+      }
+    });
+    
+    // Handle server errors
+    httpServer.on('error', (error) => {
+      if (error.code === 'EADDRINUSE') {
+        console.error(`Port ${PORT} is already in use`.red);
+      } else {
+        console.error(`Server error: ${error.message}`.red);
+      }
+      process.exit(1);
+    });
+    
+  } catch (error) {
+    console.error(`Failed to start server: ${error.message}`.red);
+    process.exit(1);
+  }
+};
+
+// Start the server
+startServer();
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err, promise) => {
