@@ -33,13 +33,19 @@ const app = express();
 const httpServer = createServer(app);
 
 // Determine allowed origins for CORS
-const DEFAULT_ORIGIN = process.env.FRONTEND_URL || 'http://localhost:3000';
+const DEFAULT_ORIGIN = process.env.FRONTEND_URL;
 const ADDITIONAL_ORIGINS = process.env.FRONTEND_URLS
   ? process.env.FRONTEND_URLS.split(',').map(origin => origin.trim()).filter(Boolean)
   : [];
 const ALLOWED_ORIGINS = Array.from(new Set([
   DEFAULT_ORIGIN,
+  'http://localhost:3000',
   'http://localhost:3001',
+  'http://localhost:5173', // Vite default
+  'https://alontraveling.netlify.app',
+  'https://www.alontraveling.netlify.app',
+  'https://alongtraveling.netlify.app',
+  'https://www.alongtraveling.netlify.app',
   ...ADDITIONAL_ORIGINS
 ]));
 
@@ -56,11 +62,45 @@ const io = new Server(httpServer, {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Enable CORS
+// Enable CORS with comprehensive configuration
 app.use(cors({
-  origin: ALLOWED_ORIGINS,
-  credentials: true
+  origin: function (origin, callback) {
+    // In production, allow all origins to prevent CORS issues
+    if (process.env.NODE_ENV === 'production') {
+      return callback(null, true);
+    }
+    
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // Check if origin is in allowed list
+    if (ALLOWED_ORIGINS.includes(origin)) {
+      return callback(null, true);
+    }
+    
+    // Log the blocked origin for debugging
+    console.log(`CORS blocked origin: ${origin}`);
+    console.log(`Allowed origins: ${ALLOWED_ORIGINS.join(', ')}`);
+    
+    callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 }));
+
+// Additional CORS headers for production
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === 'production') {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    res.header('Access-Control-Allow-Credentials', 'true');
+  }
+  next();
+});
 
 // Security middleware
 app.use(helmet());
