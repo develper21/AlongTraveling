@@ -4,37 +4,17 @@
 
 ### ⚙️ Tech Stack
 
-<div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin:18px auto 8px; max-width:860px;">
-  <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" height="22" alt="React icon" /> React 18
-  </span>
-  <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg" height="22" alt="Vite icon" /> Vite
-  </span>
-  <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" height="22" alt="Tailwind CSS icon" /> Tailwind CSS
-  </span>
-  <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" height="22" alt="Node.js icon" /> Node.js
-  </span>
-  <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" height="22" alt="Express icon" /> Express.js
-  </span>
-  <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" height="22" alt="MongoDB icon" /> MongoDB & Mongoose
-  </span>
-  <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/socketio/socketio-original.svg" height="22" alt="Socket.IO icon" /> Socket.IO
-  </span>
-  <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jsonwebtokens/jsonwebtokens-original.svg" height="22" alt="JWT Auth icon" /> JWT Auth
-  </span>
-  <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/axios/axios-plain.svg" height="22" alt="Axios icon" /> Axios + Interceptors
-  </span>
-  <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" height="22" alt="Git icon" /> DevOps Tooling
-  </span>
+<div align="center">
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/Express.js-404D59?style=for-the-badge&logo=express&logoColor=white" alt="Express.js" />
+  <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
+  <img src="https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=socket.io&logoColor=white" alt="Socket.IO" />
+  <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white" alt="JWT" />
+  <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white" alt="Axios" />
+  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" alt="Git" />
 </div>
 
 ### ✨ Feature Highlights
