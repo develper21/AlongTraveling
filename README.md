@@ -6,34 +6,34 @@
 
 <div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin:18px auto 8px; max-width:860px;">
   <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
-    <img src="https://skillicons.dev/icons?i=react" height="22" alt="React icon" /> React 18
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" height="22" alt="React icon" /> React 18
   </span>
   <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
-    <img src="https://skillicons.dev/icons?i=vite" height="22" alt="Vite icon" /> Vite
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg" height="22" alt="Vite icon" /> Vite
   </span>
   <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
-    <img src="https://skillicons.dev/icons?i=tailwind" height="22" alt="Tailwind CSS icon" /> Tailwind CSS
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" height="22" alt="Tailwind CSS icon" /> Tailwind CSS
   </span>
   <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
-    <img src="https://skillicons.dev/icons?i=nodejs" height="22" alt="Node.js icon" /> Node.js
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" height="22" alt="Node.js icon" /> Node.js
   </span>
   <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
-    <img src="https://skillicons.dev/icons?i=express" height="22" alt="Express icon" /> Express.js
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" height="22" alt="Express icon" /> Express.js
   </span>
   <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
-    <img src="https://skillicons.dev/icons?i=mongodb" height="22" alt="MongoDB icon" /> MongoDB & Mongoose
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" height="22" alt="MongoDB icon" /> MongoDB & Mongoose
   </span>
   <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/socketio/socketio-original.svg" height="22" alt="Socket.IO icon" /> Socket.IO
   </span>
   <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
-    🔐 JWT Auth
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jsonwebtokens/jsonwebtokens-original.svg" height="22" alt="JWT Auth icon" /> JWT Auth
   </span>
   <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/axios/axios-plain.svg" height="22" alt="Axios icon" /> Axios + Interceptors
   </span>
   <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
-    <img src="https://skillicons.dev/icons?i=git" height="22" alt="Git icon" /> DevOps Tooling
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" height="22" alt="Git icon" /> DevOps Tooling
   </span>
 </div>
 
@@ -617,5 +617,3 @@ MIT License
 
 Copyright (c) 2025 HopAlong
 ---
-
-**Built for the IIT Roorkee community**
