@@ -1,6 +1,6 @@
-# HopAlong
+# <div style="text-align: center;">HopAlong</div>
 
-**Your Travel Companion Platform**
+<div style="text-align: center; margin-bottom: 20px;">**Your Travel Companion Platform**</div>
 
 ### ⚙️ Tech Stack
 
@@ -24,13 +24,13 @@
     <img src="https://skillicons.dev/icons?i=mongodb" height="22" alt="MongoDB icon" /> MongoDB & Mongoose
   </span>
   <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
-    <img src="https://skillicons.dev/icons?i=socketio" height="22" alt="Socket.IO icon" /> Socket.IO
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/socketio/socketio-original.svg" height="22" alt="Socket.IO icon" /> Socket.IO
   </span>
   <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
-    <img src="https://skillicons.dev/icons?i=jwt" height="22" alt="JWT icon" /> JWT Auth
+    🔐 JWT Auth
   </span>
   <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
-    <img src="https://skillicons.dev/icons?i=axios" height="22" alt="Axios icon" /> Axios + Interceptors
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/axios/axios-plain.svg" height="22" alt="Axios icon" /> Axios + Interceptors
   </span>
   <span style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:14px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); font-weight:600;">
     <img src="https://skillicons.dev/icons?i=git" height="22" alt="Git icon" /> DevOps Tooling
