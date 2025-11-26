@@ -4,8 +4,10 @@ const colors = require('colors');
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGODB_URI, {
-      // These options are no longer needed in Mongoose 6+
-      // but included for compatibility
+      serverSelectionTimeoutMS: 5000, // Timeout after 5s
+      socketTimeoutMS: 45000, // Close sockets after 45s
+      bufferMaxEntries: 0, // Disable mongoose buffering
+      bufferCommands: false, // Disable mongoose buffering
     });
 
     console.log(`MongoDB Connected: ${conn.connection.host}`.cyan.underline.bold);
@@ -30,9 +32,11 @@ const connectDB = async () => {
       process.exit(0);
     });
 
+    return conn;
+
   } catch (error) {
     console.error(`Error: ${error.message}`.red.underline.bold);
-    process.exit(1);
+    throw error; // Don't exit here, let the server handle it
   }
 };
 
