@@ -102,8 +102,7 @@ function TripCard({ trip }) {
         if (event.key === 'Enter') {
           handleCardClick()
         }
-      }}
-    >
+      }}>
       <div className="glass-card-premium p-6 h-full flex flex-col group-hover:-translate-y-2 transition-all duration-500 relative overflow-hidden">
         {/* Gradient overlay on hover */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
@@ -116,8 +115,7 @@ function TripCard({ trip }) {
               <Link
                 to={`/trip/${tripId}`}
                 onClick={(event) => event.stopPropagation()}
-                className="block"
-              >
+                className="block">
                 <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors min-h-[3.5rem]">
                   {trip.title}
                 </h3>
@@ -195,8 +193,7 @@ function TripCard({ trip }) {
               <Link
                 to={`/trip/${tripId}`}
                 onClick={(event) => event.stopPropagation()}
-                className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
-              >
+                className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors">
                 View details →
               </Link>
 
@@ -220,8 +217,7 @@ function TripCard({ trip }) {
                   isButtonDisabled
                     ? 'bg-gray-100 text-gray-500 cursor-not-allowed focus:ring-gray-300'
                     : 'bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-500 text-white hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 focus:ring-blue-500'
-                }`}
-              >
+                }`}>
                 <PaperAirplaneIcon className={`w-4 h-4 ${isSubmitting ? 'animate-pulse' : ''}`} />
                 <span>
                   {isButtonDisabled

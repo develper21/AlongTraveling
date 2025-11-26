@@ -80,8 +80,7 @@ function Footer() {
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="group p-2 rounded-full hover:bg-blue-50 transition-colors duration-200"
-                aria-label="Twitter"
-              >
+                aria-label="Twitter">
                 <img 
                   src={twitterIcon} 
                   alt="Twitter" 
@@ -93,8 +92,7 @@ function Footer() {
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="group p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
-                aria-label="GitHub"
-              >
+                aria-label="GitHub">
                 <img 
                   src={githubIcon} 
                   alt="GitHub" 
@@ -106,8 +104,7 @@ function Footer() {
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="group p-2 rounded-full hover:bg-indigo-50 transition-colors duration-200"
-                aria-label="Discord"
-              >
+                aria-label="Discord">
                 <img 
                   src={discordIcon} 
                   alt="Discord" 

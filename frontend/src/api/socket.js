@@ -15,11 +15,11 @@ export const initSocket = () => {
 
     // Connection event handlers
     socket.on('connect', () => {
-      console.log('✅ Socket.IO connected:', socket.id);
+      console.log('Socket.IO connected:', socket.id);
     });
 
     socket.on('disconnect', (reason) => {
-      console.log('❌ Socket.IO disconnected:', reason);
+      console.log('Socket.IO disconnected:', reason);
     });
 
     socket.on('connect_error', (error) => {

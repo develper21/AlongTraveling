@@ -62,8 +62,7 @@ function ChatPanel({ tripId, messages, onSendMessage }) {
             return (
               <div
                 key={messageId}
-                className={`flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`}
-              >
+                className={`flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`}>
                 <div className={`flex space-x-2 max-w-[70%] ${isCurrentUser ? 'flex-row-reverse space-x-reverse' : ''}`}>
                   {/* Avatar */}
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
@@ -82,8 +81,7 @@ function ChatPanel({ tripId, messages, onSendMessage }) {
                         isCurrentUser
                           ? 'bg-blue-600 text-white'
                           : 'bg-gray-100 text-gray-900'
-                      }`}
-                    >
+                      }`}>
                       <p className="text-sm">{messageContent}</p>
                     </div>
                     <p className={`text-xs text-gray-500 mt-1 px-2 ${isCurrentUser ? 'text-right' : ''}`}>
@@ -111,8 +109,7 @@ function ChatPanel({ tripId, messages, onSendMessage }) {
           <button
             type="submit"
             disabled={!newMessage.trim()}
-            className="btn-primary flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
+            className="btn-primary flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed">
             <PaperAirplaneIcon className="w-5 h-5" />
             <span className="hidden sm:inline">Send</span>
           </button>

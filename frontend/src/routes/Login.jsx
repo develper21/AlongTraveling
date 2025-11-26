@@ -193,8 +193,7 @@ function Login() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="btn-primary w-full flex items-center justify-center space-x-2 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-              >
+                className="btn-primary w-full flex items-center justify-center space-x-2 text-lg disabled:opacity-50 disabled:cursor-not-allowed">
                 {isLoading ? (
                   <>
                     <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -211,48 +210,6 @@ function Login() {
                 )}
               </button>
             </form>
-
-            {/* <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-gray-500 font-medium">Quick Login (Demo)</span>
-              </div>
-            </div> */}
-
-            {/* Quick login buttons for demo */}
-            {/* <div className="space-y-2">
-              {[
-                { name: 'Rahul Sharma', email: 'rahul.sharma@example.com' },
-                { name: 'Priya Patel', email: 'priya.patel@example.com' },
-                { name: 'Arjun Kumar', email: 'arjun.kumar@example.com' }
-              ].map((user) => (
-                <button
-                  key={user.email}
-                  onClick={() => quickLogin(user.email)}
-                  disabled={isLoading}
-                  className="w-full p-3 text-left rounded-xl border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-all group disabled:opacity-50"
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold">
-                      {user.name.split(' ').map(n => n[0]).join('')}
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                        {user.name}
-                      </p>
-                      <p className="text-xs text-gray-500">{user.email}</p>
-                    </div>
-                    <ArrowRightIcon className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
-                  </div>
-                </button>
-              ))}
-              <p className="text-xs text-center text-gray-500 mt-2">
-                Demo password: password123. New here? Register above, then sign in with the same password.
-              </p>
-            </div> */}
-
             <p className="text-center text-sm text-gray-500">
               New to HopAlong?{' '}
               <Link to="/register" className="text-blue-600 font-semibold hover:text-blue-700">

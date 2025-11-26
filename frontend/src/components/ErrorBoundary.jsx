@@ -40,8 +40,7 @@ class ErrorBoundary extends Component {
               className="w-6 h-6 text-red-500 mr-2" 
               fill="none" 
               stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
+              viewBox="0 0 24 24">
               <path 
                 strokeLinecap="round" 
                 strokeLinejoin="round" 
@@ -69,8 +68,7 @@ class ErrorBoundary extends Component {
           <div className="mt-4">
             <button
               onClick={this.handleReset}
-              className="px-4 py-2 bg-red-100 hover:bg-red-200 text-red-800 rounded-md text-sm font-medium transition-colors"
-            >
+              className="px-4 py-2 bg-red-100 hover:bg-red-200 text-red-800 rounded-md text-sm font-medium transition-colors">
               Try again
             </button>
           </div>

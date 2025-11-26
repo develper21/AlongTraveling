@@ -152,16 +152,14 @@ const Home = () => {
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-12">
             <Link 
               to="/create" 
-              className="btn-primary group inline-flex items-center justify-center space-x-3 text-lg px-8 py-4 rounded-xl transition-all duration-300"
-            >
+              className="btn-primary group inline-flex items-center justify-center space-x-3 text-lg px-8 py-4 rounded-xl transition-all duration-300">
               <PlusIcon className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
               <span>Create Your Trip</span>
             </Link>
             <button 
               onClick={loadTrips}
               className="inline-flex items-center justify-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors duration-300 group"
-              aria-label="Refresh trips"
-            >
+              aria-label="Refresh trips">
               <div className="p-2 bg-gray-100 group-hover:bg-blue-50 rounded-full transition-colors duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -195,8 +193,7 @@ const Home = () => {
             ].map((stat, index) => (
               <div 
                 key={index} 
-                className={`glass-card p-5 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-${stat.color}-100/50`}
-              >
+                className={`glass-card p-5 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-${stat.color}-100/50`}>
                 <div className="flex items-center space-x-4">
                   <div className={`p-3 bg-${stat.color}-50 rounded-xl`}>
                     {stat.icon}
@@ -246,8 +243,7 @@ const Home = () => {
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
               className="px-4 py-2 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all bg-white hover:border-gray-300 cursor-pointer"
-              aria-label="Sort trips"
-            >
+              aria-label="Sort trips">
               <option value="latest">Sort by: Latest</option>
               <option value="budget-low">Sort by: Budget (Low to High)</option>
               <option value="budget-high">Sort by: Budget (High to Low)</option>
@@ -257,8 +253,7 @@ const Home = () => {
               onClick={loadTrips}
               className="p-2 text-gray-500 hover:text-blue-600 transition-colors"
               aria-label="Refresh trips"
-              disabled={loading}
-            >
+              disabled={loading}>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
@@ -298,8 +293,7 @@ const Home = () => {
               <div 
                 key={trip.id || `trip-${index}`} 
                 className="stagger-item" 
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
+                style={{ animationDelay: `${index * 0.1}s` }}>
                 <TripCard trip={trip} />
               </div>
             ))}

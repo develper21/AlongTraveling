@@ -28,8 +28,7 @@ function RequestModal({ isOpen, onClose, onSubmit, tripTitle }) {
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
-          >
+            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
             <XMarkIcon className="w-6 h-6" />
           </button>
 
@@ -63,14 +62,12 @@ function RequestModal({ isOpen, onClose, onSubmit, tripTitle }) {
               <button
                 type="button"
                 onClick={onClose}
-                className="btn-secondary"
-              >
+                className="btn-secondary">
                 Cancel
               </button>
               <button
                 type="submit"
-                className="btn-primary"
-              >
+                className="btn-primary">
                 Send Request
               </button>
             </div>

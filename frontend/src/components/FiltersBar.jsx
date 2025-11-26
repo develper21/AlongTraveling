@@ -18,8 +18,7 @@ function FiltersBar({ filters, onFilterChange }) {
         {activeFiltersCount > 0 && (
           <button
             onClick={() => onFilterChange({})}
-            className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
-          >
+            className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors">
             Clear All
           </button>
         )}
@@ -77,8 +76,7 @@ function FiltersBar({ filters, onFilterChange }) {
           <select
             value={filters.tripType || ''}
             onChange={(e) => onFilterChange({ ...filters, tripType: e.target.value })}
-            className="input-field w-full"
-          >
+            className="input-field w-full">
             <option value="">All Types</option>
             <option value="vacation">Vacation</option>
             <option value="trek">Trek</option>

@@ -51,9 +51,8 @@ function Header() {
               />
             </div>
             <div
-              className="text-yellow-400 text-4xl font-extrabold tracking-tight drop-shadow-md font-[1000]"
-              style={{ fontFamily: `'Changa One', serif` }}
-            >
+              className="text-yellow-400 text-4xl font-extrabold tracking-tight drop-shadow-md"
+              style={{ fontFamily: `'Changa One', serif` }}>
               HopAlong
             </div>
           </Link>
@@ -62,22 +61,19 @@ function Header() {
           <nav className="hidden md:flex items-center space-x-2">
             <Link 
               to="/home" 
-              className={`${navBaseClasses} ${isActive('/home') ? navActiveClasses : navInactiveClasses}`}
-            >
+              className={`${navBaseClasses} ${isActive('/home') ? navActiveClasses : navInactiveClasses}`}>
               <HomeIcon className="w-5 h-5" />
               <span>Home</span>
             </Link>
             <Link 
               to="/create" 
-              className={`${navBaseClasses} ${isActive('/create') ? navActiveClasses : navInactiveClasses}`}
-            >
+              className={`${navBaseClasses} ${isActive('/create') ? navActiveClasses : navInactiveClasses}`}>
               <PlusIcon className="w-5 h-5" />
               <span>Create Trip</span>
             </Link>
             <Link 
               to="/dashboard" 
-              className={`${navBaseClasses} ${isActive('/dashboard') ? navActiveClasses : navInactiveClasses}`}
-            >
+              className={`${navBaseClasses} ${isActive('/dashboard') ? navActiveClasses : navInactiveClasses}`}>
               <ChartBarIcon className="w-5 h-5" />
               <span>Dashboard</span>
             </Link>
@@ -88,8 +84,7 @@ function Header() {
             {/* Mobile menu button */}
             <button
               onClick={() => setShowMobileMenu(!showMobileMenu)}
-              className="md:hidden text-white p-2 hover:bg-white/20 rounded-xl transition-all"
-            >
+              className="md:hidden text-white p-2 hover:bg-white/20 rounded-xl transition-all">
               {showMobileMenu ? (
                 <XMarkIcon className="w-6 h-6" />
               ) : (
@@ -101,8 +96,7 @@ function Header() {
             <div className="relative">
               <button
                 onClick={() => setShowUserMenu(!showUserMenu)}
-                className={`flex items-center space-x-3 px-4 py-2 rounded-xl transition-all border border-white/30 backdrop-blur-sm ${location.pathname.startsWith('/profile') ? 'bg-white/30 ring-2 ring-white/30' : 'bg-white/10 hover:bg-white/20'}`}
-              >
+                className={`flex items-center space-x-3 px-4 py-2 rounded-xl transition-all border border-white/30 backdrop-blur-sm ${location.pathname.startsWith('/profile') ? 'bg-white/30 ring-2 ring-white/30' : 'bg-white/10 hover:bg-white/20'}`}>
                 <div className="w-8 h-8 rounded-full bg-blue-400 flex items-center justify-center text-white font-bold text-sm">
                   {getInitials(currentUser.name)}
                 </div>
@@ -130,15 +124,13 @@ function Header() {
                     <Link
                       to={`/profile/me`}
                       onClick={() => setShowUserMenu(false)}
-                      className="flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer"
-                    >
+                      className="flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer">
                       <UserCircleIcon className="w-5 h-5 text-gray-600" />
                       <span className="text-gray-700 font-medium">My Profile</span>
                     </Link>
                     <button
                       onClick={handleLogout}
-                      className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-red-50 transition-colors text-red-600 cursor-pointer"
-                    >
+                      className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-red-50 transition-colors text-red-600 cursor-pointer">
                       <ArrowRightOnRectangleIcon className="w-5 h-5" />
                       <span className="font-medium">Logout</span>
                     </button>
@@ -155,24 +147,21 @@ function Header() {
             <Link 
               to="/home" 
               onClick={() => setShowMobileMenu(false)}
-              className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${isActive('/home') ? 'bg-white/30 text-white ring-2 ring-white/30' : 'text-white hover:bg-white/20'}`}
-            >
+              className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${isActive('/home') ? 'bg-white/30 text-white ring-2 ring-white/30' : 'text-white hover:bg-white/20'}`}>
               <HomeIcon className="w-5 h-5" />
               <span className="font-medium">Home</span>
             </Link>
             <Link 
               to="/create" 
               onClick={() => setShowMobileMenu(false)}
-              className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${isActive('/create') ? 'bg-white/30 text-white ring-2 ring-white/30' : 'text-white hover:bg-white/20'}`}
-            >
+              className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${isActive('/create') ? 'bg-white/30 text-white ring-2 ring-white/30' : 'text-white hover:bg-white/20'}`}>
               <PlusIcon className="w-5 h-5" />
               <span className="font-medium">Create Trip</span>
             </Link>
             <Link 
               to="/dashboard" 
               onClick={() => setShowMobileMenu(false)}
-              className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${isActive('/dashboard') ? 'bg-white/30 text-white ring-2 ring-white/30' : 'text-white hover:bg-white/20'}`}
-            >
+              className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${isActive('/dashboard') ? 'bg-white/30 text-white ring-2 ring-white/30' : 'text-white hover:bg-white/20'}`}>
               <ChartBarIcon className="w-5 h-5" />
               <span className="font-medium">Dashboard</span>
             </Link>

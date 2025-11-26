@@ -36,8 +36,7 @@ function CreateTrip() {
         <div className="text-center mb-8">
           <button
             onClick={() => navigate(-1)}
-            className="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 mb-4 transition-colors"
-          >
+            className="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 mb-4 transition-colors">
             <ArrowLeftIcon className="w-4 h-4 mr-1" />
             Back to trips
           </button>

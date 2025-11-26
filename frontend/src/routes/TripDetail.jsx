@@ -316,8 +316,7 @@ function TripDetail() {
         {!isOwner && !isJoined && trip.status === 'open' && !hasRequested && (
           <button
             onClick={() => setShowRequestModal(true)}
-            className="btn-primary w-full md:w-auto"
-          >
+            className="btn-primary w-full md:w-auto">
             Request to Join
           </button>
         )}
@@ -350,8 +349,7 @@ function TripDetail() {
               activeTab === 'details'
                 ? 'text-blue-600 border-b-2 border-blue-600'
                 : 'text-gray-600 hover:text-gray-900'
-            }`}
-          >
+            }`}>
             Trip Details
           </button>
           <button
@@ -360,8 +358,7 @@ function TripDetail() {
               activeTab === 'participants'
                 ? 'text-blue-600 border-b-2 border-blue-600'
                 : 'text-gray-600 hover:text-gray-900'
-            }`}
-          >
+            }`}>
             Participants ({trip.participants.length})
           </button>
           {isOwner && (
@@ -371,8 +368,7 @@ function TripDetail() {
                 activeTab === 'requests'
                   ? 'text-blue-600 border-b-2 border-blue-600'
                   : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
+              }`}>
               Pending Requests ({requests.filter(r => r.status === 'pending').length})
             </button>
           )}
@@ -383,8 +379,7 @@ function TripDetail() {
                 activeTab === 'chat'
                   ? 'text-blue-600 border-b-2 border-blue-600'
                   : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
+              }`}>
               Group Chat
             </button>
           )}

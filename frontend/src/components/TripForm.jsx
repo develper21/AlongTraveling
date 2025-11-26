@@ -273,8 +273,7 @@ function TripForm({ onSubmit, initialData = null }) {
               name="travelMode"
               value={formData.travelMode}
               onChange={handleChange}
-              className="input-field w-full pl-10 appearance-none pr-10"
-            >
+              className="input-field w-full pl-10 appearance-none pr-10">
               <option value="bus">Bus</option>
               <option value="train">Train</option>
               <option value="flight">Flight</option>
@@ -303,8 +302,7 @@ function TripForm({ onSubmit, initialData = null }) {
               name="tripType"
               value={formData.tripType}
               onChange={handleChange}
-              className="input-field w-full pl-10 appearance-none pr-10 z-200"
-            >
+              className="input-field w-full pl-10 appearance-none pr-10 z-200">
               <option value="vacation">Vacation</option>
               <option value="trek">Trek</option>
               <option value="home">Home</option>
@@ -353,8 +351,7 @@ function TripForm({ onSubmit, initialData = null }) {
       <div className="pt-4">
         <button 
           type="submit" 
-          className="w-full md:w-auto px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-lg shadow-md hover:shadow-lg transform transition-all duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-        >
+          className="w-full md:w-auto px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-lg shadow-md hover:shadow-lg transform transition-all duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
           <div className="flex items-center justify-center space-x-2">
             <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />

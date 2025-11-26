@@ -49,8 +49,7 @@ function NotificationToast() {
       {notifications.map((notification) => (
         <div
           key={notification.id}
-          className={`${getBackgroundColor(notification.type)} border-2 rounded-2xl shadow-2xl p-4 flex items-start space-x-3 animate-slide-in-top backdrop-blur-xl`}
-        >
+          className={`${getBackgroundColor(notification.type)} border-2 rounded-2xl shadow-2xl p-4 flex items-start space-x-3 animate-slide-in-top backdrop-blur-xl`}>
           <div className="flex-shrink-0">
             {getIcon(notification.type)}
           </div>
@@ -61,8 +60,7 @@ function NotificationToast() {
           </div>
           <button
             onClick={() => removeNotification(notification.id)}
-            className="flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
-          >
+            className="flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors">
             <XMarkIcon className="w-5 h-5" />
           </button>
         </div>

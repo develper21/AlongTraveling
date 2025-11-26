@@ -231,8 +231,7 @@ function Register() {
                   value={formData.year}
                   onChange={handleChange}
                   className="input-field"
-                  disabled={isSubmitting}
-                >
+                  disabled={isSubmitting}>
                   <option value="">Select your year</option>
                   <option value="1st Year">1st Year</option>
                   <option value="2nd Year">2nd Year</option>
@@ -250,8 +249,7 @@ function Register() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="btn-primary w-full flex items-center justify-center space-x-2 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-              >
+                className="btn-primary w-full flex items-center justify-center space-x-2 text-lg disabled:opacity-50 disabled:cursor-not-allowed">
                 {isSubmitting ? (
                   <>
                     <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

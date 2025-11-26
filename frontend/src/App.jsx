@@ -12,7 +12,6 @@ import Profile from './routes/Profile'
 import NotFound from './routes/NotFound'
 import useStore from './store/useStore'
 
-// Protected Route wrapper
 function ProtectedRoute({ children }) {
   const { isAuthenticated } = useStore()
   

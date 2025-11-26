@@ -188,8 +188,7 @@ function Profile() {
             {isOwnProfile && !isEditing && (
               <button
                 onClick={handleEdit}
-                className="mt-4 md:mt-0 btn-secondary flex items-center space-x-2"
-              >
+                className="mt-4 md:mt-0 btn-secondary flex items-center space-x-2">
                 <PencilIcon className="w-5 h-5" />
                 <span>Edit Profile</span>
               </button>
@@ -201,16 +200,14 @@ function Profile() {
                 <button
                   onClick={handleCancel}
                   disabled={saving}
-                  className="px-4 py-2 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors flex items-center space-x-2"
-                >
+                  className="px-4 py-2 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors flex items-center space-x-2">
                   <XMarkIcon className="w-5 h-5" />
                   <span>Cancel</span>
                 </button>
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="btn-primary flex items-center space-x-2"
-                >
+                  className="btn-primary flex items-center space-x-2">
                   <CheckIcon className="w-5 h-5" />
                   <span>{saving ? 'Saving...' : 'Save Changes'}</span>
                 </button>
@@ -264,8 +261,7 @@ function Profile() {
                   <select
                     value={formData.year}
                     onChange={(e) => setFormData({ ...formData, year: e.target.value })}
-                    className="input-field w-full"
-                  >
+                    className="input-field w-full">
                     <option value="1st Year">1st Year</option>
                     <option value="2nd Year">2nd Year</option>
                     <option value="3rd Year">3rd Year</option>
@@ -369,8 +365,7 @@ function Profile() {
                   <Link
                     key={trip._id || trip.id}
                     to={`/trip/${trip._id || trip.id}`}
-                    className="block p-4 rounded-xl border border-gray-200 hover:border-blue-400 hover:bg-blue-50 transition-all group"
-                  >
+                    className="block p-4 rounded-xl border border-gray-200 hover:border-blue-400 hover:bg-blue-50 transition-all group">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
@@ -424,8 +419,7 @@ function Profile() {
                   <Link
                     key={trip._id || trip.id}
                     to={`/trip/${trip._id || trip.id}`}
-                    className="block p-4 rounded-xl border border-gray-200 hover:border-green-400 hover:bg-green-50 transition-all group"
-                  >
+                    className="block p-4 rounded-xl border border-gray-200 hover:border-green-400 hover:bg-green-50 transition-all group">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <h3 className="font-semibold text-gray-900 group-hover:text-green-600 transition-colors">
