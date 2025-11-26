@@ -23,9 +23,12 @@ const TripSchema = new mongoose.Schema({
     required: [true, 'Please add a start date'],
     validate: {
       validator: function(value) {
-        return value >= new Date();
+        // Allow dates from today onwards (not just future)
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Set to start of day
+        return value >= today;
       },
-      message: 'Start date must be in the future'
+      message: 'Start date must be today or in the future'
     }
   },
   endDate: {
