@@ -1,0 +1,995 @@
+# Dependencies
+node_modules/
+*/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Build outputs
+dist/
+build/
+*/dist/
+*/build/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*/.env
+*/.env.local
+*/.env.development.local
+*/.env.test.local
+*/.env.production.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*/coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+jspm_packages/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# Next.js build output
+.next
+out
+
+# Nuxt.js build / generate output
+.nuxt
+dist
+
+# Gatsby files
+.cache/
+# Comment in the public line in if your project uses Gatsby and not Next.js
+# https://nextjs.org/blog/next-9-1#public-directory-support
+# public
+
+# vuepress build output
+.vuepress/dist
+
+# vuepress v2.x temp and cache directory
+.temp
+.cache
+
+# Docusaurus cache and generated files
+.docusaurus
+
+# Serverless directories
+.serverless/
+
+# FuseBox cache
+.fusebox/
+
+# DynamoDB Local files
+.dynamodb/
+
+# TernJS port file
+.tern-port
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test
+
+# yarn v2
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Cypress
+cypress/videos/
+cypress/screenshots/
+*/cypress/videos/
+*/cypress/screenshots/
+
+# Test results
+test-results/
+junit.xml
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Database
+*.sqlite
+*.sqlite3
+*.db
+
+# Backup files
+*.bak
+*.backup
+
+# Lock files (keep package-lock.json but ignore yarn.lock if using npm)
+yarn.lock
+*/yarn.lock
+
+# Docker
+.dockerignore
+
+# Kubernetes
+*.kubeconfig
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# AWS
+.aws/
+
+# Google Cloud
+.gcloud/
+
+# Azure
+.azure/
+
+# Local development
+.local
+.localcache
+
+# Storybook build outputs
+storybook-static
+
+# Temporary folders
+tmp/
+temp/
+
+# Upload directories
+uploads/
+*/uploads/
+
+# Cache directories
+.cache/
+*/cache/
+
+# Session files
+sessions/
+*.session
+
+# SSL certificates
+*.pem
+*.key
+*.crt
+*.csr
+
+# Configuration files with sensitive data
+config/production.json
+config/staging.json
+
+# Monitoring and analytics
+*.prof
+
+# Sentry
+.sentryclirc
+
+# ESLint
+.eslintcache
+
+# Prettier
+.prettierignore
+
+# Husky
+.husky/_/
+
+# Lint-staged
+.lintstagedrc
+
+# Commitizen
+.czrc
+
+# Conventional changelog
+.changelogrc
+
+# Release-it
+.release-it.json
+
+# Semantic release
+.releaserc.json
+.releaserc.js
+
+# GitHub
+.github/workflows/*.tmp
+
+# Render
+render.yaml.tmp
+
+# Netlify
+netlify.toml.tmp
+
+# Vercel
+vercel.json.tmp
+
+# Heroku
+Procfile.tmp
+
+# Docker
+Dockerfile.tmp
+docker-compose.yml.tmp
+
+# Documentation
+docs/build/
+docs/.vitepress/cache/
+docs/.vitepress/dist/
+
+# API documentation
+api-docs/
+
+# Performance monitoring
+.perf
+
+# Bundle analyzer
+bundle-analyzer-report.html
+
+# Webpack
+.webpack/
+
+# Rollup
+.rollup.cache
+
+# Vite
+.vite/
+
+# SvelteKit
+.svelte-kit/
+
+# Svelte
+.svelte-kit/
+
+# Remix
+.build/
+
+# Astro
+dist/
+.astro/
+
+# Nuxt
+.output/
+
+# SolidJS
+solid-meta/
+
+# Qwik
+dist/
+
+# Marko
+.marko/
+
+# Eleventy
+.11tydata/
+
+# Gulp
+.gulp/
+
+# Grunt
+.grunt/
+
+# Webpack
+webpack.config.js.tmp
+
+# Babel
+.babelrc.tmp
+.babelrc.json.tmp
+
+# PostCSS
+postcss.config.js.tmp
+
+# Tailwind CSS
+tailwind.config.js.tmp
+
+# TypeScript
+tsconfig.json.tmp
+tsconfig.build.json.tmp
+
+# Jest
+jest.config.js.tmp
+jest.setup.js.tmp
+
+# Cypress
+cypress.config.js.tmp
+cypress.env.json.tmp
+
+# Playwright
+playwright.config.js.tmp
+playwright-report/
+
+# Testing Library
+testing-library.js.tmp
+
+# ESLint
+.eslintrc.js.tmp
+.eslintrc.json.tmp
+
+# Prettier
+.prettierrc.js.tmp
+.prettierrc.json.tmp
+
+# Stylelint
+.stylelintrc.js.tmp
+.stylelintrc.json.tmp
+
+# Commitlint
+commitlint.config.js.tmp
+
+# Husky
+.huskyrc.js.tmp
+.huskyrc.json.tmp
+
+# Lint-staged
+.lintstagedrc.js.tmp
+.lintstagedrc.json.tmp
+
+# Conventional changelog
+.conventional-changelog.js.tmp
+.conventional-changelog.json.tmp
+
+# Release-it
+.release-it.js.tmp
+.release-it.json.tmp
+
+# Semantic release
+.releaserc.js.tmp
+.releaserc.json.tmp
+
+# GitHub Actions
+.github/workflows/*.yml.tmp
+.github/workflows/*.yaml.tmp
+
+# Docker
+Dockerfile.tmp
+docker-compose.yml.tmp
+docker-compose.override.yml.tmp
+
+# Kubernetes
+k8s/*.yml.tmp
+k8s/*.yaml.tmp
+
+# Helm
+charts/*/values.yaml.tmp
+
+# Terraform
+*.tf.tmp
+*.tfvars.tmp
+
+# Ansible
+*.yml.tmp
+*.yaml.tmp
+inventory/*.tmp
+
+# Packer
+*.json.tmp
+
+# Vagrant
+Vagrantfile.tmp
+
+# Pulumi
+Pulumi.yaml.tmp
+Pulumi.dev.yaml.tmp
+Pulumi.prod.yaml.tmp
+
+# Serverless
+serverless.yml.tmp
+serverless.yaml.tmp
+
+# AWS SAM
+template.yaml.tmp
+template.yml.tmp
+
+# Google Cloud Functions
+index.js.tmp
+package.json.tmp
+
+# Azure Functions
+host.json.tmp
+function.json.tmp
+
+# LocalStack
+.localstack/
+
+# Testcontainers
+.testcontainers/
+
+# WireMock
+__files/
+mappings/
+
+# Mockoon
+*.mockoon.json
+
+# Postman
+postman_collection.json.tmp
+postman_environment.json.tmp
+
+# Insomnia
+*.insomnia.json.tmp
+
+# GraphQL
+schema.graphql.tmp
+schema.gql.tmp
+
+# OpenAPI
+openapi.yaml.tmp
+openapi.json.tmp
+swagger.yaml.tmp
+swagger.json.tmp
+
+# AsyncAPI
+asyncapi.yaml.tmp
+asyncapi.json.tmp
+
+# API Blueprint
+apib.md.tmp
+
+# RAML
+raml.yaml.tmp
+raml.yml.tmp
+
+# gRPC
+*.proto.tmp
+
+# Protocol Buffers
+*.pb.tmp
+
+# gRPC Gateway
+*.gw.tmp
+
+# Envoy
+envoy.yaml.tmp
+
+# Kong
+kong.yaml.tmp
+kong.yml.tmp
+
+# NGINX
+nginx.conf.tmp
+
+# Apache
+httpd.conf.tmp
+
+# HAProxy
+haproxy.cfg.tmp
+
+# Traefik
+traefik.yaml.tmp
+traefik.yml.tmp
+traefik.toml.tmp
+
+# Certbot
+certbot.ini.tmp
+certbot.cfg.tmp
+
+# Let's Encrypt
+letsencrypt.ini.tmp
+letsencrypt.cfg.tmp
+
+# SSL/TLS
+*.pem.tmp
+*.key.tmp
+*.crt.tmp
+*.csr.tmp
+
+# Monitoring
+prometheus.yml.tmp
+grafana.ini.tmp
+dashboard.json.tmp
+
+# Logging
+logrotate.conf.tmp
+rsyslog.conf.tmp
+
+# Security
+security.yaml.tmp
+security.yml.tmp
+
+# CI/CD
+.gitlab-ci.yml.tmp
+.bitbucket-pipelines.yml.tmp
+.circleci.yml.tmp
+.travis.yml.tmp
+appveyor.yml.tmp
+
+# Jenkins
+Jenkinsfile.tmp
+
+# TeamCity
+teamcity.xml.tmp
+
+# Bamboo
+bamboo-spec.yml.tmp
+
+# Octopus Deploy
+octopus.yml.tmp
+
+# Azure DevOps
+azure-pipelines.yml.tmp
+
+# Buildkite
+buildkite.yml.tmp
+
+# Codeship
+codeship-services.yml.tmp
+codeship-steps.yml.tmp
+
+# Semaphore
+.semaphore/semaphore.yml.tmp
+
+# Travis CI
+.travis.yml.tmp
+
+# AppVeyor
+.appveyor.yml.tmp
+
+# CircleCI
+.circleci/config.yml.tmp
+
+# GitLab CI
+.gitlab-ci.yml.tmp
+
+# GitHub Actions
+.github/workflows/*.yml.tmp
+.github/workflows/*.yaml.tmp
+
+# Bitbucket Pipelines
+bitbucket-pipelines.yml.tmp
+
+# AWS CodePipeline
+codepipeline.json.tmp
+
+# AWS CodeBuild
+buildspec.yml.tmp
+
+# AWS SAM
+template.yaml.tmp
+template.yml.tmp
+
+# Serverless Framework
+serverless.yml.tmp
+serverless.yaml.tmp
+
+# AWS CDK
+cdk.json.tmp
+
+# Pulumi
+Pulumi.yaml.tmp
+Pulumi.dev.yaml.tmp
+Pulumi.prod.yaml.tmp
+
+# Terraform
+*.tf.tmp
+*.tfvars.tmp
+*.tfstate.tmp
+*.tfstate.backup.tmp
+
+# Ansible
+*.yml.tmp
+*.yaml.tmp
+inventory/*.tmp
+
+# Docker
+Dockerfile.tmp
+docker-compose.yml.tmp
+docker-compose.override.yml.tmp
+
+# Kubernetes
+k8s/*.yml.tmp
+k8s/*.yaml.tmp
+
+# Helm
+charts/*/values.yaml.tmp
+
+# Package managers
+composer.lock.tmp
+Gemfile.lock.tmp
+poetry.lock.tmp
+Pipfile.lock.tmp
+Cargo.lock.tmp
+go.mod.tmp
+go.sum.tmp
+Gopkg.lock.tmp
+Gopkg.toml.tmp
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+.envrc
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Java
+*.class
+*.log
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# C/C++
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.dylib
+
+# C#
+*.dll
+*.exe
+*.pdb
+*.user
+*.aps
+*.vspscc
+*.vssscc
+*.suo
+*.cache
+*.ilk
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp_proj
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Rust
+*.pdb
+*.dll
+*.exe
+*.so
+*.dylib
+*.rlib
+
+# PHP
+*.class
+*.log
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Ruby
+*.gem
+*.rbc
+
+# Swift
+*.swp
+*.swo
+*~
+
+# Kotlin
+*.class
+*.log
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Scala
+*.class
+*.log
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# .NET
+*.dll
+*.exe
+*.pdb
+*.user
+*.aps
+*.vspscc
+*.vssscc
+*.suo
+*.cache
+*.ilk
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp_proj
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# Mobile development
+# iOS
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Android
+*.apk
+*.ap_
+*.dex
+*.class
+bin/
+gen/
+out/
+build/
+.gradle/
+local.properties
+*.keystore
+!debug.keystore
+
+# Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+
+# React Native
+android/app/build/
+ios/build/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Cordova
+platforms/
+plugins/
+www/
+
+# Ionic
+www/
+platforms/
+plugins/
+
+# NativeScript
+platforms/
+hooks/
+node_modules/
+*.tns
+
+# Xamarin
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Unity
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+
+# Unreal Engine
+Bin/
+Build/
+DerivedDataCache/
+Intermediate/
+Saved/
+
+# Game development
+*.sav
+*.save
+
+# Audio/Video
+*.mp3
+*.wav
+*.flac
+*.ogg
+*.aac
+*.m4a
+*.mp4
+*.avi
+*.mkv
+*.mov
+*.wmv
+*.flv
+
+# Images
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.svg
+*.ico
+*.webp
+
+# Documents
+*.pdf
+*.doc
+*.docx
+*.xls
+*.xlsx
+*.ppt
+*.pptx
+*.txt
+*.rtf
+*.odt
+*.ods
+*.odp
+
+# Archives
+*.zip
+*.rar
+*.7z
+*.tar
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.gz
+*.bz2
+*.xz
+
+# Database backups
+*.sql
+*.dump
+*.backup
+
+# Configuration files with secrets
+config/secrets.json
+config/production.json
+config/staging.json
+.env.production
+.env.staging
+
+# SSL certificates
+*.pem
+*.key
+*.crt
+*.csr
+
+# SSH keys
+*.pem
+id_rsa
+id_rsa.pub
+id_dsa
+id_dsa.pub
+
+# GPG keys
+*.gpg
+*.asc
+
+# AWS credentials
+.aws/credentials
+.aws/config
+
+# Google Cloud credentials
+gcloud-service-account.json
+
+# Azure credentials
+azure-credentials.json
+
+# Kubernetes secrets
+secrets.yaml
+secrets.yml
+
+# Docker secrets
+secrets.env
+
+# Environment files with secrets
+.env.secrets
+.env.local.secrets
+.env.production.secrets
+.env.staging.secrets
