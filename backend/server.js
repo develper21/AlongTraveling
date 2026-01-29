@@ -2,19 +2,16 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const helmet = require('helmet');
-const morgan = require('morgan');
-const compression = require('compression');
-const rateLimit = require('express-rate-limit');
-const { createServer } = require('http');
-const { Server } = require('socket.io');
-require('colors');
+const customLogger = require('./utils/logger');
 
 // Load env vars
 dotenv.config();
 
 // Connect to database
 const connectDB = require('./config/db');
-connectDB();
+
+// Redis connection
+const { connectRedis } = require('./config/redis');
 
 // Swagger documentation
 const { specs, swaggerUi } = require('./config/swagger');
@@ -307,36 +304,80 @@ const PORT = process.env.PORT || 5000;
 // Graceful startup
 const startServer = async () => {
   try {
+    customLogger.info('Starting HopAlong Backend Server...');
+    
     // Test database connection
     await connectDB();
-    console.log('Database connection verified'.green);
+    customLogger.success('Database connection verified');
+
+    // Connect to Redis
+    await connectRedis();
+
+    // Initialize Socket.IO
+    customLogger.service('Socket.IO', 'started');
+
+    // Load routes
+    customLogger.route('POST', '/api/auth/register');
+    customLogger.route('POST', '/api/auth/login');
+    customLogger.route('GET', '/api/auth/me');
+    customLogger.route('POST', '/api/auth/logout');
+    customLogger.route('PUT', '/api/auth/password');
+    customLogger.route('GET', '/api/users/:id');
+    customLogger.route('PUT', '/api/users/:id');
+    customLogger.route('GET', '/api/users/:id/trips');
+    customLogger.route('GET', '/api/users/:id/stats');
+    customLogger.route('GET', '/api/trips');
+    customLogger.route('POST', '/api/trips');
+    customLogger.route('GET', '/api/trips/:id');
+    customLogger.route('PUT', '/api/trips/:id');
+    customLogger.route('DELETE', '/api/trips/:id');
+    customLogger.route('POST', '/api/requests');
+    customLogger.route('GET', '/api/requests/trip/:tripId');
+    customLogger.route('GET', '/api/requests/user/:userId');
+    customLogger.route('PUT', '/api/requests/:id/approve');
+    customLogger.route('PUT', '/api/requests/:id/reject');
+    customLogger.route('DELETE', '/api/requests/:id');
+    customLogger.route('POST', '/api/messages');
+    customLogger.route('GET', '/api/messages/trip/:tripId');
+
+    // Load middleware
+    customLogger.middleware('CORS');
+    customLogger.middleware('Helmet Security');
+    customLogger.middleware('Morgan Logger');
+    customLogger.middleware('Compression');
+    customLogger.middleware('Rate Limiting');
+    customLogger.middleware('Request Logger');
+    customLogger.middleware('Error Handler');
+
+    // Services
+    customLogger.service('JWT Authentication', 'configured');
+    customLogger.service('Winston Logger', 'configured');
+    customLogger.service('Swagger Documentation', 'configured');
+    customLogger.service('API Documentation', `available at http://localhost:${PORT}/api-docs`);
 
     httpServer.listen(PORT, '0.0.0.0', () => {
-      console.log(
-        `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow
-          .bold
-      );
-      console.log(
-        `API Documentation: http://localhost:${PORT}/`.cyan.underline
-      );
-
+      customLogger.success(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+      customLogger.info(`API Base URL: http://localhost:${PORT}/api`);
+      
       // Signal that server is ready
       if (process.env.NODE_ENV === 'production') {
-        console.log('Server is ready to accept connections'.green.bold);
+        customLogger.success('Server is ready to accept connections');
+      } else {
+        customLogger.info('Development mode - all origins allowed');
       }
     });
 
     // Handle server errors
     httpServer.on('error', (error) => {
       if (error.code === 'EADDRINUSE') {
-        console.error(`Port ${PORT} is already in use`.red);
+        customLogger.error(`Port ${PORT} is already in use`);
       } else {
-        console.error(`Server error: ${error.message}`.red);
+        customLogger.error(`Server error: ${error.message}`);
       }
       process.exit(1);
     });
   } catch (error) {
-    console.error(`Failed to start server: ${error.message}`.red);
+    customLogger.error(`Failed to start server: ${error.message}`);
     process.exit(1);
   }
 };
@@ -351,7 +392,7 @@ process.on('unhandledRejection', (err, promise) => {
     stack: err.stack,
     promise: promise.toString(),
   });
-  console.log(`Error: ${err.message}`.red.bold);
+  customLogger.error(`Unhandled Promise Rejection: ${err.message}`);
   // Close server & exit process
   httpServer.close(() => process.exit(1));
 });
@@ -362,7 +403,7 @@ process.on('uncaughtException', (err) => {
     error: err.message,
     stack: err.stack,
   });
-  console.log(`Error: ${err.message}`.red.bold);
+  customLogger.error(`Uncaught Exception: ${err.message}`);
   // Close server & exit process
   httpServer.close(() => process.exit(1));
 });
@@ -370,16 +411,20 @@ process.on('uncaughtException', (err) => {
 // Graceful shutdown
 process.on('SIGTERM', () => {
   logger.info('SIGTERM received, shutting down gracefully');
+  customLogger.info('SIGTERM received, shutting down gracefully');
   httpServer.close(() => {
     logger.info('Process terminated');
+    customLogger.info('Process terminated');
     process.exit(0);
   });
 });
 
 process.on('SIGINT', () => {
   logger.info('SIGINT received, shutting down gracefully');
+  customLogger.info('SIGINT received, shutting down gracefully');
   httpServer.close(() => {
     logger.info('Process terminated');
+    customLogger.info('Process terminated');
     process.exit(0);
   });
 });

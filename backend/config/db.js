@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-require('colors');
+const customLogger = require('../utils/logger');
 
 const connectDB = async () => {
   try {
@@ -8,33 +8,34 @@ const connectDB = async () => {
       socketTimeoutMS: 45000, // Close sockets after 45s
     });
 
-    console.log(
-      `MongoDB Connected: ${conn.connection.host}`.cyan.underline.bold
-    );
+    customLogger.success('MongoDB connection established');
+    customLogger.info(`MongoDB host: ${conn.connection.host}`);
 
     // Connection event handlers
     mongoose.connection.on('connected', () => {
-      console.log('Mongoose connected to MongoDB');
+      customLogger.database('MongoDB', 'connected');
     });
 
     mongoose.connection.on('error', (err) => {
-      console.error(`Mongoose connection error: ${err}`.red.bold);
+      customLogger.error('MongoDB connection failed');
+      customLogger.error(`Error: ${err.message}`);
     });
 
     mongoose.connection.on('disconnected', () => {
-      console.log('Mongoose disconnected from MongoDB');
+      customLogger.warning('MongoDB disconnected');
     });
 
     // Graceful shutdown
     process.on('SIGINT', async () => {
       await mongoose.connection.close();
-      console.log('Mongoose connection closed due to app termination');
+      customLogger.info('MongoDB connection closed due to app termination');
       process.exit(0);
     });
 
     return conn;
   } catch (error) {
-    console.error(`Error: ${error.message}`.red.underline.bold);
+    customLogger.error('MongoDB connection failed');
+    customLogger.error(`Error: ${error.message}`);
     throw error; // Don't exit here, let the server handle it
   }
 };
