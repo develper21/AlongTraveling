@@ -1,5 +1,6 @@
 const Trip = require('../models/Trip');
 const User = require('../models/User');
+const customLogger = require('../utils/logger');
 
 /**
  * @desc    Get all trips with filters and pagination
@@ -297,7 +298,7 @@ exports.getTripStats = async (req, res, _next) => {
       },
     });
   } catch (error) {
-    console.error('Error getting trip stats:', error);
+    customLogger.error(`Error getting trip stats: ${error.message}`);
     res.status(500).json({
       success: false,
       error: 'Server error',

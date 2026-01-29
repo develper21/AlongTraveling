@@ -92,8 +92,8 @@ app.use(
       }
 
       // Log the blocked origin for debugging
-      console.log(`CORS blocked origin: ${origin}`);
-      console.log(`Allowed origins: ${ALLOWED_ORIGINS.join(', ')}`);
+      customLogger.warning(`CORS blocked origin: ${origin}`);
+      customLogger.info(`Allowed origins: ${ALLOWED_ORIGINS.join(', ')}`);
 
       callback(new Error('Not allowed by CORS'));
     },
@@ -214,19 +214,19 @@ app.get('/', (req, res) => {
 const connectedUsers = new Map();
 
 io.on('connection', (socket) => {
-  console.log(`New client connected: ${socket.id}`.green);
+  customLogger.success(`New client connected: ${socket.id}`);
 
   // User joins with their ID
   socket.on('user:join', (userId) => {
     connectedUsers.set(userId, socket.id);
     socket.userId = userId;
-    console.log(`User ${userId} connected with socket ${socket.id}`.cyan);
+    customLogger.info(`User ${userId} connected with socket ${socket.id}`);
   });
 
   // Join trip room
   socket.on('trip:join', (tripId) => {
     socket.join(`trip:${tripId}`);
-    console.log(`Socket ${socket.id} joined trip room: ${tripId}`.yellow);
+    customLogger.warning(`Socket ${socket.id} joined trip room: ${tripId}`);
 
     // Notify others in the room
     socket.to(`trip:${tripId}`).emit('user:joined', {
@@ -238,7 +238,7 @@ io.on('connection', (socket) => {
   // Leave trip room
   socket.on('trip:leave', (tripId) => {
     socket.leave(`trip:${tripId}`);
-    console.log(`Socket ${socket.id} left trip room: ${tripId}`.yellow);
+    customLogger.warning(`Socket ${socket.id} left trip room: ${tripId}`);
 
     // Notify others in the room
     socket.to(`trip:${tripId}`).emit('user:left', {
@@ -257,7 +257,7 @@ io.on('connection', (socket) => {
       timestamp: new Date().toISOString(),
     });
 
-    console.log(`Message sent to trip ${tripId}`.magenta);
+    customLogger.middleware(`Message sent to trip ${tripId}`);
   });
 
   // Typing indicator
@@ -274,7 +274,9 @@ io.on('connection', (socket) => {
     const organizerSocketId = connectedUsers.get(organizerId);
     if (organizerSocketId) {
       io.to(organizerSocketId).emit('request:notification', request);
-      console.log(`Request notification sent to organizer ${organizerId}`.blue);
+      customLogger.info(
+        `Request notification sent to organizer ${organizerId}`
+      );
     }
   });
 
@@ -283,7 +285,7 @@ io.on('connection', (socket) => {
     const userSocketId = connectedUsers.get(userId);
     if (userSocketId) {
       io.to(userSocketId).emit('request:status-update', response);
-      console.log(`Request response sent to user ${userId}`.blue);
+      customLogger.info(`Request response sent to user ${userId}`);
     }
   });
 
@@ -291,9 +293,9 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     if (socket.userId) {
       connectedUsers.delete(socket.userId);
-      console.log(`User ${socket.userId} disconnected`.red);
+      customLogger.error(`User ${socket.userId} disconnected`);
     }
-    console.log(`Client disconnected: ${socket.id}`.red);
+    customLogger.error(`Client disconnected: ${socket.id}`);
   });
 });
 
@@ -310,7 +312,7 @@ const PORT = process.env.PORT || 5000;
 const startServer = async () => {
   try {
     customLogger.info('Starting HopAlong Backend Server...');
-    
+
     // Test database connection
     await connectDB();
     customLogger.success('Database connection verified');
@@ -358,12 +360,17 @@ const startServer = async () => {
     customLogger.service('JWT Authentication', 'configured');
     customLogger.service('Winston Logger', 'configured');
     customLogger.service('Swagger Documentation', 'configured');
-    customLogger.service('API Documentation', `available at http://localhost:${PORT}/api-docs`);
+    customLogger.service(
+      'API Documentation',
+      `available at http://localhost:${PORT}/api-docs`
+    );
 
     httpServer.listen(PORT, '0.0.0.0', () => {
-      customLogger.success(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+      customLogger.success(
+        `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`
+      );
       customLogger.info(`API Base URL: http://localhost:${PORT}/api`);
-      
+
       // Signal that server is ready
       if (process.env.NODE_ENV === 'production') {
         customLogger.success('Server is ready to accept connections');
