@@ -14,7 +14,7 @@ describe('Trips Routes', () => {
 
   beforeEach(async () => {
     user = await testUtils.createTestUser({
-      email: 'trips@iitr.ac.in'
+      email: 'trips@iitr.ac.in',
     });
     token = testUtils.generateTestToken(user._id);
   });
@@ -30,7 +30,7 @@ describe('Trips Routes', () => {
         mode: 'Bus',
         type: 'Adventure',
         description: 'Amazing trip to Manali',
-        maxParticipants: 6
+        maxParticipants: 6,
       };
 
       const response = await request(app)
@@ -48,7 +48,7 @@ describe('Trips Routes', () => {
     it('should not create trip without authentication', async () => {
       const tripData = {
         title: 'Manali Adventure',
-        destination: 'Manali'
+        destination: 'Manali',
       };
 
       const response = await request(app)
@@ -76,18 +76,16 @@ describe('Trips Routes', () => {
       // Create test trips
       await testUtils.createTestTrip(user._id, {
         title: 'Trip 1',
-        destination: 'Shimla'
+        destination: 'Shimla',
       });
       await testUtils.createTestTrip(user._id, {
         title: 'Trip 2',
-        destination: 'Manali'
+        destination: 'Manali',
       });
     });
 
     it('should get all trips', async () => {
-      const response = await request(app)
-        .get('/api/trips')
-        .expect(200);
+      const response = await request(app).get('/api/trips').expect(200);
 
       expect(response.body.success).toBe(true);
       expect(response.body.data).toHaveLength(2);
@@ -125,7 +123,7 @@ describe('Trips Routes', () => {
     it('should update trip as organizer', async () => {
       const updateData = {
         title: 'Updated Trip Title',
-        budget: 10000
+        budget: 10000,
       };
 
       const response = await request(app)
@@ -141,7 +139,7 @@ describe('Trips Routes', () => {
 
     it('should not allow non-organizer to update trip', async () => {
       const otherUser = await testUtils.createTestUser({
-        email: 'other@iitr.ac.in'
+        email: 'other@iitr.ac.in',
       });
       const otherToken = testUtils.generateTestToken(otherUser._id);
 
@@ -173,7 +171,7 @@ describe('Trips Routes', () => {
 
     it('should not allow non-organizer to delete trip', async () => {
       const otherUser = await testUtils.createTestUser({
-        email: 'other@iitr.ac.in'
+        email: 'other@iitr.ac.in',
       });
       const otherToken = testUtils.generateTestToken(otherUser._id);
 

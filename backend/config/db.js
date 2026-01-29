@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const colors = require('colors');
+require('colors');
 
 const connectDB = async () => {
   try {
@@ -8,8 +8,10 @@ const connectDB = async () => {
       socketTimeoutMS: 45000, // Close sockets after 45s
     });
 
-    console.log(`MongoDB Connected: ${conn.connection.host}`.cyan.underline.bold);
-    
+    console.log(
+      `MongoDB Connected: ${conn.connection.host}`.cyan.underline.bold
+    );
+
     // Connection event handlers
     mongoose.connection.on('connected', () => {
       console.log('Mongoose connected to MongoDB');
@@ -31,7 +33,6 @@ const connectDB = async () => {
     });
 
     return conn;
-
   } catch (error) {
     console.error(`Error: ${error.message}`.red.underline.bold);
     throw error; // Don't exit here, let the server handle it

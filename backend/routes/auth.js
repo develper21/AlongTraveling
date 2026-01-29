@@ -5,9 +5,12 @@ const {
   login,
   getMe,
   logout,
-  updatePassword
+  updatePassword,
 } = require('../controllers/authController');
-const { registerValidation, loginValidation } = require('../middleware/validation');
+const {
+  registerValidation,
+  loginValidation,
+} = require('../middleware/validation');
 const { protect } = require('../middleware/auth');
 
 /**

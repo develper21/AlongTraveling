@@ -8,5 +8,5 @@ const normalizeEmail = (email = '') => {
 };
 
 module.exports = {
-  normalizeEmail
+  normalizeEmail,
 };

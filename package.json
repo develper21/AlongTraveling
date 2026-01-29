@@ -31,6 +31,8 @@
     "docs:serve": "cd backend && npm run docs:serve",
     "clean": "rm -rf node_modules backend/node_modules frontend/node_modules",
     "clean:install": "npm run clean && npm run install:all",
+    "lint:fix:backend": "cd backend && npm run lint:fix",
+    "lint:fix:frontend": "cd frontend && npm run lint:fix",
     "pre-commit": "lint-staged",
     "pre-push": "npm run test:backend && npm run lint:frontend && npm run build:frontend"
   },
@@ -41,12 +43,12 @@
   },
   "lint-staged": {
     "backend/**/*.{js,json}": [
-      "cd backend && npm run lint:fix",
-      "cd backend && npm run format"
+      "npm run lint:fix:backend",
+      "npm run format:backend"
     ],
     "frontend/**/*.{js,jsx,json}": [
-      "cd frontend && npm run lint:fix",
-      "cd frontend && npm run format"
+      "npm run lint:fix:frontend",
+      "npm run format:frontend"
     ]
   },
   "engines": {

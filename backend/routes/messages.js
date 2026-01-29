@@ -3,7 +3,7 @@ const router = express.Router();
 const {
   getMessages,
   sendMessage,
-  deleteMessage
+  deleteMessage,
 } = require('../controllers/messageController');
 const { protect } = require('../middleware/auth');
 

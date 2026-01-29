@@ -22,6 +22,7 @@ The backend serves as the core data layer and business logic handler for HopAlon
 ## Installation
 
 **Install dependencies:**
+
 ```bash
 npm install
 ```
@@ -29,6 +30,7 @@ npm install
 **Configure environment variables:**
 
 Create a `.env` file in the backend root directory:
+
 ```env
 PORT=5000
 NODE_ENV=development
@@ -39,6 +41,7 @@ FRONTEND_URL=http://localhost:3000
 ```
 
 **Start MongoDB:**
+
 ```bash
 # Local MongoDB
 mongod
@@ -47,12 +50,15 @@ mongod
 ```
 
 **Seed database (optional):**
+
 ```bash
 npm run seed
 ```
+
 Creates 6 demo users and 10 sample trips for testing.
 
 **Start the server:**
+
 ```bash
 # Development mode with auto-reload
 npm run dev
@@ -102,6 +108,7 @@ backend/
 ## API Endpoints
 
 ### Authentication Routes
+
 - `POST /api/auth/register` - Register new user (Public)
 - `POST /api/auth/login` - Login user (Public)
 - `GET /api/auth/me` - Get current user (Private)
@@ -109,6 +116,7 @@ backend/
 - `PUT /api/auth/updatepassword` - Update password (Private)
 
 ### Trip Routes
+
 - `GET /api/trips` - Get all trips with filters (Public)
 - `GET /api/trips/:id` - Get single trip (Public)
 - `POST /api/trips` - Create new trip (Private)
@@ -116,11 +124,13 @@ backend/
 - `DELETE /api/trips/:id` - Delete trip (Private, Owner only)
 
 **Query Parameters for GET /api/trips:**
+
 - `destination`, `startDate`, `endDate`, `mode`, `type`, `status`
 - `search` - Search in title/description/destination
 - `page`, `limit` - Pagination (default: page=1, limit=10)
 
 ### Join Request Routes
+
 - `POST /api/requests` - Send join request (Private)
 - `GET /api/requests/trip/:tripId` - Get trip requests (Private, Organizer)
 - `GET /api/requests/user/:userId` - Get user requests (Private, Self)
@@ -129,11 +139,13 @@ backend/
 - `DELETE /api/requests/:id` - Cancel request (Private, Self)
 
 ### Message Routes
+
 - `GET /api/messages/trip/:tripId` - Get trip messages (Private, Participants)
 - `POST /api/messages` - Send message (Private, Participants)
 - `DELETE /api/messages/:id` - Delete message (Private, Sender)
 
 ### User Routes
+
 - `GET /api/users/:id` - Get user profile (Public)
 - `PUT /api/users/:id` - Update profile (Private, Self)
 - `GET /api/users/:id/trips` - Get created trips (Public)
@@ -143,12 +155,14 @@ backend/
 ## Socket.IO Events
 
 **Client to Server:**
+
 - `user:join` - Connect with user ID
 - `trip:join` / `trip:leave` - Join/leave trip room
 - `message:send` - Send message
 - `typing:start` / `typing:stop` - Typing indicators
 
 **Server to Client:**
+
 - `message:new` - New message broadcast
 - `user:typing` / `user:stopped-typing` - Typing status
 - `user:joined` / `user:left` - Room join/leave
@@ -158,6 +172,7 @@ backend/
 ## Response Format
 
 **Success:**
+
 ```json
 {
   "success": true,
@@ -166,6 +181,7 @@ backend/
 ```
 
 **Error:**
+
 ```json
 {
   "success": false,
@@ -174,6 +190,7 @@ backend/
 ```
 
 **Paginated:**
+
 ```json
 {
   "success": true,
@@ -188,6 +205,7 @@ backend/
 ## Authentication
 
 Include JWT token in request headers:
+
 ```
 Authorization: Bearer <your-jwt-token>
 ```
@@ -195,11 +213,13 @@ Authorization: Bearer <your-jwt-token>
 ## Database Seeding
 
 **Seed sample data:**
+
 ```bash
 npm run seed
 ```
 
 **Clear all data:**
+
 ```bash
 node seeders/seedData.js -d
 ```
@@ -207,6 +227,7 @@ node seeders/seedData.js -d
 **Test Credentials:**
 
 After running `npm run seed`, use any of these accounts:
+
 - `rahul.sharma@iitr.ac.in` / `password123`
 - `priya.patel@iitr.ac.in` / `password123`
 - `arjun.kumar@iitr.ac.in` / `password123`
@@ -224,21 +245,22 @@ All seeded users share the same password for testing convenience.
 
 ## Environment Variables
 
-| Variable      | Description                  | Default                           |
-|---------------|------------------------------|-----------------------------------|
-| PORT          | Server port                  | 5000                              |
-| NODE_ENV      | Environment mode             | development                       |
-| MONGODB_URI   | MongoDB connection           | mongodb://localhost:27017/hopalong|
-| JWT_SECRET    | JWT signing key              | (required)                        |
-| JWT_EXPIRE    | Token expiration             | 30d                               |
-| FRONTEND_URL  | Frontend origin for CORS     | http://localhost:3000             |
+| Variable     | Description              | Default                            |
+| ------------ | ------------------------ | ---------------------------------- |
+| PORT         | Server port              | 5000                               |
+| NODE_ENV     | Environment mode         | development                        |
+| MONGODB_URI  | MongoDB connection       | mongodb://localhost:27017/hopalong |
+| JWT_SECRET   | JWT signing key          | (required)                         |
+| JWT_EXPIRE   | Token expiration         | 30d                                |
+| FRONTEND_URL | Frontend origin for CORS | http://localhost:3000              |
 
 ## Security
 
 **Implemented security measures:**
+
 - Password hashing with bcryptjs (10 salt rounds)
 - JWT token authentication
-- IITR email domain validation (*.iitr.ac.in)
+- IITR email domain validation (\*.iitr.ac.in)
 - Input sanitization with express-validator
 - Rate limiting (100 requests per 10 minutes)
 - Helmet for HTTP security headers
@@ -248,6 +270,7 @@ All seeded users share the same password for testing convenience.
 ## Error Handling
 
 Centralized error middleware handles:
+
 - Validation errors
 - Authentication failures
 - Database errors (CastError, duplicates)
@@ -258,11 +281,13 @@ Centralized error middleware handles:
 ## Development
 
 **Prerequisites:**
+
 - Node.js v14+ (recommended v16+)
 - MongoDB running locally or MongoDB Atlas account
 - npm (comes with Node.js)
 
 **Tips:**
+
 - Ensure MongoDB is running before starting server
 - Never commit `.env` file
 - Use Postman/Thunder Client for API testing
@@ -272,6 +297,7 @@ Centralized error middleware handles:
 ## Production Deployment
 
 **Checklist:**
+
 - Set `NODE_ENV=production`
 - Use strong `JWT_SECRET` (32+ characters)
 - Configure MongoDB Atlas

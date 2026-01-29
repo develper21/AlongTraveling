@@ -19,7 +19,7 @@ exports.register = async (req, res, next) => {
     if (existingUser) {
       return res.status(400).json({
         success: false,
-        error: 'User already exists with this email'
+        error: 'User already exists with this email',
       });
     }
 
@@ -30,7 +30,7 @@ exports.register = async (req, res, next) => {
       password,
       branch: branch || '',
       year: year || '',
-      bio: bio || ''
+      bio: bio || '',
     });
 
     // Generate token
@@ -46,8 +46,8 @@ exports.register = async (req, res, next) => {
         year: user.year,
         avatar: user.avatar,
         bio: user.bio,
-        token
-      }
+        token,
+      },
     });
   } catch (error) {
     next(error);
@@ -67,12 +67,14 @@ exports.login = async (req, res, next) => {
     const normalizedEmail = normalizeEmail(email);
 
     // Check for user
-    const user = await User.findOne({ email: normalizedEmail }).select('+password');
+    const user = await User.findOne({ email: normalizedEmail }).select(
+      '+password'
+    );
 
     if (!user) {
       return res.status(401).json({
         success: false,
-        error: 'Invalid credentials'
+        error: 'Invalid credentials',
       });
     }
 
@@ -82,7 +84,7 @@ exports.login = async (req, res, next) => {
     if (!isMatch) {
       return res.status(401).json({
         success: false,
-        error: 'Invalid credentials'
+        error: 'Invalid credentials',
       });
     }
 
@@ -99,8 +101,8 @@ exports.login = async (req, res, next) => {
         year: user.year,
         avatar: user.avatar,
         bio: user.bio,
-        token
-      }
+        token,
+      },
     });
   } catch (error) {
     next(error);
@@ -120,7 +122,7 @@ exports.getMe = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      data: user
+      data: user,
     });
   } catch (error) {
     next(error);
@@ -138,7 +140,7 @@ exports.logout = async (req, res, next) => {
     // by removing the token from storage
     res.status(200).json({
       success: true,
-      data: 'User logged out successfully'
+      data: 'User logged out successfully',
     });
   } catch (error) {
     next(error);
@@ -158,7 +160,7 @@ exports.updatePassword = async (req, res, next) => {
     if (!(await user.matchPassword(req.body.currentPassword))) {
       return res.status(401).json({
         success: false,
-        error: 'Password is incorrect'
+        error: 'Password is incorrect',
       });
     }
 
@@ -169,7 +171,7 @@ exports.updatePassword = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      data: { token }
+      data: { token },
     });
   } catch (error) {
     next(error);

@@ -16,7 +16,7 @@ exports.sendRequest = async (req, res, next) => {
     if (!trip) {
       return res.status(404).json({
         success: false,
-        error: 'Trip not found'
+        error: 'Trip not found',
       });
     }
 
@@ -24,7 +24,7 @@ exports.sendRequest = async (req, res, next) => {
     if (trip.currentParticipants >= trip.maxParticipants) {
       return res.status(400).json({
         success: false,
-        error: 'Trip is already full'
+        error: 'Trip is already full',
       });
     }
 
@@ -32,7 +32,7 @@ exports.sendRequest = async (req, res, next) => {
     if (trip.participants.includes(req.user._id)) {
       return res.status(400).json({
         success: false,
-        error: 'You are already a participant in this trip'
+        error: 'You are already a participant in this trip',
       });
     }
 
@@ -40,20 +40,20 @@ exports.sendRequest = async (req, res, next) => {
     if (trip.organizer.toString() === req.user._id.toString()) {
       return res.status(400).json({
         success: false,
-        error: 'You cannot request to join your own trip'
+        error: 'You cannot request to join your own trip',
       });
     }
 
     // Check if request already exists
     const existingRequest = await JoinRequest.findOne({
       trip: tripId,
-      user: req.user._id
+      user: req.user._id,
     });
 
     if (existingRequest) {
       return res.status(400).json({
         success: false,
-        error: `You have already sent a request for this trip (Status: ${existingRequest.status})`
+        error: `You have already sent a request for this trip (Status: ${existingRequest.status})`,
       });
     }
 
@@ -61,12 +61,12 @@ exports.sendRequest = async (req, res, next) => {
     const joinRequest = await JoinRequest.create({
       trip: tripId,
       user: req.user._id,
-      message
+      message,
     });
 
     // Add request to trip's joinRequests array
     await Trip.findByIdAndUpdate(tripId, {
-      $push: { joinRequests: joinRequest._id }
+      $push: { joinRequests: joinRequest._id },
     });
 
     const populatedRequest = await JoinRequest.findById(joinRequest._id)
@@ -75,7 +75,7 @@ exports.sendRequest = async (req, res, next) => {
 
     res.status(201).json({
       success: true,
-      data: populatedRequest
+      data: populatedRequest,
     });
   } catch (error) {
     next(error);
@@ -87,10 +87,10 @@ exports.sendRequest = async (req, res, next) => {
  * @route   GET /api/requests/trip/:tripId
  * @access  Private
  */
-exports.getRequestsForTrip = async (req, res, next) => {
+exports.getRequestsForTrip = async (req, res, _next) => {
   try {
     const tripId = req.params.tripId || req.params.id;
-    
+
     // Just fetch requests without checking if trip exists
     // This allows requests to be fetched even if trip validation fails
     const requests = await JoinRequest.find({ trip: tripId })
@@ -101,14 +101,14 @@ exports.getRequestsForTrip = async (req, res, next) => {
     res.status(200).json({
       success: true,
       count: requests.length,
-      data: requests || []
+      data: requests || [],
     });
   } catch (error) {
     // Return empty requests instead of error
     res.status(200).json({
       success: true,
       count: 0,
-      data: []
+      data: [],
     });
   }
 };
@@ -125,7 +125,7 @@ exports.getRequestsByUser = async (req, res, next) => {
     if (userId !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
-        error: 'Not authorized to view these requests'
+        error: 'Not authorized to view these requests',
       });
     }
 
@@ -133,14 +133,14 @@ exports.getRequestsByUser = async (req, res, next) => {
       .populate('trip', 'title destination startDate endDate organizer status')
       .populate({
         path: 'trip',
-        populate: { path: 'organizer', select: 'name email avatar' }
+        populate: { path: 'organizer', select: 'name email avatar' },
       })
       .sort('-createdAt');
 
     res.status(200).json({
       success: true,
       count: requests.length,
-      data: requests
+      data: requests,
     });
   } catch (error) {
     next(error);
@@ -159,7 +159,7 @@ exports.approveRequest = async (req, res, next) => {
     if (!request) {
       return res.status(404).json({
         success: false,
-        error: 'Request not found'
+        error: 'Request not found',
       });
     }
 
@@ -169,7 +169,7 @@ exports.approveRequest = async (req, res, next) => {
     if (trip.organizer.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
-        error: 'Not authorized to approve this request'
+        error: 'Not authorized to approve this request',
       });
     }
 
@@ -177,7 +177,7 @@ exports.approveRequest = async (req, res, next) => {
     if (request.status !== 'pending') {
       return res.status(400).json({
         success: false,
-        error: `Request has already been ${request.status}`
+        error: `Request has already been ${request.status}`,
       });
     }
 
@@ -185,7 +185,7 @@ exports.approveRequest = async (req, res, next) => {
     if (trip.currentParticipants >= trip.maxParticipants) {
       return res.status(400).json({
         success: false,
-        error: 'Trip is already full'
+        error: 'Trip is already full',
       });
     }
 
@@ -201,7 +201,7 @@ exports.approveRequest = async (req, res, next) => {
 
     // Add trip to user's tripsJoined
     await User.findByIdAndUpdate(request.user, {
-      $push: { tripsJoined: trip._id }
+      $push: { tripsJoined: trip._id },
     });
 
     const populatedRequest = await JoinRequest.findById(request._id)
@@ -210,7 +210,7 @@ exports.approveRequest = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      data: populatedRequest
+      data: populatedRequest,
     });
   } catch (error) {
     next(error);
@@ -229,7 +229,7 @@ exports.rejectRequest = async (req, res, next) => {
     if (!request) {
       return res.status(404).json({
         success: false,
-        error: 'Request not found'
+        error: 'Request not found',
       });
     }
 
@@ -239,7 +239,7 @@ exports.rejectRequest = async (req, res, next) => {
     if (trip.organizer.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
-        error: 'Not authorized to reject this request'
+        error: 'Not authorized to reject this request',
       });
     }
 
@@ -247,7 +247,7 @@ exports.rejectRequest = async (req, res, next) => {
     if (request.status !== 'pending') {
       return res.status(400).json({
         success: false,
-        error: `Request has already been ${request.status}`
+        error: `Request has already been ${request.status}`,
       });
     }
 
@@ -262,7 +262,7 @@ exports.rejectRequest = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      data: populatedRequest
+      data: populatedRequest,
     });
   } catch (error) {
     next(error);
@@ -281,7 +281,7 @@ exports.cancelRequest = async (req, res, next) => {
     if (!request) {
       return res.status(404).json({
         success: false,
-        error: 'Request not found'
+        error: 'Request not found',
       });
     }
 
@@ -289,7 +289,7 @@ exports.cancelRequest = async (req, res, next) => {
     if (request.user.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
-        error: 'Not authorized to cancel this request'
+        error: 'Not authorized to cancel this request',
       });
     }
 
@@ -297,20 +297,20 @@ exports.cancelRequest = async (req, res, next) => {
     if (request.status !== 'pending') {
       return res.status(400).json({
         success: false,
-        error: 'Can only cancel pending requests'
+        error: 'Can only cancel pending requests',
       });
     }
 
     // Remove request from trip's joinRequests array
     await Trip.findByIdAndUpdate(request.trip, {
-      $pull: { joinRequests: request._id }
+      $pull: { joinRequests: request._id },
     });
 
     await request.deleteOne();
 
     res.status(200).json({
       success: true,
-      data: {}
+      data: {},
     });
   } catch (error) {
     next(error);

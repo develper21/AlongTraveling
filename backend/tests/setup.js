@@ -31,11 +31,11 @@ global.testUtils = {
       password: 'password123',
       branch: 'CSE',
       year: '3rd Year',
-      bio: 'Test user bio'
+      bio: 'Test user bio',
     };
     return await User.create({ ...defaultUser, ...userData });
   },
-  
+
   createTestTrip: async (organizerId, tripData = {}) => {
     const Trip = require('../models/Trip');
     const defaultTrip = {
@@ -48,15 +48,18 @@ global.testUtils = {
       type: 'Adventure',
       description: 'Test trip description',
       organizer: organizerId,
-      maxParticipants: 4
+      maxParticipants: 4,
     };
     return await Trip.create({ ...defaultTrip, ...tripData });
   },
-  
+
   generateTestToken: (userId) => {
     const jwt = require('jsonwebtoken');
-    return jwt.sign({ id: userId }, process.env.JWT_SECRET || 'test-jwt-secret-key');
-  }
+    return jwt.sign(
+      { id: userId },
+      process.env.JWT_SECRET || 'test-jwt-secret-key'
+    );
+  },
 };
 
 module.exports = { testUtils: global.testUtils };

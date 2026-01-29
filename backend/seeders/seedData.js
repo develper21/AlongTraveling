@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const colors = require('colors');
+require('colors');
 
 // Load env vars
 dotenv.config();
@@ -22,7 +22,7 @@ const users = [
     password: 'password123',
     branch: 'Computer Science',
     year: '3rd Year',
-    bio: 'Love to explore new places and meet new people!'
+    bio: 'Love to explore new places and meet new people!',
   },
   {
     name: 'Priya Patel',
@@ -30,7 +30,7 @@ const users = [
     password: 'password123',
     branch: 'Electrical Engineering',
     year: '2nd Year',
-    bio: 'Adventure enthusiast and photography lover.'
+    bio: 'Adventure enthusiast and photography lover.',
   },
   {
     name: 'Arjun Kumar',
@@ -38,7 +38,7 @@ const users = [
     password: 'password123',
     branch: 'Mechanical Engineering',
     year: '4th Year',
-    bio: 'Passionate traveler seeking new experiences.'
+    bio: 'Passionate traveler seeking new experiences.',
   },
   {
     name: 'Sneha Reddy',
@@ -46,7 +46,7 @@ const users = [
     password: 'password123',
     branch: 'Civil Engineering',
     year: '3rd Year',
-    bio: 'Nature lover and hiking enthusiast.'
+    bio: 'Nature lover and hiking enthusiast.',
   },
   {
     name: 'Vikram Singh',
@@ -54,7 +54,7 @@ const users = [
     password: 'password123',
     branch: 'Chemical Engineering',
     year: '2nd Year',
-    bio: 'Always up for spontaneous trips!'
+    bio: 'Always up for spontaneous trips!',
   },
   {
     name: 'Ananya Gupta',
@@ -62,15 +62,16 @@ const users = [
     password: 'password123',
     branch: 'Architecture',
     year: '1st Year',
-    bio: 'Exploring India one trip at a time.'
-  }
+    bio: 'Exploring India one trip at a time.',
+  },
 ];
 
 // Sample trips generator
 const generateTrips = (userIds) => [
   {
     title: 'Weekend Trek to Rishikesh',
-    description: 'Join us for an exciting weekend trek to Rishikesh. We will explore the beautiful trails, visit ashrams, and enjoy river rafting in the Ganges.',
+    description:
+      'Join us for an exciting weekend trek to Rishikesh. We will explore the beautiful trails, visit ashrams, and enjoy river rafting in the Ganges.',
     destination: 'Rishikesh',
     startDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 1 week from now
     endDate: new Date(Date.now() + 9 * 24 * 60 * 60 * 1000),
@@ -81,11 +82,12 @@ const generateTrips = (userIds) => [
     type: 'Adventure',
     status: 'upcoming',
     organizer: userIds[0],
-    participants: [userIds[0]]
+    participants: [userIds[0]],
   },
   {
     title: 'Mussoorie Hill Station Trip',
-    description: 'Experience the scenic beauty of Mussoorie. Visit Kempty Falls, Gun Hill, and enjoy the pleasant weather.',
+    description:
+      'Experience the scenic beauty of Mussoorie. Visit Kempty Falls, Gun Hill, and enjoy the pleasant weather.',
     destination: 'Mussoorie',
     startDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // 2 weeks from now
     endDate: new Date(Date.now() + 16 * 24 * 60 * 60 * 1000),
@@ -96,11 +98,12 @@ const generateTrips = (userIds) => [
     type: 'Leisure',
     status: 'upcoming',
     organizer: userIds[1],
-    participants: [userIds[1], userIds[2], userIds[3]]
+    participants: [userIds[1], userIds[2], userIds[3]],
   },
   {
     title: 'Delhi Heritage Walk',
-    description: 'Explore the rich heritage of Delhi. Visit Red Fort, Qutub Minar, India Gate, and enjoy local street food.',
+    description:
+      'Explore the rich heritage of Delhi. Visit Red Fort, Qutub Minar, India Gate, and enjoy local street food.',
     destination: 'Delhi',
     startDate: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000), // 4 days from now
     endDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
@@ -111,11 +114,12 @@ const generateTrips = (userIds) => [
     type: 'Cultural',
     status: 'upcoming',
     organizer: userIds[2],
-    participants: [userIds[2], userIds[0], userIds[1], userIds[4], userIds[5]]
+    participants: [userIds[2], userIds[0], userIds[1], userIds[4], userIds[5]],
   },
   {
     title: 'Haridwar Spiritual Retreat',
-    description: 'A peaceful spiritual journey to Haridwar. Attend Ganga Aarti, visit temples, and experience the divine atmosphere.',
+    description:
+      'A peaceful spiritual journey to Haridwar. Attend Ganga Aarti, visit temples, and experience the divine atmosphere.',
     destination: 'Haridwar',
     startDate: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000), // 3 weeks from now
     endDate: new Date(Date.now() + 22 * 24 * 60 * 60 * 1000),
@@ -126,11 +130,12 @@ const generateTrips = (userIds) => [
     type: 'Cultural',
     status: 'upcoming',
     organizer: userIds[3],
-    participants: [userIds[3], userIds[4]]
+    participants: [userIds[3], userIds[4]],
   },
   {
     title: 'Nainital Lake City Getaway',
-    description: 'Enjoy boating in Naini Lake, visit Naina Devi Temple, and explore the beautiful mall road.',
+    description:
+      'Enjoy boating in Naini Lake, visit Naina Devi Temple, and explore the beautiful mall road.',
     destination: 'Nainital',
     startDate: new Date(Date.now() + 28 * 24 * 60 * 60 * 1000), // 4 weeks from now
     endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
@@ -141,11 +146,12 @@ const generateTrips = (userIds) => [
     type: 'Leisure',
     status: 'upcoming',
     organizer: userIds[4],
-    participants: [userIds[4]]
+    participants: [userIds[4]],
   },
   {
     title: 'Agra Day Trip - Taj Mahal',
-    description: 'One day trip to Agra to witness the magnificent Taj Mahal and Agra Fort.',
+    description:
+      'One day trip to Agra to witness the magnificent Taj Mahal and Agra Fort.',
     destination: 'Agra',
     startDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
     endDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
@@ -156,11 +162,12 @@ const generateTrips = (userIds) => [
     type: 'Cultural',
     status: 'upcoming',
     organizer: userIds[5],
-    participants: [userIds[5], userIds[0], userIds[2], userIds[3]]
+    participants: [userIds[5], userIds[0], userIds[2], userIds[3]],
   },
   {
     title: 'Dehradun Food Trail',
-    description: 'Explore the culinary delights of Dehradun. Visit popular eateries and try local Garhwali cuisine.',
+    description:
+      'Explore the culinary delights of Dehradun. Visit popular eateries and try local Garhwali cuisine.',
     destination: 'Dehradun',
     startDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
     endDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
@@ -171,11 +178,12 @@ const generateTrips = (userIds) => [
     type: 'Leisure',
     status: 'upcoming',
     organizer: userIds[0],
-    participants: [userIds[0], userIds[1], userIds[5]]
+    participants: [userIds[0], userIds[1], userIds[5]],
   },
   {
     title: 'Jim Corbett Wildlife Safari',
-    description: 'Experience thrilling wildlife safari at Jim Corbett National Park. Spot tigers, elephants, and diverse flora.',
+    description:
+      'Experience thrilling wildlife safari at Jim Corbett National Park. Spot tigers, elephants, and diverse flora.',
     destination: 'Jim Corbett',
     startDate: new Date(Date.now() + 35 * 24 * 60 * 60 * 1000),
     endDate: new Date(Date.now() + 37 * 24 * 60 * 60 * 1000),
@@ -186,11 +194,12 @@ const generateTrips = (userIds) => [
     type: 'Adventure',
     status: 'upcoming',
     organizer: userIds[1],
-    participants: [userIds[1], userIds[3]]
+    participants: [userIds[1], userIds[3]],
   },
   {
     title: 'Lansdowne Nature Escape',
-    description: 'Peaceful getaway to Lansdowne. Perfect for nature lovers seeking tranquility away from city chaos.',
+    description:
+      'Peaceful getaway to Lansdowne. Perfect for nature lovers seeking tranquility away from city chaos.',
     destination: 'Lansdowne',
     startDate: new Date(Date.now() + 42 * 24 * 60 * 60 * 1000),
     endDate: new Date(Date.now() + 44 * 24 * 60 * 60 * 1000),
@@ -201,11 +210,12 @@ const generateTrips = (userIds) => [
     type: 'Leisure',
     status: 'upcoming',
     organizer: userIds[2],
-    participants: [userIds[2]]
+    participants: [userIds[2]],
   },
   {
     title: 'Jaipur Pink City Tour',
-    description: 'Discover the royal heritage of Jaipur. Visit Amber Fort, Hawa Mahal, City Palace, and shop at local bazaars.',
+    description:
+      'Discover the royal heritage of Jaipur. Visit Amber Fort, Hawa Mahal, City Palace, and shop at local bazaars.',
     destination: 'Jaipur',
     startDate: new Date(Date.now() + 49 * 24 * 60 * 60 * 1000),
     endDate: new Date(Date.now() + 52 * 24 * 60 * 60 * 1000),
@@ -216,8 +226,15 @@ const generateTrips = (userIds) => [
     type: 'Cultural',
     status: 'upcoming',
     organizer: userIds[3],
-    participants: [userIds[3], userIds[0], userIds[1], userIds[2], userIds[4], userIds[5]]
-  }
+    participants: [
+      userIds[3],
+      userIds[0],
+      userIds[1],
+      userIds[2],
+      userIds[4],
+      userIds[5],
+    ],
+  },
 ];
 
 // Import data
@@ -236,7 +253,7 @@ const importData = async () => {
     const createdUsers = await User.create(users);
     console.log(`${createdUsers.length} users created`.green.bold);
 
-    const userIds = createdUsers.map(user => user._id);
+    const userIds = createdUsers.map((user) => user._id);
 
     // Create trips
     const trips = generateTrips(userIds);
@@ -245,17 +262,18 @@ const importData = async () => {
 
     // Update users with their created and joined trips
     for (let i = 0; i < createdUsers.length; i++) {
-      const userTrips = createdTrips.filter(trip => 
-        trip.organizer.toString() === userIds[i].toString()
+      const userTrips = createdTrips.filter(
+        (trip) => trip.organizer.toString() === userIds[i].toString()
       );
-      const joinedTrips = createdTrips.filter(trip => 
-        trip.participants.includes(userIds[i]) && 
-        trip.organizer.toString() !== userIds[i].toString()
+      const joinedTrips = createdTrips.filter(
+        (trip) =>
+          trip.participants.includes(userIds[i]) &&
+          trip.organizer.toString() !== userIds[i].toString()
       );
 
       await User.findByIdAndUpdate(userIds[i], {
-        tripsCreated: userTrips.map(t => t._id),
-        tripsJoined: joinedTrips.map(t => t._id)
+        tripsCreated: userTrips.map((t) => t._id),
+        tripsJoined: joinedTrips.map((t) => t._id),
       });
     }
     console.log('User trip references updated'.green.bold);
@@ -265,27 +283,31 @@ const importData = async () => {
       {
         trip: createdTrips[0]._id,
         user: userIds[2],
-        message: 'Hey! I would love to join this trek. I have previous trekking experience and can help with planning.',
-        status: 'pending'
+        message:
+          'Hey! I would love to join this trek. I have previous trekking experience and can help with planning.',
+        status: 'pending',
       },
       {
         trip: createdTrips[0]._id,
         user: userIds[4],
-        message: 'Count me in! Been wanting to visit Rishikesh for a while now.',
-        status: 'pending'
+        message:
+          'Count me in! Been wanting to visit Rishikesh for a while now.',
+        status: 'pending',
       },
       {
         trip: createdTrips[4]._id,
         user: userIds[0],
-        message: 'I have always wanted to visit Nainital. Would be great to join you!',
-        status: 'pending'
+        message:
+          'I have always wanted to visit Nainital. Would be great to join you!',
+        status: 'pending',
       },
       {
         trip: createdTrips[8]._id,
         user: userIds[5],
-        message: 'Love nature and peaceful getaways. Please consider my request!',
-        status: 'approved'
-      }
+        message:
+          'Love nature and peaceful getaways. Please consider my request!',
+        status: 'approved',
+      },
     ];
 
     const createdRequests = await JoinRequest.create(joinRequests);
@@ -294,7 +316,7 @@ const importData = async () => {
     // Update trips with join request references
     for (const request of createdRequests) {
       await Trip.findByIdAndUpdate(request.trip, {
-        $push: { joinRequests: request._id }
+        $push: { joinRequests: request._id },
       });
     }
 
@@ -303,48 +325,51 @@ const importData = async () => {
       {
         trip: createdTrips[1]._id,
         sender: userIds[1],
-        content: 'Hey everyone! Looking forward to this trip!'
+        content: 'Hey everyone! Looking forward to this trip!',
       },
       {
         trip: createdTrips[1]._id,
         sender: userIds[2],
-        content: 'Same here! Should we plan the itinerary?'
+        content: 'Same here! Should we plan the itinerary?',
       },
       {
         trip: createdTrips[1]._id,
         sender: userIds[3],
-        content: 'I can help with booking accommodation if needed.'
+        content: 'I can help with booking accommodation if needed.',
       },
       {
         trip: createdTrips[2]._id,
         sender: userIds[2],
-        content: 'Excited for the heritage walk! What time should we start?'
+        content: 'Excited for the heritage walk! What time should we start?',
       },
       {
         trip: createdTrips[2]._id,
         sender: userIds[0],
-        content: 'I suggest we start early morning around 6 AM to avoid crowds.'
+        content:
+          'I suggest we start early morning around 6 AM to avoid crowds.',
       },
       {
         trip: createdTrips[5]._id,
         sender: userIds[5],
-        content: 'Don\'t forget to carry your ID cards for entry!'
+        content: "Don't forget to carry your ID cards for entry!",
       },
       {
         trip: createdTrips[5]._id,
         sender: userIds[0],
-        content: 'Thanks for the reminder! Also, should we book train tickets together?'
+        content:
+          'Thanks for the reminder! Also, should we book train tickets together?',
       },
       {
         trip: createdTrips[9]._id,
         sender: userIds[3],
-        content: 'This is going to be an amazing trip! The Pink City awaits!'
+        content: 'This is going to be an amazing trip! The Pink City awaits!',
       },
       {
         trip: createdTrips[9]._id,
         sender: userIds[1],
-        content: 'I have been to Jaipur before. Happy to share some recommendations.'
-      }
+        content:
+          'I have been to Jaipur before. Happy to share some recommendations.',
+      },
     ];
 
     const createdMessages = await Message.create(messages);
@@ -353,7 +378,7 @@ const importData = async () => {
     // Update trips with message references
     for (const message of createdMessages) {
       await Trip.findByIdAndUpdate(message.trip, {
-        $push: { messages: message._id }
+        $push: { messages: message._id },
       });
     }
 
@@ -362,7 +387,7 @@ const importData = async () => {
     console.log('Email: rahul.sharma@iitr.ac.in'.yellow);
     console.log('Password: password123'.yellow);
     console.log('\nAll users have the same password: password123'.magenta);
-    
+
     process.exit();
   } catch (error) {
     console.error(`Error: ${error.message}`.red.bold);
@@ -377,7 +402,7 @@ const deleteData = async () => {
     await Trip.deleteMany();
     await JoinRequest.deleteMany();
     await Message.deleteMany();
-    
+
     console.log('Data destroyed successfully!'.red.inverse.bold);
     process.exit();
   } catch (error) {

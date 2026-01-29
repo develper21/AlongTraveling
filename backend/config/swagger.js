@@ -19,12 +19,14 @@ const options = {
     },
     servers: [
       {
-        url: process.env.NODE_ENV === 'production' 
-          ? 'https://alongtraveling.onrender.com/api' 
-          : 'http://localhost:5000/api',
-        description: process.env.NODE_ENV === 'production' 
-          ? 'Production server' 
-          : 'Development server',
+        url:
+          process.env.NODE_ENV === 'production'
+            ? 'https://alongtraveling.onrender.com/api'
+            : 'http://localhost:5000/api',
+        description:
+          process.env.NODE_ENV === 'production'
+            ? 'Production server'
+            : 'Development server',
       },
     ],
     components: {
@@ -62,7 +64,15 @@ const options = {
             },
             year: {
               type: 'string',
-              enum: ['', '1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year', 'Alumni'],
+              enum: [
+                '',
+                '1st Year',
+                '2nd Year',
+                '3rd Year',
+                '4th Year',
+                '5th Year',
+                'Alumni',
+              ],
               description: 'Year of study',
             },
             bio: {
@@ -83,7 +93,15 @@ const options = {
         },
         Trip: {
           type: 'object',
-          required: ['title', 'destination', 'startDate', 'endDate', 'budget', 'mode', 'type'],
+          required: [
+            'title',
+            'destination',
+            'startDate',
+            'endDate',
+            'budget',
+            'mode',
+            'type',
+          ],
           properties: {
             _id: {
               type: 'string',
@@ -127,7 +145,8 @@ const options = {
             description: {
               type: 'string',
               description: 'Trip description',
-              example: 'An exciting adventure trip to Manali with trekking and sightseeing',
+              example:
+                'An exciting adventure trip to Manali with trekking and sightseeing',
             },
             organizer: {
               type: 'string',

@@ -8,7 +8,10 @@ const protect = async (req, res, next) => {
   let token;
 
   // Check for token in headers
-  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
     token = req.headers.authorization.split(' ')[1];
   }
 
@@ -16,7 +19,7 @@ const protect = async (req, res, next) => {
   if (!token) {
     return res.status(401).json({
       success: false,
-      error: 'Not authorized to access this route'
+      error: 'Not authorized to access this route',
     });
   }
 
@@ -30,7 +33,7 @@ const protect = async (req, res, next) => {
     if (!req.user) {
       return res.status(401).json({
         success: false,
-        error: 'User not found'
+        error: 'User not found',
       });
     }
 
@@ -38,7 +41,7 @@ const protect = async (req, res, next) => {
   } catch (error) {
     return res.status(401).json({
       success: false,
-      error: 'Not authorized to access this route'
+      error: 'Not authorized to access this route',
     });
   }
 };
@@ -51,7 +54,7 @@ const authorize = (...roles) => {
     if (!roles.includes(req.user.role)) {
       return res.status(403).json({
         success: false,
-        error: `User role ${req.user.role} is not authorized to access this route`
+        error: `User role ${req.user.role} is not authorized to access this route`,
       });
     }
     next();

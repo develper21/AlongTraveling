@@ -20,7 +20,7 @@ describe('Join Requests Routes', () => {
   beforeEach(async () => {
     // Create organizer
     user = await testUtils.createTestUser({
-      email: 'organizer@iitr.ac.in'
+      email: 'organizer@iitr.ac.in',
     });
     token = testUtils.generateTestToken(user._id);
 
@@ -29,7 +29,7 @@ describe('Join Requests Routes', () => {
 
     // Create other user for requests
     otherUser = await testUtils.createTestUser({
-      email: 'requester@iitr.ac.in'
+      email: 'requester@iitr.ac.in',
     });
     otherToken = testUtils.generateTestToken(otherUser._id);
   });
@@ -38,7 +38,7 @@ describe('Join Requests Routes', () => {
     it('should send join request', async () => {
       const requestData = {
         trip: trip._id,
-        message: 'I would love to join this trip!'
+        message: 'I would love to join this trip!',
       };
 
       const response = await request(app)
@@ -57,7 +57,7 @@ describe('Join Requests Routes', () => {
     it('should not send request without authentication', async () => {
       const requestData = {
         trip: trip._id,
-        message: 'I want to join!'
+        message: 'I want to join!',
       };
 
       const response = await request(app)
@@ -75,7 +75,7 @@ describe('Join Requests Routes', () => {
         .set('Authorization', `Bearer ${otherToken}`)
         .send({
           trip: trip._id,
-          message: 'First request'
+          message: 'First request',
         });
 
       // Try to send duplicate
@@ -84,7 +84,7 @@ describe('Join Requests Routes', () => {
         .set('Authorization', `Bearer ${otherToken}`)
         .send({
           trip: trip._id,
-          message: 'Duplicate request'
+          message: 'Duplicate request',
         })
         .expect(400);
 
@@ -102,7 +102,7 @@ describe('Join Requests Routes', () => {
         .set('Authorization', `Bearer ${otherToken}`)
         .send({
           trip: trip._id,
-          message: 'Request 1'
+          message: 'Request 1',
         });
     });
 
@@ -135,7 +135,7 @@ describe('Join Requests Routes', () => {
         .set('Authorization', `Bearer ${otherToken}`)
         .send({
           trip: trip._id,
-          message: 'My request'
+          message: 'My request',
         });
     });
 
@@ -170,9 +170,9 @@ describe('Join Requests Routes', () => {
         .set('Authorization', `Bearer ${otherToken}`)
         .send({
           trip: trip._id,
-          message: 'Approve me!'
+          message: 'Approve me!',
         });
-      
+
       requestId = response.body.data._id;
     });
 
@@ -206,9 +206,9 @@ describe('Join Requests Routes', () => {
         .set('Authorization', `Bearer ${otherToken}`)
         .send({
           trip: trip._id,
-          message: 'Reject me!'
+          message: 'Reject me!',
         });
-      
+
       requestId = response.body.data._id;
     });
 
@@ -242,9 +242,9 @@ describe('Join Requests Routes', () => {
         .set('Authorization', `Bearer ${otherToken}`)
         .send({
           trip: trip._id,
-          message: 'Cancel me!'
+          message: 'Cancel me!',
         });
-      
+
       requestId = response.body.data._id;
     });
 

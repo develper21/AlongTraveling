@@ -9,13 +9,17 @@ Your backend is ready to deploy to Render! All necessary files and guides have b
 ## 📖 Documentation Files
 
 ### 1. **QUICK_START.md** ⚡
+
 **Start here!** 15-minute quick deployment guide.
+
 - Fastest way to get deployed
 - Step-by-step commands
 - Perfect for first-time deployment
 
 ### 2. **RENDER_DEPLOYMENT_GUIDE.md** 📘
+
 Complete detailed guide with screenshots and explanations.
+
 - MongoDB Atlas setup
 - GitHub repository setup
 - Render configuration
@@ -23,14 +27,18 @@ Complete detailed guide with screenshots and explanations.
 - Post-deployment verification
 
 ### 3. **DEPLOYMENT_CHECKLIST.md** ✅
+
 Interactive checklist to track your progress.
+
 - Pre-deployment tasks
 - Deployment steps
 - Post-deployment verification
 - Nothing gets missed!
 
 ### 4. **TROUBLESHOOTING.md** 🔧
+
 Solutions to common deployment issues.
+
 - MongoDB connection problems
 - CORS errors
 - Socket.IO issues
@@ -38,7 +46,9 @@ Solutions to common deployment issues.
 - Performance optimization
 
 ### 5. **.env.example** 📝
+
 Template for environment variables.
+
 - Copy this to create your .env locally
 - Reference for Render environment variables
 
@@ -47,6 +57,7 @@ Template for environment variables.
 ## 🎯 Quick Overview
 
 ### What You're Deploying:
+
 - **Framework:** Node.js + Express
 - **Database:** MongoDB (via MongoDB Atlas)
 - **Real-time:** Socket.IO
@@ -54,6 +65,7 @@ Template for environment variables.
 - **Email:** Nodemailer (optional)
 
 ### Where You're Deploying:
+
 - **Platform:** Render.com
 - **Plan:** Free tier (can upgrade to $7/month)
 - **URL:** `https://your-service-name.onrender.com`
@@ -63,6 +75,7 @@ Template for environment variables.
 ## 🚀 Deployment in 3 Steps
 
 ### Step 1: Setup MongoDB Atlas (5 min)
+
 ```
 1. Create free MongoDB Atlas account
 2. Create M0 free cluster
@@ -72,6 +85,7 @@ Template for environment variables.
 ```
 
 ### Step 2: Push to GitHub (3 min)
+
 ```bash
 git init
 git add .
@@ -81,6 +95,7 @@ git push -u origin main
 ```
 
 ### Step 3: Deploy on Render (7 min)
+
 ```
 1. Create Render account (sign up with GitHub)
 2. New Web Service → Connect repository
@@ -97,17 +112,17 @@ git push -u origin main
 
 Add these in Render dashboard:
 
-| Variable | Example | Required |
-|----------|---------|----------|
-| `MONGODB_URI` | `mongodb+srv://user:pass@cluster.mongodb.net/hopalong` | ✅ Yes |
-| `JWT_SECRET` | `my-super-secret-key-12345` | ✅ Yes |
-| `NODE_ENV` | `production` | ✅ Yes |
-| `JWT_EXPIRE` | `30d` | ⭐ Recommended |
-| `FRONTEND_URL` | `https://your-frontend.vercel.app` | ⭐ Recommended |
-| `EMAIL_HOST` | `smtp.gmail.com` | ❌ Optional |
-| `EMAIL_PORT` | `587` | ❌ Optional |
-| `EMAIL_USER` | `your-email@gmail.com` | ❌ Optional |
-| `EMAIL_PASSWORD` | `your-app-password` | ❌ Optional |
+| Variable         | Example                                                | Required       |
+| ---------------- | ------------------------------------------------------ | -------------- |
+| `MONGODB_URI`    | `mongodb+srv://user:pass@cluster.mongodb.net/hopalong` | ✅ Yes         |
+| `JWT_SECRET`     | `my-super-secret-key-12345`                            | ✅ Yes         |
+| `NODE_ENV`       | `production`                                           | ✅ Yes         |
+| `JWT_EXPIRE`     | `30d`                                                  | ⭐ Recommended |
+| `FRONTEND_URL`   | `https://your-frontend.vercel.app`                     | ⭐ Recommended |
+| `EMAIL_HOST`     | `smtp.gmail.com`                                       | ❌ Optional    |
+| `EMAIL_PORT`     | `587`                                                  | ❌ Optional    |
+| `EMAIL_USER`     | `your-email@gmail.com`                                 | ❌ Optional    |
+| `EMAIL_PASSWORD` | `your-app-password`                                    | ❌ Optional    |
 
 **Note:** Do NOT add `PORT` - Render provides this automatically!
 
@@ -116,6 +131,7 @@ Add these in Render dashboard:
 ## ✅ What's Been Prepared
 
 ### Code Changes:
+
 - ✅ Added Node.js version to `package.json`
 - ✅ Created `.env.example` template
 - ✅ Server already configured for production
@@ -123,6 +139,7 @@ Add these in Render dashboard:
 - ✅ Socket.IO already configured
 
 ### Documentation Created:
+
 - ✅ Quick start guide
 - ✅ Detailed deployment guide
 - ✅ Deployment checklist
@@ -148,12 +165,14 @@ Before you start, make sure you have:
 ## 🎓 Recommended Deployment Path
 
 ### For First-Time Deployers:
+
 1. Read `QUICK_START.md` first
 2. Follow the steps exactly
 3. Use `DEPLOYMENT_CHECKLIST.md` to track progress
 4. Refer to `TROUBLESHOOTING.md` if issues arise
 
 ### For Experienced Deployers:
+
 1. Check `QUICK_START.md` for commands
 2. Reference `.env.example` for variables
 3. Deploy!
@@ -187,6 +206,7 @@ Before you start, make sure you have:
 ## 🎉 After Successful Deployment
 
 Your backend will be live at:
+
 ```
 https://your-service-name.onrender.com
 ```
@@ -194,11 +214,13 @@ https://your-service-name.onrender.com
 ### Test Your Deployment:
 
 **1. Health Check:**
+
 ```bash
 curl https://your-service-name.onrender.com/api/health
 ```
 
 **2. Root Endpoint:**
+
 ```bash
 curl https://your-service-name.onrender.com/
 ```
@@ -209,6 +231,7 @@ Visit: `https://your-service-name.onrender.com`
 ### Update Your Frontend:
 
 Replace your backend URL in frontend code:
+
 ```javascript
 const API_URL = 'https://your-service-name.onrender.com';
 ```
@@ -232,6 +255,7 @@ git push origin main
 ## 💰 Render Pricing
 
 ### Free Tier:
+
 - ✅ 750 hours/month (enough for 1 service)
 - ✅ Automatic HTTPS
 - ✅ Auto-deploy from GitHub
@@ -239,6 +263,7 @@ git push origin main
 - ❌ Cold start delay (30-60 seconds)
 
 ### Starter Tier ($7/month):
+
 - ✅ Always on (no sleep)
 - ✅ Faster performance
 - ✅ More resources
@@ -251,6 +276,7 @@ git push origin main
 ## 🔐 Security Best Practices
 
 ### ✅ Already Implemented:
+
 - Helmet.js for security headers
 - CORS properly configured
 - Rate limiting enabled
@@ -258,6 +284,7 @@ git push origin main
 - .gitignore includes .env
 
 ### 🔒 Additional Recommendations:
+
 1. Use strong JWT_SECRET (min 32 characters)
 2. Rotate JWT_SECRET periodically
 3. Use MongoDB Atlas IP whitelist in production
@@ -269,11 +296,13 @@ git push origin main
 ## 📊 Monitoring Your Deployment
 
 ### Render Dashboard:
+
 - **Logs:** Real-time application logs
 - **Metrics:** CPU, memory, bandwidth usage
 - **Events:** Deployment history
 
 ### MongoDB Atlas:
+
 - **Metrics:** Database performance
 - **Alerts:** Set up email alerts
 - **Backup:** Automatic backups on free tier

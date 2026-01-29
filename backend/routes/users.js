@@ -5,7 +5,7 @@ const {
   updateUser,
   getUserTrips,
   getUserParticipations,
-  getUserStats
+  getUserStats,
 } = require('../controllers/userController');
 const { protect } = require('../middleware/auth');
 

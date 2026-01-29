@@ -45,6 +45,7 @@ git push -u origin main
 ## 🚀 Step 3: Deploy on Render (7 min)
 
 ### 3.1 Create Web Service
+
 1. Go to [render.com](https://render.com) → Sign up with GitHub
 2. New + → Web Service
 3. Connect your repository
@@ -59,15 +60,16 @@ git push -u origin main
 
 Click "Add Environment Variable" and add these:
 
-| Key | Value |
-|-----|-------|
-| `MONGODB_URI` | Your MongoDB connection string |
-| `JWT_SECRET` | Any long random string (e.g., `my-super-secret-jwt-key-12345`) |
-| `NODE_ENV` | `production` |
-| `JWT_EXPIRE` | `30d` |
-| `FRONTEND_URL` | `http://localhost:3000` (update later) |
+| Key            | Value                                                          |
+| -------------- | -------------------------------------------------------------- |
+| `MONGODB_URI`  | Your MongoDB connection string                                 |
+| `JWT_SECRET`   | Any long random string (e.g., `my-super-secret-jwt-key-12345`) |
+| `NODE_ENV`     | `production`                                                   |
+| `JWT_EXPIRE`   | `30d`                                                          |
+| `FRONTEND_URL` | `http://localhost:3000` (update later)                         |
 
 ### 3.3 Deploy!
+
 - Click "Create Web Service"
 - Wait 3-5 minutes
 - Done! 🎉
@@ -79,17 +81,20 @@ Click "Add Environment Variable" and add these:
 Your backend will be at: `https://your-service-name.onrender.com`
 
 **Test in browser:**
+
 ```
 https://your-service-name.onrender.com/
 https://your-service-name.onrender.com/api/health
 ```
 
 **Test with curl:**
+
 ```bash
 curl https://your-service-name.onrender.com/api/health
 ```
 
 **Expected response:**
+
 ```json
 {
   "success": true,
@@ -115,18 +120,22 @@ Render auto-deploys! ✨
 ## 🆘 Quick Troubleshooting
 
 **Problem:** Deployment failed
+
 - Check Render logs for errors
 - Verify MongoDB URI is correct
 - Check all environment variables
 
 **Problem:** Can't connect to MongoDB
+
 - MongoDB Atlas → Network Access → Allow 0.0.0.0/0
 - Verify password in connection string
 
 **Problem:** CORS errors
+
 - Update `FRONTEND_URL` in Render environment variables
 
 **Problem:** Service is slow
+
 - Free tier sleeps after 15 min inactivity
 - First request takes 30-60 seconds to wake up
 - Upgrade to Starter ($7/month) for always-on
@@ -136,6 +145,7 @@ Render auto-deploys! ✨
 ## 📚 Full Documentation
 
 For detailed instructions, see:
+
 - `RENDER_DEPLOYMENT_GUIDE.md` - Complete step-by-step guide
 - `DEPLOYMENT_CHECKLIST.md` - Checklist to track progress
 

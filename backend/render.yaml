@@ -6,8 +6,8 @@ services:
     plan: free
     env: node
     region: oregon
-    buildCommand: "npm install --production"
-    startCommand: "npm start"
+    buildCommand: 'npm install --production'
+    startCommand: 'npm start'
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV
@@ -30,11 +30,11 @@ services:
         sync: false
       - key: EMAIL_PASSWORD
         sync: false
-    
+
     # Auto-deploy configuration
     autoDeploy: yes
     numInstances: 1
-    
+
     # Health check configuration
     healthCheck:
       path: /health

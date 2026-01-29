@@ -17,7 +17,7 @@ describe('Users Routes', () => {
 
   beforeEach(async () => {
     user = await testUtils.createTestUser({
-      email: 'users@iitr.ac.in'
+      email: 'users@iitr.ac.in',
     });
     token = testUtils.generateTestToken(user._id);
   });
@@ -36,7 +36,7 @@ describe('Users Routes', () => {
 
     it('should return 404 for non-existent user', async () => {
       const fakeId = '507f1f77bcf86cd799439011';
-      
+
       const response = await request(app)
         .get(`/api/users/${fakeId}`)
         .expect(404);
@@ -51,7 +51,7 @@ describe('Users Routes', () => {
         name: 'Updated Name',
         branch: 'ECE',
         year: '4th Year',
-        bio: 'Updated bio'
+        bio: 'Updated bio',
       };
 
       const response = await request(app)
@@ -67,7 +67,7 @@ describe('Users Routes', () => {
 
     it('should not allow non-owner to update profile', async () => {
       const otherUser = await testUtils.createTestUser({
-        email: 'other@iitr.ac.in'
+        email: 'other@iitr.ac.in',
       });
       const otherToken = testUtils.generateTestToken(otherUser._id);
 
@@ -94,10 +94,10 @@ describe('Users Routes', () => {
     beforeEach(async () => {
       // Create test trips for the user
       await testUtils.createTestTrip(user._id, {
-        title: 'User Trip 1'
+        title: 'User Trip 1',
       });
       await testUtils.createTestTrip(user._id, {
-        title: 'User Trip 2'
+        title: 'User Trip 2',
       });
     });
 
@@ -113,7 +113,7 @@ describe('Users Routes', () => {
 
     it('should return empty array for user with no trips', async () => {
       const newUser = await testUtils.createTestUser({
-        email: 'notrips@iitr.ac.in'
+        email: 'notrips@iitr.ac.in',
       });
 
       const response = await request(app)
@@ -129,10 +129,10 @@ describe('Users Routes', () => {
     beforeEach(async () => {
       // Create test trips
       await testUtils.createTestTrip(user._id, {
-        title: 'Trip 1'
+        title: 'Trip 1',
       });
       await testUtils.createTestTrip(user._id, {
-        title: 'Trip 2'
+        title: 'Trip 2',
       });
     });
 
@@ -149,7 +149,7 @@ describe('Users Routes', () => {
 
     it('should return 404 for non-existent user stats', async () => {
       const fakeId = '507f1f77bcf86cd799439011';
-      
+
       const response = await request(app)
         .get(`/api/users/${fakeId}/stats`)
         .expect(404);

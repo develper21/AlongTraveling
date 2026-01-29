@@ -7,7 +7,7 @@ const {
   updateTrip,
   deleteTrip,
   getTripsByUser,
-  getTripStats
+  getTripStats,
 } = require('../controllers/tripController');
 const { protect } = require('../middleware/auth');
 

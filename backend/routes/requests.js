@@ -6,7 +6,7 @@ const {
   getRequestsByUser,
   approveRequest,
   rejectRequest,
-  cancelRequest
+  cancelRequest,
 } = require('../controllers/requestController');
 const { protect } = require('../middleware/auth');
 

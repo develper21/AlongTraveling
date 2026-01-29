@@ -7,7 +7,7 @@ const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
-const colors = require('colors');
+require('colors');
 
 // Load env vars
 dotenv.config();
@@ -20,7 +20,7 @@ connectDB();
 const { specs, swaggerUi } = require('./config/swagger');
 
 // Logger configuration
-const { logger, requestLogger, errorLogger, logUserAction, logSecurityEvent, logSystemEvent, logSocketEvent } = require('./config/logger');
+const { logger, requestLogger, logSecurityEvent } = require('./config/logger');
 
 // Route files
 const authRoutes = require('./routes/auth');
@@ -41,27 +41,31 @@ const httpServer = createServer(app);
 // Determine allowed origins for CORS
 const DEFAULT_ORIGIN = process.env.FRONTEND_URL;
 const ADDITIONAL_ORIGINS = process.env.FRONTEND_URLS
-  ? process.env.FRONTEND_URLS.split(',').map(origin => origin.trim()).filter(Boolean)
+  ? process.env.FRONTEND_URLS.split(',')
+      .map((origin) => origin.trim())
+      .filter(Boolean)
   : [];
-const ALLOWED_ORIGINS = Array.from(new Set([
-  DEFAULT_ORIGIN,
-  'http://localhost:3000',
-  'http://localhost:3001',
-  'http://localhost:5173', // Vite default
-  'https://alontraveling.netlify.app',
-  'https://www.alontraveling.netlify.app',
-  'https://alongtraveling.netlify.app',
-  'https://www.alongtraveling.netlify.app',
-  ...ADDITIONAL_ORIGINS
-]));
+const ALLOWED_ORIGINS = Array.from(
+  new Set([
+    DEFAULT_ORIGIN,
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://localhost:5173', // Vite default
+    'https://alontraveling.netlify.app',
+    'https://www.alontraveling.netlify.app',
+    'https://alongtraveling.netlify.app',
+    'https://www.alongtraveling.netlify.app',
+    ...ADDITIONAL_ORIGINS,
+  ])
+);
 
 // Initialize Socket.IO
 const io = new Server(httpServer, {
   cors: {
     origin: ALLOWED_ORIGINS,
     methods: ['GET', 'POST'],
-    credentials: true
-  }
+    credentials: true,
+  },
 });
 
 // Body parser
@@ -69,40 +73,48 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Enable CORS with comprehensive configuration
-app.use(cors({
-  origin (origin, callback) {
-    // In production, allow all origins to prevent CORS issues
-    if (process.env.NODE_ENV === 'production') {
-      return callback(null, true);
-    }
-    
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    // Check if origin is in allowed list
-    if (ALLOWED_ORIGINS.includes(origin)) {
-      return callback(null, true);
-    }
-    
-    // Log the blocked origin for debugging
-    console.log(`CORS blocked origin: ${origin}`);
-    console.log(`Allowed origins: ${ALLOWED_ORIGINS.join(', ')}`);
-    
-    callback(new Error('Not allowed by CORS'));
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  preflightContinue: false,
-  optionsSuccessStatus: 204
-}));
+app.use(
+  cors({
+    origin(origin, callback) {
+      // In production, allow all origins to prevent CORS issues
+      if (process.env.NODE_ENV === 'production') {
+        return callback(null, true);
+      }
+
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+
+      // Check if origin is in allowed list
+      if (ALLOWED_ORIGINS.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // Log the blocked origin for debugging
+      console.log(`CORS blocked origin: ${origin}`);
+      console.log(`Allowed origins: ${ALLOWED_ORIGINS.join(', ')}`);
+
+      callback(new Error('Not allowed by CORS'));
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+  })
+);
 
 // Additional CORS headers for production
 app.use((req, res, next) => {
   if (process.env.NODE_ENV === 'production') {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    res.header(
+      'Access-Control-Allow-Methods',
+      'GET, POST, PUT, DELETE, OPTIONS'
+    );
+    res.header(
+      'Access-Control-Allow-Headers',
+      'Content-Type, Authorization, X-Requested-With'
+    );
     res.header('Access-Control-Allow-Credentials', 'true');
   }
   next();
@@ -135,9 +147,9 @@ const limiter = rateLimit({
     });
     res.status(429).json({
       success: false,
-      error: 'Too many requests from this IP, please try again later.'
+      error: 'Too many requests from this IP, please try again later.',
     });
-  }
+  },
 });
 
 app.use('/api/', limiter);
@@ -150,11 +162,15 @@ app.use('/api/requests', requestRoutes);
 app.use('/api/messages', messageRoutes);
 
 // Swagger API Documentation
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
-  explorer: true,
-  customCss: '.swagger-ui .topbar { display: none }',
-  customSiteTitle: 'HopAlong API Documentation'
-}));
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(specs, {
+    explorer: true,
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: 'HopAlong API Documentation',
+  })
+);
 
 // Health check route for Render
 app.get('/health', (req, res) => {
@@ -163,7 +179,7 @@ app.get('/health', (req, res) => {
     message: 'Server is healthy',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-    environment: process.env.NODE_ENV
+    environment: process.env.NODE_ENV,
   });
 });
 
@@ -172,7 +188,7 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({
     success: true,
     message: 'Server is running',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 
@@ -187,8 +203,8 @@ app.get('/', (req, res) => {
       users: '/api/users',
       trips: '/api/trips',
       requests: '/api/requests',
-      messages: '/api/messages'
-    }
+      messages: '/api/messages',
+    },
   });
 });
 
@@ -209,11 +225,11 @@ io.on('connection', (socket) => {
   socket.on('trip:join', (tripId) => {
     socket.join(`trip:${tripId}`);
     console.log(`Socket ${socket.id} joined trip room: ${tripId}`.yellow);
-    
+
     // Notify others in the room
     socket.to(`trip:${tripId}`).emit('user:joined', {
       userId: socket.userId,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   });
 
@@ -221,24 +237,24 @@ io.on('connection', (socket) => {
   socket.on('trip:leave', (tripId) => {
     socket.leave(`trip:${tripId}`);
     console.log(`Socket ${socket.id} left trip room: ${tripId}`.yellow);
-    
+
     // Notify others in the room
     socket.to(`trip:${tripId}`).emit('user:left', {
       userId: socket.userId,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   });
 
   // Handle new message
   socket.on('message:send', (data) => {
     const { tripId, message } = data;
-    
+
     // Broadcast to all users in the trip room
     io.to(`trip:${tripId}`).emit('message:new', {
       ...message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-    
+
     console.log(`Message sent to trip ${tripId}`.magenta);
   });
 
@@ -294,19 +310,22 @@ const startServer = async () => {
     // Test database connection
     await connectDB();
     console.log('Database connection verified'.green);
-    
+
     httpServer.listen(PORT, '0.0.0.0', () => {
       console.log(
-        `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
+        `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow
+          .bold
       );
-      console.log(`API Documentation: http://localhost:${PORT}/`.cyan.underline);
-      
+      console.log(
+        `API Documentation: http://localhost:${PORT}/`.cyan.underline
+      );
+
       // Signal that server is ready
       if (process.env.NODE_ENV === 'production') {
         console.log('Server is ready to accept connections'.green.bold);
       }
     });
-    
+
     // Handle server errors
     httpServer.on('error', (error) => {
       if (error.code === 'EADDRINUSE') {
@@ -316,7 +335,6 @@ const startServer = async () => {
       }
       process.exit(1);
     });
-    
   } catch (error) {
     console.error(`Failed to start server: ${error.message}`.red);
     process.exit(1);

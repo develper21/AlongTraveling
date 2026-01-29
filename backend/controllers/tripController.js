@@ -17,7 +17,7 @@ exports.getTrips = async (req, res, next) => {
       status,
       search,
       page = 1,
-      limit = 10
+      limit = 10,
     } = req.query;
 
     // Build query
@@ -52,7 +52,7 @@ exports.getTrips = async (req, res, next) => {
       query.$or = [
         { title: { $regex: search, $options: 'i' } },
         { description: { $regex: search, $options: 'i' } },
-        { destination: { $regex: search, $options: 'i' } }
+        { destination: { $regex: search, $options: 'i' } },
       ];
     }
 
@@ -76,7 +76,7 @@ exports.getTrips = async (req, res, next) => {
       total,
       page: parseInt(page),
       pages: Math.ceil(total / parseInt(limit)),
-      data: trips
+      data: trips,
     });
   } catch (error) {
     next(error);
@@ -95,13 +95,13 @@ exports.getTrip = async (req, res, next) => {
       .populate('participants', 'name email avatar branch year')
       .populate({
         path: 'joinRequests',
-        populate: { path: 'user', select: 'name email avatar branch year' }
+        populate: { path: 'user', select: 'name email avatar branch year' },
       });
 
     if (!trip) {
       return res.status(404).json({
         success: false,
-        error: 'Trip not found'
+        error: 'Trip not found',
       });
     }
 
@@ -111,7 +111,7 @@ exports.getTrip = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      data: trip
+      data: trip,
     });
   } catch (error) {
     next(error);
@@ -133,7 +133,7 @@ exports.createTrip = async (req, res, next) => {
 
     // Add trip to user's tripsCreated
     await User.findByIdAndUpdate(req.user._id, {
-      $push: { tripsCreated: trip._id }
+      $push: { tripsCreated: trip._id },
     });
 
     const populatedTrip = await Trip.findById(trip._id)
@@ -142,7 +142,7 @@ exports.createTrip = async (req, res, next) => {
 
     res.status(201).json({
       success: true,
-      data: populatedTrip
+      data: populatedTrip,
     });
   } catch (error) {
     next(error);
@@ -161,7 +161,7 @@ exports.updateTrip = async (req, res, next) => {
     if (!trip) {
       return res.status(404).json({
         success: false,
-        error: 'Trip not found'
+        error: 'Trip not found',
       });
     }
 
@@ -169,7 +169,7 @@ exports.updateTrip = async (req, res, next) => {
     if (trip.organizer.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
-        error: 'Not authorized to update this trip'
+        error: 'Not authorized to update this trip',
       });
     }
 
@@ -179,14 +179,14 @@ exports.updateTrip = async (req, res, next) => {
 
     trip = await Trip.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
-      runValidators: true
+      runValidators: true,
     })
       .populate('organizer', 'name email avatar branch year')
       .populate('participants', 'name email avatar');
 
     res.status(200).json({
       success: true,
-      data: trip
+      data: trip,
     });
   } catch (error) {
     next(error);
@@ -205,7 +205,7 @@ exports.deleteTrip = async (req, res, next) => {
     if (!trip) {
       return res.status(404).json({
         success: false,
-        error: 'Trip not found'
+        error: 'Trip not found',
       });
     }
 
@@ -213,7 +213,7 @@ exports.deleteTrip = async (req, res, next) => {
     if (trip.organizer.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
-        error: 'Not authorized to delete this trip'
+        error: 'Not authorized to delete this trip',
       });
     }
 
@@ -227,7 +227,7 @@ exports.deleteTrip = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      data: {}
+      data: {},
     });
   } catch (error) {
     next(error);
@@ -249,7 +249,7 @@ exports.getTripsByUser = async (req, res, next) => {
     res.status(200).json({
       success: true,
       count: trips.length,
-      data: trips
+      data: trips,
     });
   } catch (error) {
     next(error);
@@ -261,47 +261,46 @@ exports.getTripsByUser = async (req, res, next) => {
  * @route   GET /api/trips/stats
  * @access  Public
  */
-exports.getTripStats = async (req, res, next) => {
+exports.getTripStats = async (req, res, _next) => {
   try {
     // Get total number of upcoming trips
-    const totalTrips = await Trip.countDocuments({ 
+    const totalTrips = await Trip.countDocuments({
       status: 'upcoming',
-      startDate: { $gte: new Date() }
+      startDate: { $gte: new Date() },
     });
 
     // Get total participants across all upcoming trips
-    const trips = await Trip.find({ 
+    const trips = await Trip.find({
       status: 'upcoming',
-      startDate: { $gte: new Date() }
+      startDate: { $gte: new Date() },
     }).select('participants estimatedCost');
 
     let totalParticipants = 0;
     let totalCost = 0;
 
-    trips.forEach(trip => {
+    trips.forEach((trip) => {
       const participants = trip.participants?.length || 0;
       totalParticipants += participants;
       totalCost += Number(trip.estimatedCost) || 0;
     });
 
     // Calculate average cost per person
-    const averageCostPerPerson = totalParticipants > 0 
-      ? Math.round(totalCost / totalParticipants)
-      : 0;
+    const averageCostPerPerson =
+      totalParticipants > 0 ? Math.round(totalCost / totalParticipants) : 0;
 
     res.status(200).json({
       success: true,
       data: {
         totalTrips,
         totalParticipants,
-        averageCostPerPerson
-      }
+        averageCostPerPerson,
+      },
     });
   } catch (error) {
     console.error('Error getting trip stats:', error);
     res.status(500).json({
       success: false,
-      error: 'Server error'
+      error: 'Server error',
     });
   }
 };

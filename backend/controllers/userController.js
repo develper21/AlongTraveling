@@ -10,19 +10,22 @@ exports.getUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id)
       .select('-password')
-      .populate('tripsCreated', 'title destination startDate endDate status currentParticipants maxParticipants')
+      .populate(
+        'tripsCreated',
+        'title destination startDate endDate status currentParticipants maxParticipants'
+      )
       .populate('tripsJoined', 'title destination startDate endDate status');
 
     if (!user) {
       return res.status(404).json({
         success: false,
-        error: 'User not found'
+        error: 'User not found',
       });
     }
 
     res.status(200).json({
       success: true,
-      data: user
+      data: user,
     });
   } catch (error) {
     next(error);
@@ -40,7 +43,7 @@ exports.updateUser = async (req, res, next) => {
     if (req.params.id !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
-        error: 'Not authorized to update this profile'
+        error: 'Not authorized to update this profile',
       });
     }
 
@@ -53,25 +56,21 @@ exports.updateUser = async (req, res, next) => {
     if (bio !== undefined) fieldsToUpdate.bio = bio;
     if (avatar) fieldsToUpdate.avatar = avatar;
 
-    const user = await User.findByIdAndUpdate(
-      req.params.id,
-      fieldsToUpdate,
-      {
-        new: true,
-        runValidators: true
-      }
-    ).select('-password');
+    const user = await User.findByIdAndUpdate(req.params.id, fieldsToUpdate, {
+      new: true,
+      runValidators: true,
+    }).select('-password');
 
     if (!user) {
       return res.status(404).json({
         success: false,
-        error: 'User not found'
+        error: 'User not found',
       });
     }
 
     res.status(200).json({
       success: true,
-      data: user
+      data: user,
     });
   } catch (error) {
     next(error);
@@ -93,7 +92,7 @@ exports.getUserTrips = async (req, res, next) => {
     res.status(200).json({
       success: true,
       count: trips.length,
-      data: trips
+      data: trips,
     });
   } catch (error) {
     next(error);
@@ -109,7 +108,7 @@ exports.getUserParticipations = async (req, res, next) => {
   try {
     const trips = await Trip.find({
       participants: req.params.id,
-      organizer: { $ne: req.params.id }
+      organizer: { $ne: req.params.id },
     })
       .populate('organizer', 'name email avatar')
       .populate('participants', 'name email avatar')
@@ -118,7 +117,7 @@ exports.getUserParticipations = async (req, res, next) => {
     res.status(200).json({
       success: true,
       count: trips.length,
-      data: trips
+      data: trips,
     });
   } catch (error) {
     next(error);
@@ -137,18 +136,20 @@ exports.getUserStats = async (req, res, next) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        error: 'User not found'
+        error: 'User not found',
       });
     }
 
-    const tripsCreated = await Trip.countDocuments({ organizer: req.params.id });
+    const tripsCreated = await Trip.countDocuments({
+      organizer: req.params.id,
+    });
     const tripsJoined = await Trip.countDocuments({
       participants: req.params.id,
-      organizer: { $ne: req.params.id }
+      organizer: { $ne: req.params.id },
     });
     const tripsCompleted = await Trip.countDocuments({
       participants: req.params.id,
-      status: 'completed'
+      status: 'completed',
     });
 
     res.status(200).json({
@@ -157,8 +158,8 @@ exports.getUserStats = async (req, res, next) => {
         tripsCreated,
         tripsJoined,
         tripsCompleted,
-        totalTrips: tripsCreated + tripsJoined
-      }
+        totalTrips: tripsCreated + tripsJoined,
+      },
     });
   } catch (error) {
     next(error);

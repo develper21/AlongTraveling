@@ -16,7 +16,7 @@ describe('Authentication Routes', () => {
         password: 'password123',
         branch: 'CSE',
         year: '3rd Year',
-        bio: 'Test bio'
+        bio: 'Test bio',
       };
 
       const response = await request(app)
@@ -35,7 +35,7 @@ describe('Authentication Routes', () => {
       const userData = {
         name: 'John Doe',
         email: 'john.doe@gmail.com',
-        password: 'password123'
+        password: 'password123',
       };
 
       const response = await request(app)
@@ -49,13 +49,13 @@ describe('Authentication Routes', () => {
 
     it('should not register duplicate user', async () => {
       await testUtils.createTestUser({
-        email: 'duplicate@iitr.ac.in'
+        email: 'duplicate@iitr.ac.in',
       });
 
       const userData = {
         name: 'John Doe',
         email: 'duplicate@iitr.ac.in',
-        password: 'password123'
+        password: 'password123',
       };
 
       const response = await request(app)
@@ -72,14 +72,14 @@ describe('Authentication Routes', () => {
     beforeEach(async () => {
       await testUtils.createTestUser({
         email: 'login@iitr.ac.in',
-        password: 'password123'
+        password: 'password123',
       });
     });
 
     it('should login user with valid credentials', async () => {
       const loginData = {
         email: 'login@iitr.ac.in',
-        password: 'password123'
+        password: 'password123',
       };
 
       const response = await request(app)
@@ -95,7 +95,7 @@ describe('Authentication Routes', () => {
     it('should not login with invalid password', async () => {
       const loginData = {
         email: 'login@iitr.ac.in',
-        password: 'wrongpassword'
+        password: 'wrongpassword',
       };
 
       const response = await request(app)
@@ -109,7 +109,7 @@ describe('Authentication Routes', () => {
     it('should not login non-existent user', async () => {
       const loginData = {
         email: 'nonexistent@iitr.ac.in',
-        password: 'password123'
+        password: 'password123',
       };
 
       const response = await request(app)
@@ -126,7 +126,7 @@ describe('Authentication Routes', () => {
 
     beforeEach(async () => {
       user = await testUtils.createTestUser({
-        email: 'me@iitr.ac.in'
+        email: 'me@iitr.ac.in',
       });
       token = testUtils.generateTestToken(user._id);
     });
@@ -144,9 +144,7 @@ describe('Authentication Routes', () => {
     });
 
     it('should not get profile without token', async () => {
-      const response = await request(app)
-        .get('/api/auth/me')
-        .expect(401);
+      const response = await request(app).get('/api/auth/me').expect(401);
 
       expect(response.body.success).toBe(false);
     });
