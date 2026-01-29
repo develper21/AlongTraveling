@@ -1,0 +1,315 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '18'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # Build and Test
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    services:
+      mongodb:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.runCommand({ping: 1})'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: |
+          backend/package-lock.json
+          frontend/package-lock.json
+
+    - name: Install backend dependencies
+      run: |
+        cd backend
+        npm ci
+
+    - name: Install frontend dependencies
+      run: |
+        cd frontend
+        npm ci
+
+    - name: Run backend tests
+      run: |
+        cd backend
+        npm test
+      env:
+        NODE_ENV: test
+        JWT_SECRET: test-jwt-secret
+        MONGODB_URI: mongodb://localhost:27017/hopalong-test
+
+    - name: Run frontend linting
+      run: |
+        cd frontend
+        npm run lint
+
+    - name: Build frontend
+      run: |
+        cd frontend
+        npm run build
+      env:
+        VITE_API_BASE_URL: https://alongtraveling.onrender.com/api
+
+    - name: Security audit
+      run: |
+        cd backend && npm audit --audit-level=moderate
+        cd ../frontend && npm audit --audit-level=moderate
+
+  # Deploy Backend to Render
+  deploy-backend:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Deploy to Render
+      run: |
+        curl -X POST "https://api.render.com/v1/services/srv-xxxxx/deploys" \
+          -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+          -H "Content-Type: application/json" \
+          -d '{}'
+
+    - name: Wait for deployment
+      run: |
+        echo "Waiting for backend deployment to complete..."
+        sleep 60
+
+    - name: Verify backend deployment
+      run: |
+        curl -f https://alongtraveling.onrender.com/health || exit 1
+
+  # Deploy Frontend to Netlify
+  deploy-frontend:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+
+    - name: Install frontend dependencies
+      run: |
+        cd frontend
+        npm ci
+
+    - name: Build frontend for production
+      run: |
+        cd frontend
+        npm run build
+      env:
+        VITE_API_BASE_URL: https://alongtraveling.onrender.com/api
+
+    - name: Deploy to Netlify
+      uses: netlify/actions/cli@master
+      with:
+        args: deploy --prod --dir=frontend/dist
+      env:
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+    - name: Verify frontend deployment
+      run: |
+        curl -f https://alontraveling.netlify.app || exit 1
+
+  # Run E2E tests after deployment
+  e2e-tests:
+    needs: [deploy-backend, deploy-frontend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+
+    - name: Install frontend dependencies
+      run: |
+        cd frontend
+        npm ci
+
+    - name: Run E2E tests
+      run: |
+        cd frontend
+        npm run test:e2e
+      env:
+        CYPRESS_baseUrl: https://alontraveling.netlify.app
+        CYPRESS_apiUrl: https://alongtraveling.onrender.com/api
+
+    - name: Upload E2E test results
+      uses: actions/upload-artifact@v3
+      if: failure()
+      with:
+        name: cypress-results
+        path: frontend/cypress/videos/
+        retention-days: 7
+
+  # Create Release
+  create-release:
+    needs: [e2e-tests]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Generate changelog
+      run: |
+        npx conventional-changelog-cli -p angular -i CHANGELOG.md -s
+
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref_name }}
+        release_name: Release ${{ github.ref_name }}
+        body: |
+          ## 🚀 HopAlong Release ${{ github.ref_name }}
+          
+          ### ✨ New Features
+          - Comprehensive testing framework with Jest and Cypress
+          - ESLint and Prettier configuration for code quality
+          - Pre-commit hooks with Husky and lint-staged
+          - GitHub Actions CI/CD pipeline
+          - API documentation with Swagger/OpenAPI
+          - Error tracking and monitoring setup
+          - Security vulnerability fixes
+          - Code quality improvements and best practices
+          
+          ### 🔧 Improvements
+          - Enhanced project structure and organization
+          - Improved development workflow and standards
+          - Updated documentation and contribution guidelines
+          
+          ### 🐛 Bug Fixes
+          - All security vulnerabilities (npm audit fixes)
+          - Code quality issues and linting problems
+          - Testing infrastructure setup
+          
+          ### 📦 Installation
+          ```bash
+          # Clone the repository
+          git clone https://github.com/your-username/HopAlong.git
+          cd HopAlong
+          
+          # Install dependencies
+          npm run install:all
+          
+          # Start development servers
+          npm run dev
+          ```
+          
+          ### 📚 Documentation
+          - [API Documentation](https://alongtraveling.onrender.com/api-docs)
+          - [Contributing Guide](CONTRIBUTING.md)
+          - [Code of Conduct](CODE_OF_CONDUCT.md)
+          
+          ---
+          
+          🤖 This is an automated release created by GitHub Actions
+        draft: false
+        prerelease: false
+
+  # Notify team
+  notify:
+    needs: [deploy-backend, deploy-frontend, e2e-tests]
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+    - name: Notify on success
+      if: ${{ needs.deploy-backend.result == 'success' && needs.deploy-frontend.result == 'success' }}
+      run: |
+        echo "✅ Deployment completed successfully!"
+        echo "🌐 Frontend: https://alontraveling.netlify.app"
+        echo "🔧 Backend: https://alongtraveling.onrender.com"
+        echo "📚 API Docs: https://alongtraveling.onrender.com/api-docs"
+
+    - name: Notify on failure
+      if: failure()
+      run: |
+        echo "❌ Deployment failed!"
+        echo "Please check the logs and fix the issues."
+
+  # Health Check
+  health-check:
+    needs: [deploy-backend, deploy-frontend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+
+    steps:
+    - name: Wait for deployment
+      run: |
+        echo "Waiting for deployments to stabilize..."
+        sleep 120
+
+    - name: Check backend health
+      run: |
+        response=$(curl -s -o /dev/null -w "%{http_code}" https://alongtraveling.onrender.com/health)
+        if [ $response -eq 200 ]; then
+          echo "✅ Backend is healthy"
+        else
+          echo "❌ Backend health check failed with status $response"
+          exit 1
+        fi
+
+    - name: Check frontend health
+      run: |
+        response=$(curl -s -o /dev/null -w "%{http_code}" https://alontraveling.netlify.app)
+        if [ $response -eq 200 ]; then
+          echo "✅ Frontend is healthy"
+        else
+          echo "❌ Frontend health check failed with status $response"
+          exit 1
+        fi
+
+    - name: Check API documentation
+      run: |
+        response=$(curl -s -o /dev/null -w "%{http_code}" https://alongtraveling.onrender.com/api-docs)
+        if [ $response -eq 200 ]; then
+          echo "✅ API documentation is accessible"
+        else
+          echo "❌ API documentation check failed with status $response"
+          exit 1
+        fi

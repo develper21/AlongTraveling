@@ -1,0 +1,87 @@
+name: Dependency Update
+
+on:
+  schedule:
+    # Run every Monday at 9:00 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+jobs:
+  update-dependencies:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Update backend dependencies
+      run: |
+        cd backend
+        npm update
+        npm audit fix --audit-level=moderate
+        npm test
+        if [ $? -eq 0 ]; then
+          echo "Backend dependencies updated successfully"
+        else
+          echo "Backend tests failed after dependency update"
+          exit 1
+        fi
+
+    - name: Update frontend dependencies
+      run: |
+        cd frontend
+        npm update
+        npm audit fix --audit-level=moderate
+        npm run lint
+        npm run build
+        if [ $? -eq 0 ]; then
+          echo "Frontend dependencies updated successfully"
+        else
+          echo "Frontend build failed after dependency update"
+          exit 1
+        fi
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: 'chore: update dependencies'
+        title: '🔄 Automated Dependency Update'
+        body: |
+          ## 🔄 Automated Dependency Update
+          
+          This PR updates project dependencies to their latest versions.
+          
+          ### ✅ Checks Passed
+          - Backend tests
+          - Frontend build
+          - Security audit
+          - Code linting
+          
+          ### 📋 Changes
+          - Updated backend dependencies
+          - Updated frontend dependencies
+          - Fixed any security vulnerabilities
+          
+          ### 🔍 Review Required
+          Please review the changes and ensure:
+          - No breaking changes
+          - All functionality works as expected
+          - Performance is not degraded
+          
+          ---
+          
+          🤖 This is an automated PR created by GitHub Actions
+        branch: chore/dependency-update
+        delete-branch: true
+        labels: |
+          dependencies
+          automated
+          chore

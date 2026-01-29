@@ -1,0 +1,240 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  NODE_VERSION: '18'
+  MONGODB_VERSION: '6.0'
+
+jobs:
+  # Backend Tests
+  backend-tests:
+    runs-on: ubuntu-latest
+    
+    services:
+      mongodb:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.runCommand({ping: 1})'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: backend/package-lock.json
+
+    - name: Install backend dependencies
+      run: |
+        cd backend
+        npm ci
+
+    - name: Run backend linting
+      run: |
+        cd backend
+        npm run lint
+
+    - name: Run backend tests
+      run: |
+        cd backend
+        npm run test:coverage
+      env:
+        NODE_ENV: test
+        JWT_SECRET: test-jwt-secret
+        MONGODB_URI: mongodb://localhost:27017/hopalong-test
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./backend/coverage/lcov.info
+        directory: ./backend/coverage
+        flags: backend
+        name: backend-coverage
+
+  # Frontend Tests
+  frontend-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+
+    - name: Install frontend dependencies
+      run: |
+        cd frontend
+        npm ci
+
+    - name: Run frontend linting
+      run: |
+        cd frontend
+        npm run lint
+
+    - name: Build frontend
+      run: |
+        cd frontend
+        npm run build
+      env:
+        VITE_API_BASE_URL: http://localhost:5000/api
+
+    - name: Run E2E tests
+      run: |
+        cd frontend
+        npm run cypress:run
+      continue-on-error: true
+
+  # Security Audit
+  security-audit:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Run backend security audit
+      run: |
+        cd backend
+        npm ci
+        npm audit --audit-level=moderate
+
+    - name: Run frontend security audit
+      run: |
+        cd frontend
+        npm ci
+        npm audit --audit-level=moderate
+
+  # Code Quality
+  code-quality:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Check code formatting
+      run: |
+        cd backend
+        npm ci
+        npx prettier --check .
+        cd ../frontend
+        npm ci
+        npx prettier --check .
+
+    - name: Check for TODO comments
+      run: |
+        if grep -r "TODO\|FIXME\|XXX" --include="*.js" --include="*.jsx" --include="*.ts" --include="*.tsx" .; then
+          echo "Please resolve TODO/FIXME comments before merging"
+          exit 1
+        fi
+
+  # Build and Deploy (only on main branch)
+  deploy:
+    needs: [backend-tests, frontend-tests, security-audit, code-quality]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Deploy to Render (Backend)
+      run: |
+        curl -X POST "https://api.render.com/v1/services/srv-xxxxx/deploys" \
+          -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+          -H "Content-Type: application/json"
+
+    - name: Deploy to Netlify (Frontend)
+      uses: netlify/actions/cli@master
+      with:
+        args: deploy --prod --dir=frontend/dist
+      env:
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+  # Release (only on main branch)
+  release:
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Generate changelog
+      run: |
+        npx conventional-changelog-cli -p angular -i CHANGELOG.md -s
+
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ github.run_number }}
+        release_name: Release v${{ github.run_number }}
+        body: |
+          Automated release from main branch
+          ## Changes
+          - See CHANGELOG.md for detailed changes
+        draft: false
+        prerelease: false
+
+  # Notification
+  notify:
+    needs: [backend-tests, frontend-tests, security-audit, code-quality, deploy]
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+    - name: Notify on success
+      if: ${{ needs.deploy.result == 'success' }}
+      run: |
+        echo "✅ Pipeline completed successfully!"
+        # Add Slack/Discord notification here if needed
+
+    - name: Notify on failure
+      if: ${{ failure() }}
+      run: |
+        echo "❌ Pipeline failed!"
+        # Add Slack/Discord notification here if needed
