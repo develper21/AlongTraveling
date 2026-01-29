@@ -22,7 +22,7 @@ const TripSchema = new mongoose.Schema({
     type: Date,
     required: [true, 'Please add a start date'],
     validate: {
-      validator: function(value) {
+      validator(value) {
         // Allow dates from today onwards (not just future)
         const today = new Date();
         today.setHours(0, 0, 0, 0); // Set to start of day
@@ -35,7 +35,7 @@ const TripSchema = new mongoose.Schema({
     type: Date,
     required: [true, 'Please add an end date'],
     validate: {
-      validator: function(value) {
+      validator(value) {
         return value > this.startDate;
       },
       message: 'End date must be after start date'

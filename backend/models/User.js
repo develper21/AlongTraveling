@@ -33,7 +33,7 @@ const UserSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    default: function() {
+    default() {
       // Generate initials from name
       return this.name
         .split(' ')
