@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-commit checks..."
+
+# Run lint-staged
+npx lint-staged
+
+# Check for TODO/FIXME comments
+echo "📝 Checking for TODO/FIXME comments..."
+if grep -r "TODO\|FIXME\|XXX" --include="*.js" --include="*.jsx" --include="*.ts" --include="*.tsx" --exclude-dir=node_modules --exclude-dir=.git .; then
+  echo "⚠️  Warning: Please resolve TODO/FIXME comments before committing"
+  echo "   Use 'git commit --no-verify' to skip this check (not recommended)"
+  exit 1
+fi
+
+echo "✅ Pre-commit checks passed!"
