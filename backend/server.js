@@ -2,6 +2,11 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const helmet = require('helmet');
+const morgan = require('morgan');
+const compression = require('compression');
+const rateLimit = require('express-rate-limit');
+const { createServer } = require('http');
+const { Server } = require('socket.io');
 const customLogger = require('./utils/logger');
 
 // Load env vars
