@@ -1,13 +1,22 @@
-const redis = require('redis');
-const customLogger = require('../utils/logger');
-
 let redisClient = null;
 
 const connectRedis = async () => {
   try {
+    // Import custom logger
+    const customLogger = require('../utils/logger');
+    
     // Check if Redis is configured
     if (!process.env.REDIS_URL) {
       customLogger.warning('Redis not configured - skipping Redis connection');
+      return null;
+    }
+
+    // Try to require redis, if not available, skip
+    let redis;
+    try {
+      redis = require('redis');
+    } catch (error) {
+      customLogger.warning('Redis module not found - install with: npm install redis');
       return null;
     }
 
