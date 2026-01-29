@@ -1,14 +1,11 @@
 const request = require('supertest');
-const express = require('express');
-const cors = require('cors');
+const { createTestApp } = require('./helpers/app');
 const tripRoutes = require('../routes/trips');
 const authRoutes = require('../routes/auth');
 const { testUtils } = require('./setup');
 
 // Create test app
-const app = express();
-app.use(cors());
-app.use(express.json());
+const app = createTestApp();
 app.use('/api/auth', authRoutes);
 app.use('/api/trips', tripRoutes);
 

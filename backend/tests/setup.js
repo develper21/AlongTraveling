@@ -55,7 +55,7 @@ global.testUtils = {
   
   generateTestToken: (userId) => {
     const jwt = require('jsonwebtoken');
-    return jwt.sign({ id: userId }, process.env.JWT_SECRET || 'test-secret');
+    return jwt.sign({ id: userId }, process.env.JWT_SECRET || 'test-jwt-secret-key');
   }
 };
 

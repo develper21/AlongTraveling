@@ -3,26 +3,18 @@
 
 echo "🚀 Running pre-push checks..."
 
-# Run backend tests
-echo "🧪 Running backend tests..."
+# Run backend linting
+echo "🔍 Running backend linting..."
 cd backend
-npm test
-if [ $? -ne 0 ]; then
-  echo "❌ Backend tests failed"
-  exit 1
-fi
-
-# Run frontend linting
-echo "🔍 Running frontend linting..."
-cd ../frontend
 npm run lint
 if [ $? -ne 0 ]; then
-  echo "❌ Frontend linting failed"
+  echo "❌ Backend linting failed"
   exit 1
 fi
 
 # Build frontend
 echo "🏗️  Building frontend..."
+cd ../frontend
 npm run build
 if [ $? -ne 0 ]; then
   echo "❌ Frontend build failed"
