@@ -16,6 +16,12 @@ dotenv.config();
 const connectDB = require('./config/db');
 connectDB();
 
+// Swagger documentation
+const { specs, swaggerUi } = require('./config/swagger');
+
+// Logger configuration
+const { logger, requestLogger, errorLogger, logUserAction, logSecurityEvent, logSystemEvent, logSocketEvent } = require('./config/logger');
+
 // Route files
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
@@ -64,7 +70,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Enable CORS with comprehensive configuration
 app.use(cors({
-  origin: function (origin, callback) {
+  origin (origin, callback) {
     // In production, allow all origins to prevent CORS issues
     if (process.env.NODE_ENV === 'production') {
       return callback(null, true);
@@ -108,6 +114,9 @@ app.use(helmet());
 // Compression middleware
 app.use(compression());
 
+// Request logging middleware
+app.use(requestLogger);
+
 // Dev logging middleware
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -117,7 +126,18 @@ if (process.env.NODE_ENV === 'development') {
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
   max: 100, // limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.'
+  message: 'Too many requests from this IP, please try again later.',
+  handler: (req, res) => {
+    logSecurityEvent('rate_limit_exceeded', {
+      ip: req.ip,
+      url: req.url,
+      userAgent: req.get('User-Agent'),
+    });
+    res.status(429).json({
+      success: false,
+      error: 'Too many requests from this IP, please try again later.'
+    });
+  }
 });
 
 app.use('/api/', limiter);
@@ -128,6 +148,13 @@ app.use('/api/users', userRoutes);
 app.use('/api/trips', tripRoutes);
 app.use('/api/requests', requestRoutes);
 app.use('/api/messages', messageRoutes);
+
+// Swagger API Documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
+  explorer: true,
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: 'HopAlong API Documentation'
+}));
 
 // Health check route for Render
 app.get('/health', (req, res) => {
@@ -301,9 +328,42 @@ startServer();
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err, promise) => {
+  logger.error('Unhandled Promise Rejection', {
+    error: err.message,
+    stack: err.stack,
+    promise: promise.toString(),
+  });
   console.log(`Error: ${err.message}`.red.bold);
   // Close server & exit process
   httpServer.close(() => process.exit(1));
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (err) => {
+  logger.error('Uncaught Exception', {
+    error: err.message,
+    stack: err.stack,
+  });
+  console.log(`Error: ${err.message}`.red.bold);
+  // Close server & exit process
+  httpServer.close(() => process.exit(1));
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  logger.info('SIGTERM received, shutting down gracefully');
+  httpServer.close(() => {
+    logger.info('Process terminated');
+    process.exit(0);
+  });
+});
+
+process.on('SIGINT', () => {
+  logger.info('SIGINT received, shutting down gracefully');
+  httpServer.close(() => {
+    logger.info('Process terminated');
+    process.exit(0);
+  });
 });
 
 module.exports = { app, httpServer, io };
