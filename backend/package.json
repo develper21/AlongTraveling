@@ -9,7 +9,14 @@
   "scripts": {
     "start": "NODE_ENV=production node server.js",
     "dev": "nodemon server.js",
-    "seed": "node seeders/seedData.js"
+    "seed": "node seeders/seedData.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint . --ext .js",
+    "lint:fix": "eslint . --ext .js --fix",
+    "format": "prettier --write .",
+    "prepare": "husky install"
   },
   "keywords": [
     "travel",
@@ -36,6 +43,21 @@
     "socket.io": "^4.6.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "@apidevtools/swagger-parser": "^12.1.0",
+    "@types/jest": "^30.0.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^8.10.2",
+    "eslint-plugin-prettier": "^4.2.5",
+    "express-winston": "^4.2.0",
+    "husky": "^9.1.7",
+    "jest": "^30.2.0",
+    "lint-staged": "^16.2.7",
+    "mongodb-memory-server": "^11.0.1",
+    "nodemon": "^3.0.1",
+    "prettier": "^3.8.1",
+    "supertest": "^7.2.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "winston": "^3.19.0"
   }
 }
