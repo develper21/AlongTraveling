@@ -1,0 +1,76 @@
+{
+  "name": "hopalong",
+  "version": "1.0.0",
+  "description": "Travel Companion Platform for IIT Roorkee Students",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "husky install",
+    "lint:all": "npm run lint:backend && npm run lint:frontend",
+    "lint:backend": "cd backend && npm run lint",
+    "lint:frontend": "cd frontend && npm run lint",
+    "test:all": "npm run test:backend && npm run test:frontend",
+    "test:backend": "cd backend && npm test",
+    "test:frontend": "cd frontend && npm test",
+    "test:e2e": "cd frontend && npm run test:e2e",
+    "test:coverage": "npm run test:coverage:backend && npm run test:coverage:frontend",
+    "test:coverage:backend": "cd backend && npm run test:coverage",
+    "test:coverage:frontend": "cd frontend && npm run test:coverage || echo 'Frontend coverage not implemented yet'",
+    "build:all": "npm run build:frontend",
+    "build:frontend": "cd frontend && npm run build",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "format:all": "npm run format:backend && npm run format:frontend",
+    "format:backend": "cd backend && npm run format",
+    "format:frontend": "cd frontend && npm run format",
+    "audit:all": "npm run audit:backend && npm run audit:frontend",
+    "audit:backend": "cd backend && npm audit",
+    "audit:frontend": "cd frontend && npm audit",
+    "docs:api": "cd backend && npm run docs:generate",
+    "docs:serve": "cd backend && npm run docs:serve",
+    "clean": "rm -rf node_modules backend/node_modules frontend/node_modules",
+    "clean:install": "npm run clean && npm run install:all",
+    "pre-commit": "lint-staged",
+    "pre-push": "npm run test:backend && npm run lint:frontend && npm run build:frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0"
+  },
+  "lint-staged": {
+    "backend/**/*.{js,json}": [
+      "cd backend && npm run lint:fix",
+      "cd backend && npm run format"
+    ],
+    "frontend/**/*.{js,jsx,json}": [
+      "cd frontend && npm run lint:fix",
+      "cd frontend && npm run format"
+    ]
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/HopAlong.git"
+  },
+  "keywords": [
+    "travel",
+    "companion",
+    "iit",
+    "roorkee",
+    "mern",
+    "react",
+    "node",
+    "mongodb"
+  ],
+  "author": "HopAlong Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/your-username/HopAlong/issues"
+  },
+  "homepage": "https://github.com/your-username/HopAlong#readme"
+}
