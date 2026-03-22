@@ -1,14 +1,15 @@
 services:
-  # Web Service
   - type: web
     name: alongtraveling-backend
     runtime: node
     plan: free
-    env: node
     region: oregon
-    buildCommand: 'npm install --production'
-    startCommand: 'npm start'
+
+    buildCommand: npm install --production
+    startCommand: npm start
+
     healthCheckPath: /health
+
     envVars:
       - key: NODE_ENV
         value: production
@@ -31,16 +32,5 @@ services:
       - key: EMAIL_PASSWORD
         sync: false
 
-    # Auto-deploy configuration
-    autoDeploy: yes
+    autoDeploy: true
     numInstances: 1
-
-    # Health check configuration
-    healthCheck:
-      path: /health
-      checkInterval: 10
-      timeout: 5
-      gracePeriod: 30
-      restartPolicy:
-        type: on_failure
-        restartLimit: 3
