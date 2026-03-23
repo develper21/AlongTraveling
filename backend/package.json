@@ -1,7 +1,7 @@
 {
-  "name": "hopalong-backend",
+  "name": "alongtraveling-backend",
   "version": "1.0.0",
-  "description": "Backend API for HopAlong - Travel Companion App for IIT Roorkee Students",
+  "description": "Backend API for AlongTraveling - Travel Companion App for IIT Roorkee Students",
   "main": "server.js",
   "engines": {
     "node": ">=18.0.0"
@@ -15,8 +15,7 @@
     "test:coverage": "jest --coverage",
     "lint": "eslint . --ext .js",
     "lint:fix": "eslint . --ext .js --fix",
-    "format": "prettier --write .",
-    "prepare": "husky install"
+    "format": "prettier --write ."
   },
   "keywords": [
     "travel",
