@@ -1,10 +1,9 @@
 {
-  "name": "hopalong",
+  "name": "alongtraveling",
   "version": "1.0.0",
   "description": "Travel Companion Platform for IIT Roorkee Students",
   "main": "index.js",
   "scripts": {
-    "prepare": "husky install",
     "lint:all": "npm run lint:backend && npm run lint:frontend",
     "lint:backend": "cd backend && npm run lint",
     "lint:frontend": "cd frontend && npm run lint",
@@ -30,26 +29,10 @@
     "docs:api": "cd backend && npm run docs:generate",
     "docs:serve": "cd backend && npm run docs:serve",
     "clean": "rm -rf node_modules backend/node_modules frontend/node_modules",
-    "clean:install": "npm run clean && npm run install:all",
-    "lint:fix:backend": "cd backend && npm run lint:fix",
-    "lint:fix:frontend": "cd frontend && npm run lint:fix",
-    "pre-commit": "lint-staged",
-    "pre-push": "npm run test:backend && npm run lint:frontend && npm run build:frontend"
+    "clean:install": "npm run clean && npm run install:all"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2",
-    "husky": "^8.0.3",
-    "lint-staged": "^15.2.0"
-  },
-  "lint-staged": {
-    "backend/**/*.{js,json}": [
-      "npm run lint:fix:backend",
-      "npm run format:backend"
-    ],
-    "frontend/**/*.{js,jsx,json}": [
-      "npm run lint:fix:frontend",
-      "npm run format:frontend"
-    ]
+    "concurrently": "^8.2.2"
   },
   "engines": {
     "node": ">=18.0.0",
