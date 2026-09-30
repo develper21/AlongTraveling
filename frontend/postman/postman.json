@@ -1,0 +1,601 @@
+{
+  "info": {
+    "_postman_id": "e5f6a7b8-hop2-fro-nt0000000002",
+    "name": "HopAlong — Frontend API",
+    "description": "📮 Postman collection for the **HopAlong frontend** — mirrors every call made by `frontend/src/api/api.js` through the Axios client (`frontend/src/api/client.js`).\n\nUse this to test **exactly what the UI sends** to the backend, request-by-request, page-by-page.\n\n| Frontend API object | Backend prefix | Used by UI |\n|---|---|---|\n| `authApi` | `/api/auth` | Login.jsx, Register.jsx, Header (logout), Profile (password) |\n| `tripsApi` | `/api/trips` | Home (browse + filters), CreateTrip, TripDetail, Dashboard (stats) |\n| `requestsApi` | `/api/requests` | TripDetail (RequestModal, RequestsList), Dashboard |\n| `messagesApi` | `/api/messages` | TripDetail (ChatPanel) |\n| `usersApi` | `/api/users` | Profile.jsx, Dashboard |\n\n### 🚀 How to use\n1. Start backend (`cd backend && npm run dev`) and frontend (`cd frontend && npm run dev`).\n2. Run **authApi → Login** first — the test script auto-saves `token` and `userId` (same key `token` the app stores in `localStorage`).\n3. Create/save a trip via **tripsApi → Create Trip** to auto-save `tripId`; send a request via **requestsApi → Send Request** to save `requestId`; send a chat message via **messagesApi → Send Message** to save `messageId`.\n4. The Bearer token is applied automatically to protected requests — just like the Axios request interceptor does.\n\n### 🔑 Demo credentials (after `cd backend && npm run seed`)\n| Email | Password |\n|---|---|\n| `rahul.sharma@iitr.ac.in` | `password123` |\n| `priya.patel@iitr.ac.in` | `password123` |\n\n### 🧩 Mirror notes\n- The frontend `client.js` interceptor attaches `Authorization: Bearer <token>` to every request and redirects to `/` on **401** — the same behavior is reproduced here.\n- `requestsApi.sendRequest()` sends both `trip` and `tripId` keys; the backend controller reads `tripId`.\n- Real-time chat updates come via Socket.IO (`frontend/src/api/socket.js`) and cannot be tested with REST requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{token}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000/api" },
+    { "key": "token", "value": "" },
+    { "key": "userId", "value": "" },
+    { "key": "tripId", "value": "" },
+    { "key": "requestId", "value": "" },
+    { "key": "messageId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "authApi",
+      "description": "Authentication calls — `frontend/src/api/api.js → authApi`. Used by Login.jsx, Register.jsx, Header (logout) and Profile (update password).",
+      "item": [
+        {
+          "name": "Register (Register.jsx)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const res = pm.response.json();",
+                  "  if (res.data && res.data.token) {",
+                  "    pm.collectionVariables.set('token', res.data.token);",
+                  "    pm.collectionVariables.set('userId', res.data._id);",
+                  "    console.log('Token saved (same as localStorage token key in the app)');",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Student\",\n  \"email\": \"new.student@iitr.ac.in\",\n  \"password\": \"password123\",\n  \"branch\": \"CSE\",\n  \"year\": \"2nd Year\",\n  \"bio\": \"Hi! I travel on weekends.\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "`authApi.register(userData)` → `POST /auth/register`\n\nCalled by **Register.jsx** on form submit. Only `*.iitr.ac.in` emails are accepted. On success the app stores the token in `localStorage` (`setAuthToken`) and logs the user in.\n\n**Errors:** 400 validation / user exists."
+          }
+        },
+        {
+          "name": "Login (Login.jsx)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const res = pm.response.json();",
+                  "  if (res.data && res.data.token) {",
+                  "    pm.collectionVariables.set('token', res.data.token);",
+                  "    pm.collectionVariables.set('userId', res.data._id);",
+                  "    console.log('Token saved — protected requests in this collection will now pass');",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"rahul.sharma@iitr.ac.in\",\n  \"password\": \"password123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "`authApi.login(email, password)` → `POST /auth/login`\n\nCalled by **Login.jsx**. On 401 the app clears the token and redirects to `/` (same rule the collection's 401 responses will show). **Run this first** to populate `token` + `userId`."
+          }
+        },
+        {
+          "name": "Get Current User (App bootstrap)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "me"]
+            },
+            "description": "`authApi.getCurrentUser()` → `GET /auth/me`\n\nCalled on app bootstrap / refresh to restore the logged-in session from the stored token (ProtectedRoute + Zustand rehydrate)."
+          }
+        },
+        {
+          "name": "Update Password (Profile.jsx)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"password123\",\n  \"newPassword\": \"newpassword123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/updatepassword",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "updatepassword"]
+            },
+            "description": "`authApi.updatePassword(currentPassword, newPassword)` → `PUT /auth/updatepassword`\n\nCalled from the Profile page settings. New password must be ≥ 6 characters."
+          }
+        },
+        {
+          "name": "Logout (Header.jsx)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "logout"]
+            },
+            "description": "`authApi.logout()` → `POST /auth/logout`\n\nCalled from the Header logout button. The app then removes the auth token from `localStorage` and redirects to `/`."
+          }
+        }
+      ]
+    },
+    {
+      "name": "tripsApi",
+      "description": "Trip calls — `frontend/src/api/api.js → tripsApi`. Used by Home.jsx (browse + FiltersBar), CreateTrip.jsx, TripDetail.jsx and Dashboard.jsx (stats).",
+      "item": [
+        {
+          "name": "Get Trips + Filters (Home.jsx)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/trips?destination=&startDate=&endDate=&mode=&type=&status=&search=&page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["trips"],
+              "query": [
+                { "key": "destination", "value": "", "disabled": true, "description": "FiltersBar → destination input" },
+                { "key": "startDate", "value": "", "disabled": true, "description": "FiltersBar → start date" },
+                { "key": "endDate", "value": "", "disabled": true, "description": "FiltersBar → end date" },
+                { "key": "mode", "value": "Bus", "disabled": true, "description": "FiltersBar → Bus/Train/Car/Flight" },
+                { "key": "type", "value": "Adventure", "disabled": true, "description": "FiltersBar → Adventure/Leisure/Cultural/Educational" },
+                { "key": "status", "value": "upcoming", "disabled": true, "description": "FiltersBar → trip status" },
+                { "key": "search", "value": "", "disabled": true, "description": "Header/Home search box" },
+                { "key": "page", "value": "1", "description": "Pagination" },
+                { "key": "limit", "value": "10", "description": "Trips per page" }
+              ]
+            },
+            "description": "`tripsApi.getTrips(filters)` → `GET /trips?...`\n\nCalled by **Home.jsx** on load and every time the user applies **FiltersBar** or uses the search box. All filters map 1:1 to the URL params built in `api.js`."
+          }
+        },
+        {
+          "name": "Get Trip Detail (TripDetail.jsx)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/trips/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["trips", ":id"],
+              "variable": [
+                { "key": "id", "value": "{{tripId}}" }
+              ]
+            },
+            "description": "`tripsApi.getTrip(id)` → `GET /trips/:id`\n\nCalled by **TripDetail.jsx** to render trip info, organizer, participants, requests (for organizer) and the chat panel."
+          }
+        },
+        {
+          "name": "Create Trip (CreateTrip.jsx)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const res = pm.response.json();",
+                  "  if (res.data && res.data._id) {",
+                  "    pm.collectionVariables.set('tripId', res.data._id);",
+                  "    console.log('tripId saved for later requests/messages');",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Weekend Trip to Rishikesh\",\n  \"description\": \"River rafting, camping and bonfire by the Ganga.\",\n  \"destination\": \"Rishikesh\",\n  \"startDate\": \"2026-11-20\",\n  \"endDate\": \"2026-11-22\",\n  \"maxParticipants\": 6,\n  \"estimatedCost\": 2500,\n  \"mode\": \"Bus\",\n  \"type\": \"Adventure\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/trips",
+              "host": ["{{baseUrl}}"],
+              "path": ["trips"]
+            },
+            "description": "`tripsApi.createTrip(tripData)` → `POST /trips`\n\nCalled by **CreateTrip.jsx** (TripForm submit). Organizer is taken from the JWT — the same user becomes participant #1."
+          }
+        },
+        {
+          "name": "Update Trip (TripDetail.jsx — organizer)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estimatedCost\": 3000,\n  \"maxParticipants\": 8\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/trips/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["trips", ":id"],
+              "variable": [
+                { "key": "id", "value": "{{tripId}}" }
+              ]
+            },
+            "description": "`tripsApi.updateTrip(id, updates)` → `PUT /trips/:id`\n\nCalled by the Edit form in **TripDetail.jsx** — only visible to the trip organizer. Partial updates are supported (send only changed fields)."
+          }
+        },
+        {
+          "name": "Delete Trip (TripDetail.jsx — organizer)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/trips/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["trips", ":id"],
+              "variable": [
+                { "key": "id", "value": "{{tripId}}" }
+              ]
+            },
+            "description": "`tripsApi.deleteTrip(id)` → `DELETE /trips/:id`\n\nCalled by the Delete button in **TripDetail.jsx** (organizer only, confirmation dialog first). ⚠️ Destructive — run last."
+          }
+        },
+        {
+          "name": "Get User Trips (Profile.jsx)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/trips/user/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["trips", "user", ":userId"],
+              "variable": [
+                { "key": "userId", "value": "{{userId}}" }
+              ]
+            },
+            "description": "`tripsApi.getUserTrips(userId)` → `GET /trips/user/:userId`\n\nCalled by **Profile.jsx** to list trips organized by the user."
+          }
+        },
+        {
+          "name": "Get Trip Stats (Dashboard.jsx)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/trips/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["trips", "stats"]
+            },
+            "description": "`tripsApi.getTripStats()` → `GET /trips/stats`\n\nCalled by **Dashboard.jsx** to show trip statistics cards."
+          }
+        }
+      ]
+    },
+    {
+      "name": "requestsApi",
+      "description": "Join-request calls — `frontend/src/api/api.js → requestsApi`. Used by TripDetail.jsx (RequestModal, RequestsList) and Dashboard.jsx (my requests).",
+      "item": [
+        {
+          "name": "Send Join Request (RequestModal.jsx)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const res = pm.response.json();",
+                  "  if (res.data && res.data._id) {",
+                  "    pm.collectionVariables.set('requestId', res.data._id);",
+                  "    console.log('requestId saved for approve/reject/cancel');",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"trip\": \"{{tripId}}\",\n  \"tripId\": \"{{tripId}}\",\n  \"message\": \"Hi! I would love to join this trip.\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/requests",
+              "host": ["{{baseUrl}}"],
+              "path": ["requests"]
+            },
+            "description": "`requestsApi.sendRequest(tripId, message)` → `POST /requests`\n\nCalled by **RequestModal.jsx** from a trip detail page. Note: `api.js` sends both `trip` and `tripId`; the backend reads `tripId`. The organizer is notified live via Socket.IO `request:notification`.\n\n**Errors:** 400 (duplicate, trip full, own trip), 404 trip not found."
+          }
+        },
+        {
+          "name": "Get Requests For Trip (RequestsList.jsx)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/requests/trip/:tripId",
+              "host": ["{{baseUrl}}"],
+              "path": ["requests", "trip", ":tripId"],
+              "variable": [
+                { "key": "tripId", "value": "{{tripId}}" }
+              ]
+            },
+            "description": "`requestsApi.getRequestsForTrip(tripId)` → `GET /requests/trip/:tripId`\n\nCalled by **RequestsList.jsx** inside TripDetail (organizer view) to review pending/approved/rejected requests."
+          }
+        },
+        {
+          "name": "Get User Requests (Dashboard.jsx)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/requests/user/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["requests", "user", ":userId"],
+              "variable": [
+                { "key": "userId", "value": "{{userId}}" }
+              ]
+            },
+            "description": "`requestsApi.getUserRequests(userId)` → `GET /requests/user/:userId`\n\nCalled by **Dashboard.jsx** to show the requests you have sent and their statuses."
+          }
+        },
+        {
+          "name": "Approve Request (RequestsList.jsx — organizer)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/requests/:id/approve",
+              "host": ["{{baseUrl}}"],
+              "path": ["requests", ":id", "approve"],
+              "variable": [
+                { "key": "id", "value": "{{requestId}}" }
+              ]
+            },
+            "description": "`requestsApi.approveRequest(requestId)` → `PUT /requests/:id/approve`\n\nCalled by the ✅ Approve button in **RequestsList.jsx** (organizer only). Adds the requester to participants, bumps seat count, and fires `request:status-update` over Socket.IO."
+          }
+        },
+        {
+          "name": "Reject Request (RequestsList.jsx — organizer)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/requests/:id/reject",
+              "host": ["{{baseUrl}}"],
+              "path": ["requests", ":id", "reject"],
+              "variable": [
+                { "key": "id", "value": "{{requestId}}" }
+              ]
+            },
+            "description": "`requestsApi.rejectRequest(requestId)` → `PUT /requests/:id/reject`\n\nCalled by the ❌ Reject button in **RequestsList.jsx** (organizer only)."
+          }
+        },
+        {
+          "name": "Cancel Request (Dashboard.jsx — sender)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/requests/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["requests", ":id"],
+              "variable": [
+                { "key": "id", "value": "{{requestId}}" }
+              ]
+            },
+            "description": "`requestsApi.cancelRequest(requestId)` → `DELETE /requests/:id`\n\nCalled by the Cancel button next to your own pending request (sender only)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "messagesApi",
+      "description": "Chat calls — `frontend/src/api/api.js → messagesApi`. Used by TripDetail.jsx (ChatPanel). Real-time delivery uses Socket.IO on top of these REST calls.",
+      "item": [
+        {
+          "name": "Get Trip Messages (ChatPanel.jsx)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/messages/trip/:tripId",
+              "host": ["{{baseUrl}}"],
+              "path": ["messages", "trip", ":tripId"],
+              "variable": [
+                { "key": "tripId", "value": "{{tripId}}" }
+              ]
+            },
+            "description": "`messagesApi.getMessages(tripId)` → `GET /messages/trip/:tripId`\n\nCalled by **ChatPanel.jsx** when a trip is opened — loads chat history sorted oldest → newest. Returns `{ success, count, data }`; responds `[]` instead of an error when there are no messages. Cached 60s (`Cache-Control`)."
+          }
+        },
+        {
+          "name": "Send Message (ChatPanel.jsx)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const res = pm.response.json();",
+                  "  if (res.data && res.data._id) {",
+                  "    pm.collectionVariables.set('messageId', res.data._id);",
+                  "    console.log('messageId saved for delete test');",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"trip\": \"{{tripId}}\",\n  \"content\": \"Hello team! Excited for the trip 🎉\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/messages",
+              "host": ["{{baseUrl}}"],
+              "path": ["messages"]
+            },
+            "description": "`messagesApi.sendMessage(tripId, content)` → `POST /messages`\n\nCalled by the ChatPanel input. Body uses `trip` + `content` (matches `api.js`). Live broadcast to other participants happens via Socket.IO `message:new` in the `trip:{id}` room."
+          }
+        },
+        {
+          "name": "Delete Message (ChatPanel.jsx — sender)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/messages/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["messages", ":id"],
+              "variable": [
+                { "key": "id", "value": "{{messageId}}" }
+              ]
+            },
+            "description": "`messagesApi.deleteMessage(messageId)` → `DELETE /messages/:id`\n\nCalled by the delete option on your own chat bubbles (sender only)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "usersApi",
+      "description": "User profile calls — `frontend/src/api/api.js → usersApi`. Used by Profile.jsx and Dashboard.jsx.",
+      "item": [
+        {
+          "name": "Get User (Profile.jsx)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", ":id"],
+              "variable": [
+                { "key": "id", "value": "{{userId}}" }
+              ]
+            },
+            "description": "`usersApi.getUser(userId)` → `GET /users/:id`\n\nCalled by **Profile.jsx** (route `/profile/:id`) to render a user's public profile."
+          }
+        },
+        {
+          "name": "Update User (Profile.jsx — edit)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Rahul Sharma\",\n  \"branch\": \"CSE\",\n  \"year\": \"4th Year\",\n  \"bio\": \"Travel enthusiast | Trekker | Photographer\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", ":id"],
+              "variable": [
+                { "key": "id", "value": "{{userId}}" }
+              ]
+            },
+            "description": "`usersApi.updateUser(userId, updates)` → `PUT /users/:id`\n\nCalled by the Edit Profile form — only for your own profile. Updatable fields: `name`, `branch`, `year`, `bio`."
+          }
+        },
+        {
+          "name": "Get User Trips (Profile.jsx)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/:id/trips",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", ":id", "trips"],
+              "variable": [
+                { "key": "id", "value": "{{userId}}" }
+              ]
+            },
+            "description": "`usersApi.getUserTrips(userId)` → `GET /users/:id/trips`\n\nCalled by **Profile.jsx** — trips organized by this user."
+          }
+        },
+        {
+          "name": "Get User Participations (Profile.jsx)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/:id/participations",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", ":id", "participations"],
+              "variable": [
+                { "key": "id", "value": "{{userId}}" }
+              ]
+            },
+            "description": "`usersApi.getUserParticipations(userId)` → `GET /users/:id/participations`\n\nCalled by **Profile.jsx** — trips this user has joined as a participant."
+          }
+        },
+        {
+          "name": "Get User Stats (Dashboard.jsx)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/:id/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", ":id", "stats"]
+            },
+            "description": "`usersApi.getUserStats(userId)` → `GET /users/:id/stats`\n\nCalled by **Dashboard.jsx** — stats cards (trips created, trips joined)."
+          }
+        }
+      ]
+    }
+  ]
+}
