@@ -1,0 +1,652 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-hop1-alon-g00000000001",
+    "name": "HopAlong — Backend API",
+    "description": "📮 Complete Postman collection for the **HopAlong backend** (Express + MongoDB + Socket.IO).\n\nCovers **every route** mounted in `backend/server.js`:\n\n| Folder | Prefix | Routes |\n|---|---|---|\n| 🏥 Health | `/health`, `/api/health` | 3 |\n| 🔐 Auth | `/api/auth` | 5 |\n| 👤 Users | `/api/users` | 5 |\n| 🧳 Trips | `/api/trips` | 7 |\n| 🤝 Join Requests | `/api/requests` | 6 |\n| 💬 Messages | `/api/messages` | 3 |\n\n### 🚀 How to use\n1. Start the backend: `cd backend && npm run dev` (default `http://localhost:5000`).\n2. (Optional) Seed demo data: `cd backend && npm run seed` — 6 demo users + 10 trips.\n3. Run **Auth → Login User** first. The test script auto-saves `token` and `userId`.\n4. Run **Trips → Create Trip** to auto-save `tripId`, **Requests → Send Join Request** to save `requestId`, **Messages → Send Message** to save `messageId`.\n5. Or run the entire collection with the **Collection Runner** in order.\n\n### 🔑 Demo credentials (after `npm run seed`)\n| Email | Password |\n|---|---|\n| `rahul.sharma@iitr.ac.in` | `password123` |\n| `priya.patel@iitr.ac.in` | `password123` |\n| `arjun.kumar@iitr.ac.in` | `password123` |\n\n### ⚠️ Notes\n- Registration only accepts `*.iitr.ac.in` emails.\n- Rate limit: **100 requests / 10 min** per IP on `/api/*`.\n- Trip `startDate` must be today or in the future; `endDate` must be after `startDate`.\n- Approve/Reject/Update/Delete trip routes require the **organizer's** token.\n- Real-time events (chat, notifications) run over Socket.IO and are not covered by REST requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{token}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000" },
+    { "key": "token", "value": "" },
+    { "key": "userId", "value": "" },
+    { "key": "tripId", "value": "" },
+    { "key": "requestId", "value": "" },
+    { "key": "messageId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "🏥 Health",
+      "description": "Server health-check routes used by Render and monitoring.",
+      "item": [
+        {
+          "name": "Server Health",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Returns server status, uptime and environment. Used by Render health checks."
+          }
+        },
+        {
+          "name": "API Health",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "health"]
+            },
+            "description": "Quick API availability check."
+          }
+        },
+        {
+          "name": "API Root",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": ["{{baseUrl}}"],
+              "path": [""]
+            },
+            "description": "Welcome message with the list of all mounted API endpoints."
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔐 Auth",
+      "description": "Authentication: register (IITR email only), login, current user, password update, logout.",
+      "item": [
+        {
+          "name": "Register User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const res = pm.response.json();",
+                  "  if (res.data && res.data.token) {",
+                  "    pm.collectionVariables.set('token', res.data.token);",
+                  "    pm.collectionVariables.set('userId', res.data._id);",
+                  "    console.log('Saved token + userId:', res.data._id);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Student\",\n  \"email\": \"test.student@iitr.ac.in\",\n  \"password\": \"password123\",\n  \"branch\": \"CSE\",\n  \"year\": \"3rd Year\",\n  \"bio\": \"Love weekend trips!\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            },
+            "description": "Register a new user. Email **must** be an IITR domain (`*.iitr.ac.in`). Returns the user object with a JWT `token`. Test script auto-saves `token` + `userId`.\n\n**Errors:** 400 validation error / email already exists."
+          }
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const res = pm.response.json();",
+                  "  if (res.data && res.data.token) {",
+                  "    pm.collectionVariables.set('token', res.data.token);",
+                  "    pm.collectionVariables.set('userId', res.data._id);",
+                  "    console.log('Saved token + userId:', res.data._id);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"rahul.sharma@iitr.ac.in\",\n  \"password\": \"password123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Login with email + password. Returns user object with JWT. **Run this first** — the test script auto-saves `token` + `userId`.\n\n**Errors:** 401 invalid credentials."
+          }
+        },
+        {
+          "name": "Get Current User (me)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "me"]
+            },
+            "description": "Get the profile of the currently authenticated user (from the Bearer token).\n\n**Errors:** 401 not authorized."
+          }
+        },
+        {
+          "name": "Update Password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"password123\",\n  \"newPassword\": \"newpassword123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/updatepassword",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "updatepassword"]
+            },
+            "description": "Change the current user's password (min 6 chars). Use the **current** password of the logged-in user.\n\n**Errors:** 401 wrong current password."
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "logout"]
+            },
+            "description": "Logout the current user (client should discard the token afterwards)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "👤 Users",
+      "description": "Public profiles, profile updates, trips, participations and stats.",
+      "item": [
+        {
+          "name": "Get User Profile",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", ":id"],
+              "variable": [
+                { "key": "id", "value": "{{userId}}" }
+              ]
+            },
+            "description": "Get a user's public profile by ID. Defaults to the logged-in `userId`.\n\n**Errors:** 404 user not found."
+          }
+        },
+        {
+          "name": "Update User Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Rahul Sharma\",\n  \"branch\": \"CSE\",\n  \"year\": \"4th Year\",\n  \"bio\": \"Travel enthusiast | Trekker\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", ":id"],
+              "variable": [
+                { "key": "id", "value": "{{userId}}" }
+              ]
+            },
+            "description": "Update a user profile (name, branch, year, bio). Protected — users can only update their own profile."
+          }
+        },
+        {
+          "name": "Get User Trips",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/:id/trips",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", ":id", "trips"],
+              "variable": [
+                { "key": "id", "value": "{{userId}}" }
+              ]
+            },
+            "description": "Get all trips **organized** by the user."
+          }
+        },
+        {
+          "name": "Get User Participations",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/:id/participations",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", ":id", "participations"],
+              "variable": [
+                { "key": "id", "value": "{{userId}}" }
+              ]
+            },
+            "description": "Get all trips the user has **joined** as a participant."
+          }
+        },
+        {
+          "name": "Get User Stats",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/:id/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", ":id", "stats"],
+              "variable": [
+                { "key": "id", "value": "{{userId}}" }
+              ]
+            },
+            "description": "Get user statistics — trips created, trips joined, etc."
+          }
+        }
+      ]
+    },
+    {
+      "name": "🧳 Trips",
+      "description": "Trip CRUD, filters, search, stats and per-user trips.",
+      "item": [
+        {
+          "name": "Get All Trips (filters)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trips?destination=&startDate=&endDate=&mode=&type=&status=&search=&page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trips"],
+              "query": [
+                { "key": "destination", "value": "", "disabled": true, "description": "Filter by destination" },
+                { "key": "startDate", "value": "", "disabled": true, "description": "Filter by start date" },
+                { "key": "endDate", "value": "", "disabled": true, "description": "Filter by end date" },
+                { "key": "mode", "value": "Bus", "disabled": true, "description": "Bus | Train | Car | Flight" },
+                { "key": "type", "value": "Adventure", "disabled": true, "description": "Adventure | Leisure | Cultural | Educational" },
+                { "key": "status", "value": "upcoming", "disabled": true, "description": "upcoming | ongoing | completed | cancelled" },
+                { "key": "search", "value": "", "disabled": true, "description": "Search in title, description, destination" },
+                { "key": "page", "value": "1", "description": "Page number (default 1)" },
+                { "key": "limit", "value": "10", "description": "Results per page (default 10)" }
+              ]
+            },
+            "description": "Browse all trips. All query params are optional — enable only the filters you need."
+          }
+        },
+        {
+          "name": "Get Trip Stats",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trips/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trips", "stats"]
+            },
+            "description": "Global trip statistics (totals by status, mode, etc.) — used by the Dashboard."
+          }
+        },
+        {
+          "name": "Get Trips By User",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trips/user/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trips", "user", ":userId"],
+              "variable": [
+                { "key": "userId", "value": "{{userId}}" }
+              ]
+            },
+            "description": "Get all trips organized by a specific user (used by Profile page)."
+          }
+        },
+        {
+          "name": "Create Trip",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const res = pm.response.json();",
+                  "  if (res.data && res.data._id) {",
+                  "    pm.collectionVariables.set('tripId', res.data._id);",
+                  "    console.log('Saved tripId:', res.data._id);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Weekend Trip to Rishikesh\",\n  \"description\": \"River rafting, camping and bonfire by the Ganga.\",\n  \"destination\": \"Rishikesh\",\n  \"startDate\": \"2026-11-20\",\n  \"endDate\": \"2026-11-22\",\n  \"maxParticipants\": 6,\n  \"estimatedCost\": 2500,\n  \"mode\": \"Bus\",\n  \"type\": \"Adventure\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/trips",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trips"]
+            },
+            "description": "Create a new trip. Protected — organizer is taken from the token. Test script auto-saves `tripId`.\n\n**Validation:** `startDate` must be today or future, `endDate` after `startDate`, `maxParticipants` 2–50, `mode` (Bus/Train/Car/Flight), `type` (Adventure/Leisure/Cultural/Educational)."
+          }
+        },
+        {
+          "name": "Get Trip By ID",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trips/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trips", ":id"],
+              "variable": [
+                { "key": "id", "value": "{{tripId}}" }
+              ]
+            },
+            "description": "Get a single trip with organizer and participants populated.\n\n**Errors:** 404 trip not found."
+          }
+        },
+        {
+          "name": "Update Trip",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Weekend Trip to Rishikesh (Updated)\",\n  \"estimatedCost\": 3000,\n  \"maxParticipants\": 8\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/trips/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trips", ":id"],
+              "variable": [
+                { "key": "id", "value": "{{tripId}}" }
+              ]
+            },
+            "description": "Update a trip. Protected — **only the organizer** can update.\n\n**Errors:** 401/403 not owner, 404 not found."
+          }
+        },
+        {
+          "name": "Delete Trip",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trips/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trips", ":id"],
+              "variable": [
+                { "key": "id", "value": "{{tripId}}" }
+              ]
+            },
+            "description": "Delete a trip. Protected — **only the organizer** can delete. ⚠️ Destructive — run last."
+          }
+        }
+      ]
+    },
+    {
+      "name": "🤝 Join Requests",
+      "description": "Request-to-join workflow: send, list (per trip / per user), approve, reject, cancel.",
+      "item": [
+        {
+          "name": "Send Join Request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const res = pm.response.json();",
+                  "  if (res.data && res.data._id) {",
+                  "    pm.collectionVariables.set('requestId', res.data._id);",
+                  "    console.log('Saved requestId:', res.data._id);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tripId\": \"{{tripId}}\",\n  \"message\": \"Hi! I would love to join this trip. I have done rafting before.\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/requests",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requests"]
+            },
+            "description": "Send a join request for a trip (as the logged-in user). Test script auto-saves `requestId`.\n\n**Rules:** cannot join own trip, cannot join twice, trip must have seats, must not already be a participant.\n\n**Errors:** 400 (full / duplicate / own trip), 404 trip not found."
+          }
+        },
+        {
+          "name": "Get Trip Requests (organizer)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/trip/:tripId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requests", "trip", ":tripId"],
+              "variable": [
+                { "key": "tripId", "value": "{{tripId}}" }
+              ]
+            },
+            "description": "Get all join requests for a trip. Protected — meant for the **trip organizer** to review requests (RequestsList UI)."
+          }
+        },
+        {
+          "name": "Get My Requests (per user)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/user/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requests", "user", ":userId"],
+              "variable": [
+                { "key": "userId", "value": "{{userId}}" }
+              ]
+            },
+            "description": "Get all join requests **sent by** a user with their statuses (pending / approved / rejected)."
+          }
+        },
+        {
+          "name": "Approve Request",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/:id/approve",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requests", ":id", "approve"],
+              "variable": [
+                { "key": "id", "value": "{{requestId}}" }
+              ]
+            },
+            "description": "Approve a join request. Requires the **trip organizer's** token — the participant count is updated automatically and the requester is notified via Socket.IO (`request:status-update`)."
+          }
+        },
+        {
+          "name": "Reject Request",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/:id/reject",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requests", ":id", "reject"],
+              "variable": [
+                { "key": "id", "value": "{{requestId}}" }
+              ]
+            },
+            "description": "Reject a join request. Requires the **trip organizer's** token. The requester receives a status-update notification."
+          }
+        },
+        {
+          "name": "Cancel Request",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requests", ":id"],
+              "variable": [
+                { "key": "id", "value": "{{requestId}}" }
+              ]
+            },
+            "description": "Cancel (withdraw) a join request. Only the **sender** of the request can cancel it."
+          }
+        }
+      ]
+    },
+    {
+      "name": "💬 Messages",
+      "description": "Trip chat messages (REST layer). Real-time delivery happens via Socket.IO (`message:new`).",
+      "item": [
+        {
+          "name": "Get Trip Messages",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/messages/trip/:tripId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "messages", "trip", ":tripId"],
+              "variable": [
+                { "key": "tripId", "value": "{{tripId}}" }
+              ]
+            },
+            "description": "Get the full chat history for a trip (sorted by creation time). Returns `{ success, count, data }` — returns an empty array instead of an error if the trip has no messages.\n\nResponse is cached for 60 seconds (`Cache-Control: public, max-age=60`)."
+          }
+        },
+        {
+          "name": "Send Message",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const res = pm.response.json();",
+                  "  if (res.data && res.data._id) {",
+                  "    pm.collectionVariables.set('messageId', res.data._id);",
+                  "    console.log('Saved messageId:', res.data._id);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"trip\": \"{{tripId}}\",\n  \"content\": \"Hello team! Excited for the trip 🎉\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/messages",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "messages"]
+            },
+            "description": "Send a chat message to a trip. Body must contain `trip` (trip ID) and `content` (max 1000 chars). Test script auto-saves `messageId`.\n\n**Errors:** 400 missing trip/content."
+          }
+        },
+        {
+          "name": "Delete Message",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/messages/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "messages", ":id"],
+              "variable": [
+                { "key": "id", "value": "{{messageId}}" }
+              ]
+            },
+            "description": "Delete a message. Only the **sender** can delete their own message."
+          }
+        }
+      ]
+    }
+  ]
+}
