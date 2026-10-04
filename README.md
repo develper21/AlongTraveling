@@ -590,10 +590,3 @@ All seeded users share the same password for testing convenience.
 5. Open a Pull Request
 
 ---
-
-## License
-
-MIT License
-
-Copyright (c) 2025 HopAlong
----
