@@ -27,9 +27,5 @@ module.exports = {
     },
   },
   testTimeout: 30000,
-  globalSetup: async () => {
-    // Set test environment variables
-    process.env.NODE_ENV = 'test';
-    process.env.JWT_SECRET = 'test-jwt-secret-key';
-  },
+  globalSetup: '<rootDir>/tests/globalSetup.js',
 };
