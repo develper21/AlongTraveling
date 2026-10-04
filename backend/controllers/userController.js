@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Trip = require('../models/Trip');
+const JoinRequest = require('../models/JoinRequest');
 
 /**
  * @desc    Get user by ID
@@ -151,6 +152,9 @@ exports.getUserStats = async (req, res, next) => {
       participants: req.params.id,
       status: 'completed',
     });
+    const joinRequestsSent = await JoinRequest.countDocuments({
+      user: req.params.id,
+    });
 
     res.status(200).json({
       success: true,
@@ -158,6 +162,7 @@ exports.getUserStats = async (req, res, next) => {
         tripsCreated,
         tripsJoined,
         tripsCompleted,
+        joinRequestsSent,
         totalTrips: tripsCreated + tripsJoined,
       },
     });
