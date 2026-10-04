@@ -1,12 +1,12 @@
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
-import { setAuthToken, removeAuthToken } from '../api/config'
-import { connectSocket, disconnectSocket } from '../api/socket'
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { setAuthToken, removeAuthToken } from '../api/config';
+import { connectSocket, disconnectSocket } from '../api/socket';
 
 // Global store using Zustand with persistence
 const useStore = create(
   persist(
-    (set, get) => ({
+    (set) => ({
       // Authentication state
       isAuthenticated: false,
       currentUser: null,
@@ -15,12 +15,12 @@ const useStore = create(
       // Login action - stores token and user, connects socket
       login: (userData, token) => {
         setAuthToken(token);
-        set({ 
-          isAuthenticated: true, 
+        set({
+          isAuthenticated: true,
           currentUser: userData,
-          token 
+          token,
         });
-        
+
         // Connect to Socket.IO
         if (userData._id) {
           connectSocket(userData._id);
@@ -31,10 +31,10 @@ const useStore = create(
       logout: () => {
         removeAuthToken();
         disconnectSocket();
-        set({ 
-          isAuthenticated: false, 
+        set({
+          isAuthenticated: false,
           currentUser: null,
-          token: null 
+          token: null,
         });
       },
 
@@ -43,18 +43,23 @@ const useStore = create(
 
       // Notifications (in-memory)
       notifications: [],
-      
-      addNotification: (notification) => set((state) => ({
-        notifications: [...state.notifications, { 
-          id: Date.now(), 
-          ...notification,
-          timestamp: new Date()
-        }]
-      })),
 
-      removeNotification: (id) => set((state) => ({
-        notifications: state.notifications.filter(n => n.id !== id)
-      })),
+      addNotification: (notification) =>
+        set((state) => ({
+          notifications: [
+            ...state.notifications,
+            {
+              id: Date.now(),
+              ...notification,
+              timestamp: new Date(),
+            },
+          ],
+        })),
+
+      removeNotification: (id) =>
+        set((state) => ({
+          notifications: state.notifications.filter((n) => n.id !== id),
+        })),
 
       clearNotifications: () => set({ notifications: [] }),
 
@@ -64,13 +69,13 @@ const useStore = create(
     }),
     {
       name: 'hopalong-auth', // localStorage key
-      partialize: (state) => ({ 
-        isAuthenticated: state.isAuthenticated, 
+      partialize: (state) => ({
+        isAuthenticated: state.isAuthenticated,
         currentUser: state.currentUser,
-        token: state.token
+        token: state.token,
       }),
     }
   )
-)
+);
 
-export default useStore
+export default useStore;
