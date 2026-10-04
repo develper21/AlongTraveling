@@ -6,7 +6,7 @@ This document keeps track of the current state of the project, important decisio
 
 | | | |
 |---|---|---|
-| 📅 **Last Updated** <br/> Sep 30, 2026 — 7:30 PM | 👤 **Current Phase** <br/> **Phase 5** <br/> Real-time Chat | 🧭 **Next Milestone** <br/> Postman API testing & deployment |
+| 📅 **Last Updated** <br/> Oct 4, 2026 — 4:00 PM | 👤 **Current Phase** <br/> **Phase 5** <br/> Real-time Chat | 🧭 **Next Milestone** <br/> Deployment (Render + Netlify) |
 
 ---
 
@@ -19,7 +19,9 @@ This document keeps track of the current state of the project, important decisio
 - ✅ Trip Management (CRUD, filters, search) completed
 - ✅ Join Requests (send, approve, reject, cancel) completed
 - 🔄 Working on Real-time Chat (ChatPanel UI in progress)
-- 🔄 Postman collections for API testing in progress
+- ✅ Postman collections completed (frontend + backend, all routes)
+- ✅ CI pipeline added: install → lint → test → build → Cypress e2e
+- ✅ Backend Jest 41/41 green · Frontend Cypress 27/27 green
 
 ---
 
@@ -47,6 +49,11 @@ This document keeps track of the current state of the project, important decisio
 | 4.3 | Approve / reject requests | Mar 8, 2026 |
 | 6.1 | Swagger UI documentation | Mar 23, 2026 |
 | 6.4 | Project docs (PRD, Architecture, Rules, Design, Tasks, Memory) | Sep 30, 2026 |
+| 6.2 | Backend Postman collection (all routes + auto-chained variables) | Oct 4, 2026 |
+| 6.3 | Frontend Postman collection (mirrors api.js 1:1) | Oct 4, 2026 |
+| 6.6 | Backend test suite fixed & green (41/41) | Oct 4, 2026 |
+| 6.7 | Frontend Cypress e2e suite (auth/navigation/trips, 27 tests) | Oct 4, 2026 |
+| 6.8 | GitHub Actions CI pipeline | Oct 4, 2026 |
 
 ---
 
@@ -56,8 +63,6 @@ This document keeps track of the current state of the project, important decisio
 |---|------|-------|
 | 5.3 | Chat panel UI with typing indicators | Socket events wired; polishing UI |
 | 5.4 | Message persistence & history load | Loading on trip open |
-| 6.2 | Backend Postman collection | All routes captured with examples |
-| 6.3 | Frontend Postman collection | Mirrors api.js calls 1:1 |
 
 ---
 
@@ -68,8 +73,9 @@ This document keeps track of the current state of the project, important decisio
 | **Email domain** | Registration only accepts `*.iitr.ac.in` (normalizeEmail applied) |
 | **JWT storage** | `localStorage` key `token`; Axios interceptor attaches `Bearer` |
 | **401 handling** | Global interceptor clears token and redirects to `/` |
-| **Rate limit** | 100 requests / 10 minutes per IP on `/api/*` — affects rapid Postman runs |
-| **Request body keys** | `POST /requests` expects `{ tripId, message }`; `POST /messages` expects `{ trip, content }` |
+| **Rate limit** | 100 req / 10 min per IP on `/api/*`; override with `RATE_LIMIT_MAX` env (used by CI/e2e) |
+| **Request body keys** | `POST /requests` accepts `tripId` **or** `trip`; `POST /messages` expects `{ trip, content }` |
+| **Protected routes** | Redirect to `/` (login lives at root, there is no `/login` route) |
 | **Duplicate route** | `messages.js` registers `/trip/:id` twice — harmless, second is shadowed; candidates for cleanup |
 | **Seeded users** | 6 demo accounts (e.g. `rahul.sharma@iitr.ac.in` / `password123`) via `npm run seed` |
 | **Socket rooms** | Join `trip:{id}` room to receive `message:new`, typing and request events |
@@ -80,9 +86,9 @@ This document keeps track of the current state of the project, important decisio
 ## 🚀 Next Steps
 
 1. Finish ChatPanel typing indicators and message history load.
-2. Run both Postman collections against the local dev server (`npm run dev:backend`).
-3. Verify all routes return expected codes; fix any failures.
-4. Deploy backend (Render) and frontend (Netlify); set production env vars.
+2. Push to GitHub and confirm the CI pipeline runs green on all three jobs.
+3. Recreate `docs/DEPLOYMENT.md` and deploy (Render + Netlify).
+4. Optionally add `data-testid` attributes to components to decouple e2e specs from styling classes.
 
 ---
 
@@ -95,3 +101,5 @@ This document keeps track of the current state of the project, important decisio
 | Jan 2026 | Zustand over Redux | Lightweight, less boilerplate |
 | Feb 2026 | Socket.IO rooms per trip | Chat isolation per journey |
 | Sep 2026 | Postman collections in both `frontend/postman` & `backend/postman` | Route testing parity for API & UI teams |
+| Oct 2026 | Rate limit configurable via `RATE_LIMIT_MAX` | e2e suites exhaust 100 req/10min and get 429s |
+| Oct 2026 | Cypress selectors target real DOM (no data-testid yet) | Specs kept in sync with actual components |

@@ -6,7 +6,7 @@ This document contains the complete list of tasks for building the HopAlong appl
 
 | | | |
 |---|---|---|
-| 📊 **Total Tasks** <br/> **38** | ✅ **Completed** <br/> **29** (76%) | 🔄 **In Progress** <br/> **4** (11%) |
+| 📊 **Total Tasks** <br/> **41** | ✅ **Completed** <br/> **33** (80%) | 🔄 **In Progress** <br/> **2** (5%) |
 
 ---
 
@@ -91,10 +91,13 @@ Full route documentation and API testing.
 | # | Task | Priority | Status | Notes |
 |---|------|----------|--------|-------|
 | 6.1 | Swagger UI documentation | Medium | ✅ Completed | `/api-docs` |
-| 6.2 | Backend Postman collection | High | 🔄 In Progress | `backend/postman/postman.json` |
-| 6.3 | Frontend Postman collection | High | 🔄 In Progress | `frontend/postman/postman.json` |
+| 6.2 | Backend Postman collection | High | ✅ Completed | `backend/postman/postman.json` — all 29 routes |
+| 6.3 | Frontend Postman collection | High | ✅ Completed | `frontend/postman/postman.json` — mirrors `api.js` |
 | 6.4 | Project docs (PRD, Architecture, Rules, Design) | Medium | ✅ Completed | docs/ folder |
 | 6.5 | Recreate deployment guide | Medium | ⬜ Not Started | docs/DEPLOYMENT.md — before launch |
+| 6.6 | Backend Jest suite green (41/41) | High | ✅ Completed | Fixed IITR email check, `/auth/me` crash, validation |
+| 6.7 | Frontend Cypress e2e suite (27 tests) | High | ✅ Completed | auth / navigation / trips specs |
+| 6.8 | GitHub Actions CI pipeline | High | ✅ Completed | install → lint → test → build → e2e |
 
 ---
 
