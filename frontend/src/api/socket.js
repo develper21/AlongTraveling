@@ -10,7 +10,7 @@ export const initSocket = () => {
       autoConnect: false,
       reconnection: true,
       reconnectionDelay: 1000,
-      reconnectionAttempts: 5
+      reconnectionAttempts: 5,
     });
 
     // Connection event handlers
@@ -182,5 +182,5 @@ export default {
   sendRequestResponse,
   onRequestNotification,
   onRequestStatusUpdate,
-  cleanupSocketListeners
+  cleanupSocketListeners,
 };

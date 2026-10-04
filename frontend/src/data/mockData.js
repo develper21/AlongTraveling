@@ -7,7 +7,7 @@ export const mockUsers = [
     email: 'rahul.sharma@iitr.ac.in',
     branch: 'CSE',
     year: '3rd Year',
-    bio: 'Adventure enthusiast looking for travel buddies!'
+    bio: 'Adventure enthusiast looking for travel buddies!',
   },
   {
     id: 'user_2',
@@ -15,7 +15,7 @@ export const mockUsers = [
     email: 'priya.gupta@iitr.ac.in',
     branch: 'ECE',
     year: '2nd Year',
-    bio: 'Love exploring new places and cultures'
+    bio: 'Love exploring new places and cultures',
   },
   {
     id: 'user_3',
@@ -23,7 +23,7 @@ export const mockUsers = [
     email: 'amit.kumar@iitr.ac.in',
     branch: 'Mechanical',
     year: '4th Year',
-    bio: 'Trek lover and photographer'
+    bio: 'Trek lover and photographer',
   },
   {
     id: 'user_4',
@@ -31,7 +31,7 @@ export const mockUsers = [
     email: 'sneha.patel@iitr.ac.in',
     branch: 'Chemical',
     year: '3rd Year',
-    bio: 'Beach person who loves road trips'
+    bio: 'Beach person who loves road trips',
   },
   {
     id: 'user_5',
@@ -39,7 +39,7 @@ export const mockUsers = [
     email: 'vikram.singh@iitr.ac.in',
     branch: 'Civil',
     year: '2nd Year',
-    bio: 'Budget traveler, mountain enthusiast'
+    bio: 'Budget traveler, mountain enthusiast',
   },
   {
     id: 'user_6',
@@ -47,9 +47,9 @@ export const mockUsers = [
     email: 'anjali.verma@iitr.ac.in',
     branch: 'Biotechnology',
     year: '3rd Year',
-    bio: 'Solo traveler looking for companions'
-  }
-]
+    bio: 'Solo traveler looking for companions',
+  },
+];
 
 export const mockTrips = [
   {
@@ -63,11 +63,12 @@ export const mockTrips = [
     budgetEstimate: 3500,
     travelMode: 'bus',
     tripType: 'trek',
-    notes: 'Moderate difficulty trek with stunning views. Experience required. Carrying camping gear.',
+    notes:
+      'Moderate difficulty trek with stunning views. Experience required. Carrying camping gear.',
     ownerId: 'user_3',
     status: 'open',
     participants: ['user_3', 'user_2', 'user_5'],
-    createdAt: '2025-10-05T10:00:00Z'
+    createdAt: '2025-10-05T10:00:00Z',
   },
   {
     id: 'trip_2',
@@ -84,7 +85,7 @@ export const mockTrips = [
     ownerId: 'user_4',
     status: 'full',
     participants: ['user_4', 'user_1', 'user_6', 'user_2'],
-    createdAt: '2025-10-03T14:30:00Z'
+    createdAt: '2025-10-03T14:30:00Z',
   },
   {
     id: 'trip_3',
@@ -101,7 +102,7 @@ export const mockTrips = [
     ownerId: 'user_1',
     status: 'open',
     participants: ['user_1', 'user_3'],
-    createdAt: '2025-10-07T09:15:00Z'
+    createdAt: '2025-10-07T09:15:00Z',
   },
   {
     id: 'trip_4',
@@ -118,7 +119,7 @@ export const mockTrips = [
     ownerId: 'user_5',
     status: 'open',
     participants: ['user_5', 'user_1', 'user_3', 'user_4', 'user_6'],
-    createdAt: '2025-10-06T16:45:00Z'
+    createdAt: '2025-10-06T16:45:00Z',
   },
   {
     id: 'trip_5',
@@ -135,7 +136,7 @@ export const mockTrips = [
     ownerId: 'user_2',
     status: 'open',
     participants: ['user_2'],
-    createdAt: '2025-10-08T11:20:00Z'
+    createdAt: '2025-10-08T11:20:00Z',
   },
   {
     id: 'trip_6',
@@ -148,11 +149,12 @@ export const mockTrips = [
     budgetEstimate: 4500,
     travelMode: 'bus',
     tripType: 'trek',
-    notes: 'Budget backpacking trip. Exploring cafes, short treks, chill vibes.',
+    notes:
+      'Budget backpacking trip. Exploring cafes, short treks, chill vibes.',
     ownerId: 'user_6',
     status: 'open',
     participants: ['user_6', 'user_5', 'user_2'],
-    createdAt: '2025-10-04T13:00:00Z'
+    createdAt: '2025-10-04T13:00:00Z',
   },
   {
     id: 'trip_7',
@@ -169,7 +171,7 @@ export const mockTrips = [
     ownerId: 'user_1',
     status: 'open',
     participants: ['user_1', 'user_4'],
-    createdAt: '2025-10-09T08:30:00Z'
+    createdAt: '2025-10-09T08:30:00Z',
   },
   {
     id: 'trip_8',
@@ -182,13 +184,14 @@ export const mockTrips = [
     budgetEstimate: 2000,
     travelMode: 'car',
     tripType: 'vacation',
-    notes: 'Quick day trip to see the Taj Mahal. Leaving early morning, back by night.',
+    notes:
+      'Quick day trip to see the Taj Mahal. Leaving early morning, back by night.',
     ownerId: 'user_3',
     status: 'open',
     participants: ['user_3', 'user_1', 'user_2', 'user_6'],
-    createdAt: '2025-10-02T07:00:00Z'
-  }
-]
+    createdAt: '2025-10-02T07:00:00Z',
+  },
+];
 
 export const mockRequests = [
   {
@@ -197,7 +200,7 @@ export const mockRequests = [
     userId: 'user_1',
     message: 'I have trekking experience and would love to join!',
     status: 'pending',
-    createdAt: '2025-10-08T10:30:00Z'
+    createdAt: '2025-10-08T10:30:00Z',
   },
   {
     id: 'req_2',
@@ -205,7 +208,7 @@ export const mockRequests = [
     userId: 'user_4',
     message: 'Interested in the heritage tour. Count me in!',
     status: 'pending',
-    createdAt: '2025-10-09T15:20:00Z'
+    createdAt: '2025-10-09T15:20:00Z',
   },
   {
     id: 'req_3',
@@ -213,7 +216,7 @@ export const mockRequests = [
     userId: 'user_3',
     message: 'Never been to Manali in winter. Would be a great experience!',
     status: 'approved',
-    createdAt: '2025-10-08T18:00:00Z'
+    createdAt: '2025-10-08T18:00:00Z',
   },
   {
     id: 'req_4',
@@ -221,9 +224,9 @@ export const mockRequests = [
     userId: 'user_2',
     message: 'Love adventure sports! Can I join?',
     status: 'rejected',
-    createdAt: '2025-10-07T12:00:00Z'
-  }
-]
+    createdAt: '2025-10-07T12:00:00Z',
+  },
+];
 
 export const mockMessages = [
   {
@@ -232,7 +235,7 @@ export const mockMessages = [
     userId: 'user_4',
     userName: 'Sneha Patel',
     message: 'Hey everyone! So excited for this trip!',
-    timestamp: '2025-10-10T09:00:00Z'
+    timestamp: '2025-10-10T09:00:00Z',
   },
   {
     id: 'msg_2',
@@ -240,7 +243,7 @@ export const mockMessages = [
     userId: 'user_1',
     userName: 'Rahul Sharma',
     message: 'Same here! What activities are we planning?',
-    timestamp: '2025-10-10T09:15:00Z'
+    timestamp: '2025-10-10T09:15:00Z',
   },
   {
     id: 'msg_3',
@@ -248,7 +251,7 @@ export const mockMessages = [
     userId: 'user_6',
     userName: 'Anjali Verma',
     message: 'I vote for parasailing and jet skiing!',
-    timestamp: '2025-10-10T09:30:00Z'
+    timestamp: '2025-10-10T09:30:00Z',
   },
   {
     id: 'msg_4',
@@ -256,7 +259,7 @@ export const mockMessages = [
     userId: 'user_5',
     userName: 'Vikram Singh',
     message: 'Meeting point will be campus gate at 5 AM sharp!',
-    timestamp: '2025-10-10T20:00:00Z'
+    timestamp: '2025-10-10T20:00:00Z',
   },
   {
     id: 'msg_5',
@@ -264,12 +267,12 @@ export const mockMessages = [
     userId: 'user_1',
     userName: 'Rahul Sharma',
     message: 'Got it! Should we book rafting in advance?',
-    timestamp: '2025-10-10T20:15:00Z'
-  }
-]
+    timestamp: '2025-10-10T20:15:00Z',
+  },
+];
 
 // Helper function to reset data (for testing)
 export const resetMockData = () => {
   // In a real app, this would reset the data to initial state
-  console.log('Mock data reset')
-}
+  console.log('Mock data reset');
+};

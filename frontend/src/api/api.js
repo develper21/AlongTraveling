@@ -20,8 +20,11 @@ export const authApi = {
   },
 
   updatePassword: async (currentPassword, newPassword) => {
-    return await api.put('/auth/updatepassword', { currentPassword, newPassword });
-  }
+    return await api.put('/auth/updatepassword', {
+      currentPassword,
+      newPassword,
+    });
+  },
 };
 
 // ============ TRIPS API ============
@@ -29,7 +32,7 @@ export const authApi = {
 export const tripsApi = {
   getTrips: async (filters = {}) => {
     const params = new URLSearchParams();
-    
+
     if (filters.destination) params.append('destination', filters.destination);
     if (filters.startDate) params.append('startDate', filters.startDate);
     if (filters.endDate) params.append('endDate', filters.endDate);
@@ -65,7 +68,7 @@ export const tripsApi = {
 
   getTripStats: async () => {
     return await api.get('/trips/stats');
-  }
+  },
 };
 
 // ============ REQUESTS API ============
@@ -93,7 +96,7 @@ export const requestsApi = {
 
   cancelRequest: async (requestId) => {
     return await api.delete(`/requests/${requestId}`);
-  }
+  },
 };
 
 // ============ MESSAGES API ============
@@ -109,7 +112,7 @@ export const messagesApi = {
 
   deleteMessage: async (messageId) => {
     return await api.delete(`/messages/${messageId}`);
-  }
+  },
 };
 
 // ============ USERS API ============
@@ -133,7 +136,7 @@ export const usersApi = {
 
   getUserStats: async (userId) => {
     return await api.get(`/users/${userId}/stats`);
-  }
+  },
 };
 
 // Export all as default for convenience
@@ -142,5 +145,5 @@ export default {
   trips: tripsApi,
   requests: requestsApi,
   messages: messagesApi,
-  users: usersApi
+  users: usersApi,
 };

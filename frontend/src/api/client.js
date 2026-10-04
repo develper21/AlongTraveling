@@ -5,8 +5,8 @@ import { API_BASE_URL, getAuthToken, removeAuthToken } from './config';
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
-    'Content-Type': 'application/json'
-  }
+    'Content-Type': 'application/json',
+  },
 });
 
 api.interceptors.request.use(
@@ -34,14 +34,18 @@ api.interceptors.response.use(
         window.location.href = '/';
       }
     }
-    
-    const errorMessage = error.response?.data?.error || error.response?.data?.message || error.message || 'An error occurred';
-    return Promise.reject({ 
+
+    const errorMessage =
+      error.response?.data?.error ||
+      error.response?.data?.message ||
+      error.message ||
+      'An error occurred';
+    return Promise.reject({
       success: false,
       error: errorMessage,
-      message: errorMessage, 
+      message: errorMessage,
       status: error.response?.status,
-      data: error.response?.data 
+      data: error.response?.data,
     });
   }
 );

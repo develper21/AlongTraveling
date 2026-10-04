@@ -10,11 +10,14 @@ const requestCache = new Map();
 const generateCacheKey = (url, params = {}) => {
   const sortedParams = Object.keys(params)
     .sort()
-    .reduce((acc, key) => ({
-      ...acc,
-      [key]: params[key]
-    }), {});
-  
+    .reduce(
+      (acc, key) => ({
+        ...acc,
+        [key]: params[key],
+      }),
+      {}
+    );
+
   return `${url}-${JSON.stringify(sortedParams)}`;
 };
 
@@ -32,70 +35,73 @@ export const useApi = (apiCall, { manual = false } = {}) => {
     };
   }, []);
 
-  const fetchData = useCallback(async (...args) => {
-    const cacheKey = generateCacheKey(apiCall.name, args[0]);
-    
-    // Return cached response if available
-    if (responseCache.has(cacheKey)) {
-      const cachedData = responseCache.get(cacheKey);
-      if (isMounted.current) {
-        setData(cachedData);
-        setLoading(false);
-      }
-      return { data: cachedData, error: null };
-    }
+  const fetchData = useCallback(
+    async (...args) => {
+      const cacheKey = generateCacheKey(apiCall.name, args[0]);
 
-    // Return existing promise if request is in progress
-    if (requestCache.has(cacheKey)) {
+      // Return cached response if available
+      if (responseCache.has(cacheKey)) {
+        const cachedData = responseCache.get(cacheKey);
+        if (isMounted.current) {
+          setData(cachedData);
+          setLoading(false);
+        }
+        return { data: cachedData, error: null };
+      }
+
+      // Return existing promise if request is in progress
+      if (requestCache.has(cacheKey)) {
+        try {
+          const result = await requestCache.get(cacheKey);
+          if (isMounted.current) {
+            setData(result);
+            setLoading(false);
+          }
+          return { data: result, error: null };
+        } catch (err) {
+          if (isMounted.current) {
+            setError(err);
+            setLoading(false);
+          }
+          return { data: null, error: err };
+        }
+      }
+
+      // Make the API call
       try {
-        const result = await requestCache.get(cacheKey);
+        if (isMounted.current) {
+          setLoading(true);
+          setError(null);
+        }
+
+        const promise = apiCall(...args);
+        requestCache.set(cacheKey, promise);
+
+        const result = await promise;
+
+        // Cache successful responses
+        responseCache.set(cacheKey, result);
+        requestCache.delete(cacheKey);
+
         if (isMounted.current) {
           setData(result);
           setLoading(false);
         }
+
         return { data: result, error: null };
       } catch (err) {
+        requestCache.delete(cacheKey);
+
         if (isMounted.current) {
           setError(err);
           setLoading(false);
         }
+
         return { data: null, error: err };
       }
-    }
-
-    // Make the API call
-    try {
-      if (isMounted.current) {
-        setLoading(true);
-        setError(null);
-      }
-
-      const promise = apiCall(...args);
-      requestCache.set(cacheKey, promise);
-
-      const result = await promise;
-      
-      // Cache successful responses
-      responseCache.set(cacheKey, result);
-      requestCache.delete(cacheKey);
-
-      if (isMounted.current) {
-        setData(result);
-        setLoading(false);
-      }
-
-      return { data: result, error: null };
-    } catch (err) {
-      requestCache.delete(cacheKey);
-      
-      if (isMounted.current) {
-        setError(err);
-        setLoading(false);
-      }
-      
-      return { data: null, error: err };
-    }
-  }, [apiCall]);
+    },
+    [apiCall]
+  );
 
   // Auto-fetch on mount if not manual
   useEffect(() => {
@@ -120,7 +126,7 @@ export const useApi = (apiCall, { manual = false } = {}) => {
     loading,
     fetchData,
     clearCache,
-    setData // Allow manual data updates
+    setData, // Allow manual data updates
   };
 };
 

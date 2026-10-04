@@ -1,45 +1,45 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { SparklesIcon, ArrowRightIcon } from '@heroicons/react/24/solid'
-import { authApi } from '../api/api'
-import useStore from '../store/useStore'
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { SparklesIcon, ArrowRightIcon } from '@heroicons/react/24/solid';
+import { authApi } from '../api/api';
+import useStore from '../store/useStore';
 
 function Register() {
-  const navigate = useNavigate()
-  const { login, addNotification } = useStore()
+  const navigate = useNavigate();
+  const { login, addNotification } = useStore();
 
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     branch: '',
-    year: ''
-  })
-  const [error, setError] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
+    year: '',
+  });
+  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const handleChange = (event) => {
-    const { name, value } = event.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (event) => {
-    event.preventDefault()
-    setError('')
+    event.preventDefault();
+    setError('');
 
     if (!emailRegex.test(formData.email)) {
-      setError('Please enter a valid email address')
-      return
+      setError('Please enter a valid email address');
+      return;
     }
 
     if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters long')
-      return
+      setError('Password must be at least 6 characters long');
+      return;
     }
 
-    setIsSubmitting(true)
+    setIsSubmitting(true);
 
     try {
       const response = await authApi.register({
@@ -47,36 +47,50 @@ function Register() {
         email: formData.email.trim().toLowerCase(),
         password: formData.password,
         branch: formData.branch.trim(),
-        year: formData.year
-      })
+        year: formData.year,
+      });
 
       if (response.success) {
-        login(response.data, response.data.token)
+        login(response.data, response.data.token);
         addNotification({
           type: 'success',
-          message: 'Account created successfully! Welcome to HopAlong.'
-        })
-        navigate('/home')
+          message: 'Account created successfully! Welcome to HopAlong.',
+        });
+        navigate('/home');
       } else {
-        setError(response.error || 'Unable to create account. Please try again.')
+        setError(
+          response.error || 'Unable to create account. Please try again.'
+        );
       }
     } catch (err) {
       if (err.status === 400) {
-        setError(err.error || 'Unable to create account. Please verify your details.')
+        setError(
+          err.error || 'Unable to create account. Please verify your details.'
+        );
       } else {
-        setError(err.error || err.message || 'Unable to reach the server. Please try again later.')
+        setError(
+          err.error ||
+            err.message ||
+            'Unable to reach the server. Please try again later.'
+        );
       }
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-20 left-20 w-72 h-72 bg-blue-400/30 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-400/30 rounded-full blur-3xl floating" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-400/20 rounded-full blur-3xl floating" style={{ animationDelay: '2s' }}></div>
+        <div
+          className="absolute bottom-20 right-20 w-96 h-96 bg-purple-400/30 rounded-full blur-3xl floating"
+          style={{ animationDelay: '1s' }}
+        ></div>
+        <div
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-400/20 rounded-full blur-3xl floating"
+          style={{ animationDelay: '2s' }}
+        ></div>
       </div>
 
       <div className="w-full max-w-6xl mx-auto grid md:grid-cols-2 gap-8 relative z-10">
@@ -86,15 +100,14 @@ function Register() {
               <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-2xl glow-hover">
                 <span className="text-3xl">🧭</span>
               </div>
-              <h1 className="text-5xl font-bold gradient-text">
-                HopAlong
-              </h1>
+              <h1 className="text-5xl font-bold gradient-text">HopAlong</h1>
             </div>
             <p className="text-2xl text-gray-700 font-semibold">
               Start Your Journey with Fellow Travelers
-              </p>
+            </p>
             <p className="text-lg text-gray-600">
-              Create an account with your email, discover trips, and plan adventures with a trusted community.
+              Create an account with your email, discover trips, and plan
+              adventures with a trusted community.
             </p>
           </div>
 
@@ -104,8 +117,12 @@ function Register() {
                 <SparklesIcon className="w-6 h-6 text-blue-600" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900">Plan Trips Together</h3>
-                <p className="text-gray-600 text-sm">Find companions who share your destination and interests.</p>
+                <h3 className="font-semibold text-gray-900">
+                  Plan Trips Together
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Find companions who share your destination and interests.
+                </p>
               </div>
             </div>
 
@@ -114,8 +131,12 @@ function Register() {
                 <SparklesIcon className="w-6 h-6 text-purple-600" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900">Split Costs Effortlessly</h3>
-                <p className="text-gray-600 text-sm">Coordinate budgets and make travel affordable for everyone.</p>
+                <h3 className="font-semibold text-gray-900">
+                  Split Costs Effortlessly
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Coordinate budgets and make travel affordable for everyone.
+                </p>
               </div>
             </div>
 
@@ -124,8 +145,13 @@ function Register() {
                 <SparklesIcon className="w-6 h-6 text-indigo-600" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900">Verified Community</h3>
-                <p className="text-gray-600 text-sm">Travel with trusted community members using verified email addresses.</p>
+                <h3 className="font-semibold text-gray-900">
+                  Verified Community
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Travel with trusted community members using verified email
+                  addresses.
+                </p>
               </div>
             </div>
           </div>
@@ -135,15 +161,22 @@ function Register() {
           <div className="glass-card-premium p-8 md:p-10 w-full max-w-md space-y-6">
             <div className="text-center space-y-1.5">
               <div className="md:hidden mb-6">
-                <h1 className="text-4xl font-bold gradient-text mb-2">HopAlong</h1>
+                <h1 className="text-4xl font-bold gradient-text mb-2">
+                  HopAlong
+                </h1>
               </div>
-              <h2 className="text-3xl font-bold text-gray-900">Create Your Account</h2>
+              <h2 className="text-3xl font-bold text-gray-900">
+                Create Your Account
+              </h2>
               <p className="text-gray-600">Use your email to get started</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-3">
               <div>
-                <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-semibold text-gray-700 mb-2"
+                >
                   Full Name
                 </label>
                 <input
@@ -160,7 +193,10 @@ function Register() {
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-semibold text-gray-700 mb-2"
+                >
                   Email Address
                 </label>
                 <div className="relative">
@@ -178,8 +214,18 @@ function Register() {
                   {formData.email && emailRegex.test(formData.email) && (
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                       <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                        <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        <svg
+                          className="w-4 h-4 text-white"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
                         </svg>
                       </div>
                     </div>
@@ -188,7 +234,10 @@ function Register() {
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-semibold text-gray-700 mb-2"
+                >
                   Password
                 </label>
                 <input
@@ -206,7 +255,10 @@ function Register() {
               </div>
 
               <div>
-                <label htmlFor="branch" className="block text-sm font-semibold text-gray-700 mb-2">
+                <label
+                  htmlFor="branch"
+                  className="block text-sm font-semibold text-gray-700 mb-2"
+                >
                   Branch (optional)
                 </label>
                 <input
@@ -222,7 +274,10 @@ function Register() {
               </div>
 
               <div>
-                <label htmlFor="year" className="block text-sm font-semibold text-gray-700 mb-2">
+                <label
+                  htmlFor="year"
+                  className="block text-sm font-semibold text-gray-700 mb-2"
+                >
                   Year (optional)
                 </label>
                 <select
@@ -231,7 +286,8 @@ function Register() {
                   value={formData.year}
                   onChange={handleChange}
                   className="input-field"
-                  disabled={isSubmitting}>
+                  disabled={isSubmitting}
+                >
                   <option value="">Select your year</option>
                   <option value="1st Year">1st Year</option>
                   <option value="2nd Year">2nd Year</option>
@@ -249,12 +305,29 @@ function Register() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="btn-primary w-full flex items-center justify-center space-x-2 text-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                className="btn-primary w-full flex items-center justify-center space-x-2 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              >
                 {isSubmitting ? (
                   <>
-                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    <svg
+                      className="animate-spin h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
                     </svg>
                     <span>Creating account...</span>
                   </>
@@ -269,7 +342,10 @@ function Register() {
 
             <p className="text-center text-sm text-gray-500">
               Already have an account?{' '}
-              <Link to="/" className="text-blue-600 font-semibold hover:text-blue-700">
+              <Link
+                to="/"
+                className="text-blue-600 font-semibold hover:text-blue-700"
+              >
                 Sign in here
               </Link>
             </p>
@@ -277,7 +353,7 @@ function Register() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Register
+export default Register;

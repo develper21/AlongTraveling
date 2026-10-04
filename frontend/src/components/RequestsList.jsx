@@ -1,20 +1,22 @@
-import { CheckCircleIcon, XCircleIcon, ClockIcon } from '@heroicons/react/24/outline'
-import { getInitials, formatDate } from '../lib/utils'
-import Badge from './Badge'
+import {
+  CheckCircleIcon,
+  XCircleIcon,
+  ClockIcon,
+} from '@heroicons/react/24/outline';
+import { getInitials, formatDate } from '../lib/utils';
+import Badge from './Badge';
 
 function RequestsList({ requests, onApprove, onReject, showActions = true }) {
   if (!requests || requests.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-500">
-        No requests yet
-      </div>
-    )
+      <div className="text-center py-8 text-gray-500">No requests yet</div>
+    );
   }
 
   return (
     <div className="space-y-4">
-      {requests.map(request => {
-        const requestId = request._id || request.id
+      {requests.map((request) => {
+        const requestId = request._id || request.id;
         return (
           <div key={requestId} className="glass-card p-4">
             <div className="flex items-start space-x-4">
@@ -37,9 +39,7 @@ function RequestsList({ requests, onApprove, onReject, showActions = true }) {
                   <Badge status={request.status} className="ml-2" />
                 </div>
 
-                <p className="text-gray-700 mb-2">
-                  {request.message}
-                </p>
+                <p className="text-gray-700 mb-2">{request.message}</p>
 
                 <p className="text-xs text-gray-500 flex items-center">
                   <ClockIcon className="w-4 h-4 mr-1" />
@@ -51,13 +51,15 @@ function RequestsList({ requests, onApprove, onReject, showActions = true }) {
                   <div className="flex items-center space-x-3 mt-4">
                     <button
                       onClick={() => onApprove(requestId)}
-                      className="flex items-center space-x-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors">
+                      className="flex items-center space-x-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
+                    >
                       <CheckCircleIcon className="w-5 h-5" />
                       <span>Approve</span>
                     </button>
                     <button
                       onClick={() => onReject(requestId)}
-                      className="flex items-center space-x-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors">
+                      className="flex items-center space-x-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors"
+                    >
                       <XCircleIcon className="w-5 h-5" />
                       <span>Reject</span>
                     </button>
@@ -66,10 +68,10 @@ function RequestsList({ requests, onApprove, onReject, showActions = true }) {
               </div>
             </div>
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
 }
 
-export default RequestsList
+export default RequestsList;

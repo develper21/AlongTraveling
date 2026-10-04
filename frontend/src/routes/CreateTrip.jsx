@@ -1,34 +1,34 @@
-import { useNavigate } from 'react-router-dom'
-import { ArrowLeftIcon } from '@heroicons/react/24/outline'
-import { tripsApi } from '../api/api'
-import TripForm from '../components/TripForm'
-import useStore from '../store/useStore'
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { tripsApi } from '../api/api';
+import TripForm from '../components/TripForm';
+import useStore from '../store/useStore';
 
 function CreateTrip() {
-  const navigate = useNavigate()
-  const { addNotification } = useStore()
+  const navigate = useNavigate();
+  const { addNotification } = useStore();
 
   const handleSubmit = async (tripData) => {
     try {
-      const response = await tripsApi.createTrip(tripData)
-      
+      const response = await tripsApi.createTrip(tripData);
+
       if (response.success) {
         addNotification({
           type: 'success',
           message: 'Trip created successfully! 🎉',
-          duration: 3000
-        })
-        navigate(`/trip/${response.data._id || response.data.id}`)
+          duration: 3000,
+        });
+        navigate(`/trip/${response.data._id || response.data.id}`);
       }
     } catch (error) {
-      console.error('Error creating trip:', error)
+      console.error('Error creating trip:', error);
       addNotification({
         type: 'error',
         message: error.message || 'Failed to create trip. Please try again.',
-        duration: 4000
-      })
+        duration: 4000,
+      });
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -36,7 +36,8 @@ function CreateTrip() {
         <div className="text-center mb-8">
           <button
             onClick={() => navigate(-1)}
-            className="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 mb-4 transition-colors">
+            className="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 mb-4 transition-colors"
+          >
             <ArrowLeftIcon className="w-4 h-4 mr-1" />
             Back to trips
           </button>
@@ -44,7 +45,8 @@ function CreateTrip() {
             Plan Your Next Adventure
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Share your travel plans and connect with fellow travelers for an unforgettable journey together.
+            Share your travel plans and connect with fellow travelers for an
+            unforgettable journey together.
           </p>
         </div>
 
@@ -60,7 +62,7 @@ function CreateTrip() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default CreateTrip
+export default CreateTrip;

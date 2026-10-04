@@ -1,8 +1,10 @@
-import { MagnifyingGlassIcon, FunnelIcon } from '@heroicons/react/24/outline'
+import { MagnifyingGlassIcon, FunnelIcon } from '@heroicons/react/24/outline';
 
 function FiltersBar({ filters, onFilterChange }) {
-  const activeFiltersCount = Object.values(filters).filter(v => v && v !== '').length
-  
+  const activeFiltersCount = Object.values(filters).filter(
+    (v) => v && v !== ''
+  ).length;
+
   return (
     <div className="glass-card p-6 mb-8">
       <div className="flex items-center justify-between mb-4">
@@ -18,7 +20,8 @@ function FiltersBar({ filters, onFilterChange }) {
         {activeFiltersCount > 0 && (
           <button
             onClick={() => onFilterChange({})}
-            className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors">
+            className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
+          >
             Clear All
           </button>
         )}
@@ -36,7 +39,9 @@ function FiltersBar({ filters, onFilterChange }) {
               type="text"
               placeholder="Search destination..."
               value={filters.destination || ''}
-              onChange={(e) => onFilterChange({ ...filters, destination: e.target.value })}
+              onChange={(e) =>
+                onFilterChange({ ...filters, destination: e.target.value })
+              }
               className="input-field pl-10"
             />
           </div>
@@ -50,7 +55,9 @@ function FiltersBar({ filters, onFilterChange }) {
           <input
             type="date"
             value={filters.dateFrom || ''}
-            onChange={(e) => onFilterChange({ ...filters, dateFrom: e.target.value })}
+            onChange={(e) =>
+              onFilterChange({ ...filters, dateFrom: e.target.value })
+            }
             className="input-field"
           />
         </div>
@@ -63,7 +70,9 @@ function FiltersBar({ filters, onFilterChange }) {
           <input
             type="date"
             value={filters.dateTo || ''}
-            onChange={(e) => onFilterChange({ ...filters, dateTo: e.target.value })}
+            onChange={(e) =>
+              onFilterChange({ ...filters, dateTo: e.target.value })
+            }
             className="input-field"
           />
         </div>
@@ -75,8 +84,11 @@ function FiltersBar({ filters, onFilterChange }) {
           </label>
           <select
             value={filters.tripType || ''}
-            onChange={(e) => onFilterChange({ ...filters, tripType: e.target.value })}
-            className="input-field w-full">
+            onChange={(e) =>
+              onFilterChange({ ...filters, tripType: e.target.value })
+            }
+            className="input-field w-full"
+          >
             <option value="">All Types</option>
             <option value="vacation">Vacation</option>
             <option value="trek">Trek</option>
@@ -87,10 +99,9 @@ function FiltersBar({ filters, onFilterChange }) {
             <option value="other">Other</option>
           </select>
         </div>
-
       </div>
     </div>
-  )
+  );
 }
 
-export default FiltersBar
+export default FiltersBar;
