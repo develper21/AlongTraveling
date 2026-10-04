@@ -89,27 +89,65 @@ const updateUserValidation = [
 ];
 
 /**
+ * Trip field rules — kept aligned with the Trip model (models/Trip.js)
+ * so the API never rejects payloads the model itself accepts.
+ */
+const tripFieldRules = {
+  title: (body) =>
+    body('title')
+      .trim()
+      .notEmpty()
+      .withMessage('Title is required')
+      .isLength({ max: 100 })
+      .withMessage('Title cannot be more than 100 characters'),
+  description: (body) =>
+    body('description')
+      .trim()
+      .notEmpty()
+      .withMessage('Description is required')
+      .isLength({ max: 1000 })
+      .withMessage('Description cannot be more than 1000 characters'),
+  destination: (body) =>
+    body('destination')
+      .trim()
+      .notEmpty()
+      .withMessage('Destination is required')
+      .isLength({ max: 100 })
+      .withMessage('Destination cannot be more than 100 characters'),
+};
+
+// Travel modes / trip types accepted in any letter case — the UI sends
+// lowercase values ('bus', 'vacation') while tests & docs use Title case
+const TRAVEL_MODES = ['Bus', 'Train', 'Flight', 'Car', 'Bike', 'Other'];
+const TRIP_TYPES = [
+  'Adventure',
+  'Leisure',
+  'Cultural',
+  'Business',
+  'Educational',
+  'Vacation',
+  'Trek',
+  'Home',
+  'Work',
+  'Festival',
+  'Roadtrip',
+  'Other',
+];
+
+const isOneOfCaseInsensitive = (allowed) => (value) => {
+  if (!allowed.some((option) => option.toLowerCase() === String(value).toLowerCase())) {
+    throw new Error('Invalid value');
+  }
+  return true;
+};
+
+/**
  * Create Trip Validation
  */
 const createTripValidation = [
-  body('title')
-    .trim()
-    .notEmpty()
-    .withMessage('Title is required')
-    .isLength({ min: 3, max: 100 })
-    .withMessage('Title must be between 3 and 100 characters'),
-  body('description')
-    .trim()
-    .notEmpty()
-    .withMessage('Description is required')
-    .isLength({ min: 10, max: 1000 })
-    .withMessage('Description must be between 10 and 1000 characters'),
-  body('destination')
-    .trim()
-    .notEmpty()
-    .withMessage('Destination is required')
-    .isLength({ min: 2, max: 100 })
-    .withMessage('Destination must be between 2 and 100 characters'),
+  tripFieldRules.title(body),
+  tripFieldRules.description(body),
+  tripFieldRules.destination(body),
   body('startDate')
     .notEmpty()
     .withMessage('Start date is required')
@@ -143,18 +181,11 @@ const createTripValidation = [
     .withMessage('Estimated cost cannot be negative'),
   body('mode')
     .optional()
-    .isIn(['Bus', 'Train', 'Flight', 'Car', 'Bike', 'Other'])
+    .custom(isOneOfCaseInsensitive(TRAVEL_MODES))
     .withMessage('Invalid travel mode'),
   body('type')
     .optional()
-    .isIn([
-      'Adventure',
-      'Leisure',
-      'Cultural',
-      'Business',
-      'Educational',
-      'Other',
-    ])
+    .custom(isOneOfCaseInsensitive(TRIP_TYPES))
     .withMessage('Invalid trip type'),
   validate,
 ];
@@ -166,18 +197,18 @@ const updateTripValidation = [
   body('title')
     .optional()
     .trim()
-    .isLength({ min: 3, max: 100 })
-    .withMessage('Title must be between 3 and 100 characters'),
+    .isLength({ max: 100 })
+    .withMessage('Title cannot be more than 100 characters'),
   body('description')
     .optional()
     .trim()
-    .isLength({ min: 10, max: 1000 })
-    .withMessage('Description must be between 10 and 1000 characters'),
+    .isLength({ max: 1000 })
+    .withMessage('Description cannot be more than 1000 characters'),
   body('destination')
     .optional()
     .trim()
-    .isLength({ min: 2, max: 100 })
-    .withMessage('Destination must be between 2 and 100 characters'),
+    .isLength({ max: 100 })
+    .withMessage('Destination cannot be more than 100 characters'),
   body('startDate')
     .optional()
     .isISO8601()
@@ -196,18 +227,11 @@ const updateTripValidation = [
     .withMessage('Estimated cost cannot be negative'),
   body('mode')
     .optional()
-    .isIn(['Bus', 'Train', 'Flight', 'Car', 'Bike', 'Other'])
+    .custom(isOneOfCaseInsensitive(TRAVEL_MODES))
     .withMessage('Invalid travel mode'),
   body('type')
     .optional()
-    .isIn([
-      'Adventure',
-      'Leisure',
-      'Cultural',
-      'Business',
-      'Educational',
-      'Other',
-    ])
+    .custom(isOneOfCaseInsensitive(TRIP_TYPES))
     .withMessage('Invalid trip type'),
   body('status')
     .optional()
