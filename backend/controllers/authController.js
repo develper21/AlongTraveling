@@ -1,6 +1,9 @@
 const User = require('../models/User');
+// Ensure the Trip model is registered for populate() even when only
+// auth routes are loaded (prevents MissingSchemaError on GET /auth/me)
+require('../models/Trip');
 const { generateToken } = require('../utils/generateToken');
-const { normalizeEmail } = require('../utils/emailValidator');
+const { normalizeEmail, isValidIITREmail } = require('../utils/emailValidator');
 
 /**
  * @desc    Register user
@@ -10,6 +13,14 @@ const { normalizeEmail } = require('../utils/emailValidator');
 exports.register = async (req, res, next) => {
   try {
     const { name, email, password, branch, year, bio } = req.body;
+
+    // Enforce campus-only community (see README / PRD)
+    if (!isValidIITREmail(email)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Only IITR email addresses (*.iitr.ac.in) are allowed to register',
+      });
+    }
 
     // Normalize email
     const normalizedEmail = normalizeEmail(email);
