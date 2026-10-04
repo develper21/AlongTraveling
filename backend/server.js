@@ -137,9 +137,10 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Rate limiting
+// Override via RATE_LIMIT_MAX for test/e2e environments (default: 100)
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  max: parseInt(process.env.RATE_LIMIT_MAX, 10) || 100, // limit each IP per windowMs
   message: 'Too many requests from this IP, please try again later.',
   handler: (req, res) => {
     logSecurityEvent('rate_limit_exceeded', {
