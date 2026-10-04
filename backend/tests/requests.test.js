@@ -4,6 +4,7 @@ const cors = require('cors');
 const requestRoutes = require('../routes/requests');
 const authRoutes = require('../routes/auth');
 const tripRoutes = require('../routes/trips');
+const { setupErrorHandler } = require('./helpers/app');
 const { testUtils } = require('./setup');
 
 // Create test app
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/trips', tripRoutes);
 app.use('/api/requests', requestRoutes);
+setupErrorHandler(app);
 
 describe('Join Requests Routes', () => {
   let token, user, trip, otherUser, otherToken;
@@ -48,8 +50,10 @@ describe('Join Requests Routes', () => {
         .expect(201);
 
       expect(response.body.success).toBe(true);
-      expect(response.body.data.trip).toBe(trip._id.toString());
-      expect(response.body.data.user).toBe(otherUser._id.toString());
+      // sendRequest returns the request with populated trip & user objects
+      // (the shape the RequestsList / RequestModal components render)
+      expect(response.body.data.trip._id).toBe(trip._id.toString());
+      expect(response.body.data.user._id).toBe(otherUser._id.toString());
       expect(response.body.data.message).toBe(requestData.message);
       expect(response.body.data.status).toBe('pending');
     });

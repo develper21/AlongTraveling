@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const userRoutes = require('../routes/users');
 const authRoutes = require('../routes/auth');
+const { setupErrorHandler } = require('./helpers/app');
 const { testUtils } = require('./setup');
 
 // Create test app
@@ -11,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+setupErrorHandler(app);
 
 describe('Users Routes', () => {
   let token, user;
@@ -108,7 +110,8 @@ describe('Users Routes', () => {
 
       expect(response.body.success).toBe(true);
       expect(response.body.data).toHaveLength(2);
-      expect(response.body.data[0].organizer).toBe(user._id.toString());
+      // organizer is populated (the Profile UI renders organizer details)
+      expect(response.body.data[0].organizer._id).toBe(user._id.toString());
     });
 
     it('should return empty array for user with no trips', async () => {

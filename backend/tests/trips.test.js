@@ -1,5 +1,5 @@
 const request = require('supertest');
-const { createTestApp } = require('./helpers/app');
+const { createTestApp, setupErrorHandler } = require('./helpers/app');
 const tripRoutes = require('../routes/trips');
 const authRoutes = require('../routes/auth');
 const { testUtils } = require('./setup');
@@ -8,6 +8,11 @@ const { testUtils } = require('./setup');
 const app = createTestApp();
 app.use('/api/auth', authRoutes);
 app.use('/api/trips', tripRoutes);
+setupErrorHandler(app);
+
+// The Trip model requires startDate >= today and endDate > startDate
+const futureDate = (daysAhead) =>
+  new Date(Date.now() + daysAhead * 24 * 60 * 60 * 1000).toISOString();
 
 describe('Trips Routes', () => {
   let token, user;
@@ -24,9 +29,9 @@ describe('Trips Routes', () => {
       const tripData = {
         title: 'Manali Adventure',
         destination: 'Manali',
-        startDate: '2024-06-01T00:00:00.000Z',
-        endDate: '2024-06-05T00:00:00.000Z',
-        budget: 8000,
+        startDate: futureDate(1),
+        endDate: futureDate(5),
+        estimatedCost: 8000,
         mode: 'Bus',
         type: 'Adventure',
         description: 'Amazing trip to Manali',
@@ -42,7 +47,8 @@ describe('Trips Routes', () => {
       expect(response.body.success).toBe(true);
       expect(response.body.data.title).toBe(tripData.title);
       expect(response.body.data.destination).toBe(tripData.destination);
-      expect(response.body.data.organizer).toBe(user._id.toString());
+      // organizer is populated in the response (the UI renders organizer details)
+      expect(response.body.data.organizer._id).toBe(user._id.toString());
     });
 
     it('should not create trip without authentication', async () => {
@@ -123,7 +129,7 @@ describe('Trips Routes', () => {
     it('should update trip as organizer', async () => {
       const updateData = {
         title: 'Updated Trip Title',
-        budget: 10000,
+        estimatedCost: 10000,
       };
 
       const response = await request(app)
@@ -134,7 +140,7 @@ describe('Trips Routes', () => {
 
       expect(response.body.success).toBe(true);
       expect(response.body.data.title).toBe(updateData.title);
-      expect(response.body.data.budget).toBe(updateData.budget);
+      expect(response.body.data.estimatedCost).toBe(updateData.estimatedCost);
     });
 
     it('should not allow non-organizer to update trip', async () => {

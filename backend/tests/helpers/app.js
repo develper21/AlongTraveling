@@ -1,7 +1,10 @@
 const express = require('express');
 const cors = require('cors');
+const { errorHandler } = require('../../middleware/errorHandler');
 
-// Create test app
+// Create test app — call `setupErrorHandler(app)` AFTER mounting routes
+// so controller `next(error)` responses match the real server (400/404…,
+// not Express's default 500 HTML page).
 const createTestApp = () => {
   const app = express();
   app.use(cors());
@@ -9,4 +12,8 @@ const createTestApp = () => {
   return app;
 };
 
-module.exports = { createTestApp };
+const setupErrorHandler = (app) => {
+  app.use(errorHandler);
+};
+
+module.exports = { createTestApp, setupErrorHandler };

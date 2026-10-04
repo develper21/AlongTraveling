@@ -1,11 +1,12 @@
 const request = require('supertest');
-const { createTestApp } = require('./helpers/app');
+const { createTestApp, setupErrorHandler } = require('./helpers/app');
 const authRoutes = require('../routes/auth');
 const { testUtils } = require('./setup');
 
 // Create test app
 const app = createTestApp();
 app.use('/api/auth', authRoutes);
+setupErrorHandler(app);
 
 describe('Authentication Routes', () => {
   describe('POST /api/auth/register', () => {
