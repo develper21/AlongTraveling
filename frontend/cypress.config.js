@@ -13,9 +13,9 @@ module.exports = defineConfig({
     requestTimeout: 10000,
     responseTimeout: 10000,
     env: {
-      apiUrl: 'http://localhost:5000/api'
+      apiUrl: 'http://localhost:5000/api',
     },
-    setupNodeEvents(on, config) {
+    setupNodeEvents(_on, _config) {
       // implement node event listeners here
     },
   },

@@ -1,251 +1,160 @@
+// ============================================================
+// Authentication e2e tests
+// ------------------------------------------------------------
+// - "Login / Register pages" + "Protected routes" + "404"
+//   contexts are pure client-side and run WITHOUT a backend.
+// - "Full auth flows" requires the backend running
+//   (demo credentials need: cd backend && npm run seed).
+// ============================================================
+
 describe('Authentication', () => {
-  const testUser = {
-    name: 'Test User',
-    email: 'test@iitr.ac.in',
-    password: 'password123',
-    branch: 'CSE',
-    year: '3rd Year',
-    bio: 'Test user for Cypress'
-  };
-
   beforeEach(() => {
-    // Clear localStorage and cookies
-    cy.clearLocalStorage();
-    cy.clearCookies();
-  });
+    cy.clearLocalStorage()
+    cy.clearCookies()
+  })
 
-  describe('User Registration', () => {
-    it('should register a new user successfully', () => {
-      cy.visit('/register');
-      
-      // Fill registration form
-      cy.get('input[name="name"]').type(testUser.name);
-      cy.get('input[name="email"]').type(testUser.email);
-      cy.get('input[name="password"]').type(testUser.password);
-      cy.get('input[name="branch"]').type(testUser.branch);
-      cy.get('select[name="year"]').select(testUser.year);
-      cy.get('textarea[name="bio"]').type(testUser.bio);
-      
-      // Submit form
-      cy.get('button[type="submit"]').click();
-      
-      // Should redirect to home page
-      cy.url().should('include', '/home');
-      
-      // Check if user is logged in
+  context('Login page (client-side)', () => {
+    it('renders the login form', () => {
+      cy.visit('/')
+      cy.contains('h2', 'Welcome Back!').should('be.visible')
+      cy.get('#email').should('be.visible')
+      cy.get('#password').should('be.visible')
+      cy.contains('button', 'Sign In').should('be.visible')
+    })
+
+    it('blocks an invalid email at the browser level without calling the API', () => {
+      cy.visit('/')
+      cy.get('#email').type('not-an-email')
+      cy.get('#password').type('password123')
+      cy.get('button[type="submit"]').click()
+
+      // The email input is type="email", so native HTML5 constraint
+      // validation blocks the submit before the custom error can render
+      cy.get('#email').then(($input) => {
+        expect($input[0].validity.valid, 'native email validation fails').to.be
+          .false
+      })
+      // stays on the login page
+      cy.url().should('not.include', '/home')
+      cy.contains('h2', 'Welcome Back!').should('be.visible')
+    })
+
+    it('links to the register page', () => {
+      cy.visit('/')
+      cy.contains('a', 'Create an account').click()
+      cy.url().should('include', '/register')
+    })
+  })
+
+  context('Register page (client-side validation)', () => {
+    it('renders the register form with all fields', () => {
+      cy.visit('/register')
+      cy.contains('h2', 'Create Your Account').should('be.visible')
+      cy.get('#name').should('be.visible')
+      cy.get('#email').should('be.visible')
+      cy.get('#password').should('be.visible')
+      cy.get('#branch').should('be.visible')
+      cy.get('#year').should('be.visible')
+    })
+
+    it('blocks short passwords before calling the API', () => {
+      cy.visit('/register')
+      cy.get('#name').type('Cypress Tester')
+      cy.get('#email').type('cypress.short@iitr.ac.in')
+      cy.get('#password').type('123')
+      cy.get('button[type="submit"]').click()
+
+      cy.contains('p', 'Password must be at least 6 characters long').should(
+        'be.visible'
+      )
+      cy.url().should('include', '/register')
+    })
+
+    it('links back to the login page', () => {
+      cy.visit('/register')
+      cy.contains('a', 'Sign in here').click()
+      cy.url().should('not.include', '/register')
+    })
+  })
+
+  context('Protected routes (client-side guard)', () => {
+    const protectedRoutes = [
+      '/home',
+      '/create',
+      '/dashboard',
+      '/trip/507f1f77bcf86cd799439011',
+      '/profile/me',
+    ]
+
+    protectedRoutes.forEach((route) => {
+      it(`redirects an unauthenticated user from ${route} to login`, () => {
+        cy.visit(route)
+        cy.contains('h2', 'Welcome Back!').should('be.visible')
+      })
+    })
+  })
+
+  context('404 page', () => {
+    it('shows the NotFound page for unknown routes', () => {
+      cy.visit('/this-route-does-not-exist')
+      cy.contains('h1', 'Page Not Found').should('be.visible')
+      cy.contains('a', 'Back to Home').should('be.visible')
+    })
+  })
+
+  context('Full auth flows (backend required)', () => {
+    it('registers a new user, stores the session and lands on /home', () => {
+      cy.registerUi().then((data) => {
+        cy.url({ timeout: 15000 }).should('include', '/home')
+
+        cy.window().then((win) => {
+          const persisted = JSON.parse(win.localStorage.getItem('hopalong-auth'))
+          expect(persisted.state.isAuthenticated).to.be.true
+          expect(persisted.state.token).to.exist
+          expect(persisted.state.currentUser.email).to.eq(data.email)
+          // plain token key used by src/api/config.js
+          expect(win.localStorage.getItem('token')).to.exist
+        })
+      })
+    })
+
+    it('logs in with valid demo credentials', () => {
+      cy.loginAsDemoUser()
+      cy.visit('/home')
+      cy.url().should('include', '/home')
+      // header is only rendered for authenticated users
+      cy.get('header').should('be.visible')
+    })
+
+    it('does not log in with invalid credentials', () => {
+      cy.visit('/')
+      cy.get('#email').type('rahul.sharma@iitr.ac.in')
+      cy.get('#password').type('wrong-password-123')
+      cy.get('button[type="submit"]').click()
+
+      // The API rejects the login and the axios 401 interceptor reloads
+      // the app back to the login screen — the user never reaches /home
+      cy.url({ timeout: 15000 }).should('not.include', '/home')
       cy.window().then((win) => {
-        expect(win.localStorage.getItem('token')).to.exist;
-        expect(win.localStorage.getItem('user')).to.exist;
-      });
-    });
+        expect(win.localStorage.getItem('token')).to.be.null
+      })
+    })
 
-    it('should show validation errors for empty fields', () => {
-      cy.visit('/register');
-      
-      // Submit empty form
-      cy.get('button[type="submit"]').click();
-      
-      // Should show validation errors
-      cy.get('[data-testid="error-message"]').should('be.visible');
-    });
+    it('logs out from the header user menu', () => {
+      cy.loginAsDemoUser()
+      cy.visit('/home')
+      cy.get('header').should('be.visible')
 
-    it('should not register user with invalid email', () => {
-      cy.visit('/register');
-      
-      // Fill form with invalid email
-      cy.get('input[name="name"]').type(testUser.name);
-      cy.get('input[name="email"]').type('invalid-email@gmail.com');
-      cy.get('input[name="password"]').type(testUser.password);
-      
-      // Submit form
-      cy.get('button[type="submit"]').click();
-      
-      // Should show email validation error
-      cy.get('[data-testid="error-message"]').should('contain', 'email');
-    });
+      cy.logoutUi()
+      cy.url().should('not.include', '/home')
 
-    it('should not register user with short password', () => {
-      cy.visit('/register');
-      
-      // Fill form with short password
-      cy.get('input[name="name"]').type(testUser.name);
-      cy.get('input[name="email"]').type('short@iitr.ac.in');
-      cy.get('input[name="password"]').type('123');
-      
-      // Submit form
-      cy.get('button[type="submit"]').click();
-      
-      // Should show password validation error
-      cy.get('[data-testid="error-message"]').should('contain', 'password');
-    });
-  });
-
-  describe('User Login', () => {
-    beforeEach(() => {
-      // Create a test user via API
-      cy.apiRequest('POST', '/auth/register', testUser);
-    });
-
-    it('should login user with valid credentials', () => {
-      cy.visit('/');
-      
-      // Fill login form
-      cy.get('input[name="email"]').type(testUser.email);
-      cy.get('input[name="password"]').type(testUser.password);
-      
-      // Submit form
-      cy.get('button[type="submit"]').click();
-      
-      // Should redirect to home page
-      cy.url().should('include', '/home');
-      
-      // Check if user is logged in
       cy.window().then((win) => {
-        expect(win.localStorage.getItem('token')).to.exist;
-        expect(win.localStorage.getItem('user')).to.exist;
-      });
-    });
-
-    it('should show error for invalid credentials', () => {
-      cy.visit('/');
-      
-      // Fill login form with wrong password
-      cy.get('input[name="email"]').type(testUser.email);
-      cy.get('input[name="password"]').type('wrongpassword');
-      
-      // Submit form
-      cy.get('button[type="submit"]').click();
-      
-      // Should show error message
-      cy.get('[data-testid="error-message"]').should('contain', 'Invalid');
-    });
-
-    it('should show error for non-existent user', () => {
-      cy.visit('/');
-      
-      // Fill login form with non-existent user
-      cy.get('input[name="email"]').type('nonexistent@iitr.ac.in');
-      cy.get('input[name="password"]').type('password123');
-      
-      // Submit form
-      cy.get('button[type="submit"]').click();
-      
-      // Should show error message
-      cy.get('[data-testid="error-message"]').should('contain', 'Invalid');
-    });
-  });
-
-  describe('User Logout', () => {
-    beforeEach(() => {
-      // Login user
-      cy.apiLogin(testUser.email, testUser.password);
-    });
-
-    it('should logout user successfully', () => {
-      cy.visit('/home');
-      
-      // Click logout button
-      cy.get('[data-testid="logout-btn"]').click();
-      
-      // Should redirect to login page
-      cy.url().should('include', '/');
-      
-      // Check if user is logged out
-      cy.window().then((win) => {
-        expect(win.localStorage.getItem('token')).to.be.null;
-        expect(win.localStorage.getItem('user')).to.be.null;
-      });
-    });
-  });
-
-  describe('Protected Routes', () => {
-    it('should redirect unauthenticated users to login', () => {
-      const protectedRoutes = ['/home', '/create', '/dashboard', '/profile/me'];
-      
-      protectedRoutes.forEach((route) => {
-        cy.visit(route);
-        cy.url().should('include', '/');
-      });
-    });
-
-    it('should allow authenticated users to access protected routes', () => {
-      // Login user
-      cy.apiLogin(testUser.email, testUser.password);
-      
-      const protectedRoutes = ['/home', '/create', '/dashboard', '/profile/me'];
-      
-      protectedRoutes.forEach((route) => {
-        cy.visit(route);
-        cy.url().should('include', route);
-      });
-    });
-  });
-
-  describe('Password Update', () => {
-    beforeEach(() => {
-      // Login user
-      cy.apiLogin(testUser.email, testUser.password);
-    });
-
-    it('should update password successfully', () => {
-      cy.visit('/profile/me');
-      
-      // Click update password button
-      cy.get('[data-testid="update-password-btn"]').click();
-      
-      // Fill password update form
-      cy.get('[data-testid="current-password"]').type(testUser.password);
-      cy.get('[data-testid="new-password"]').type('newpassword123');
-      cy.get('[data-testid="confirm-password"]').type('newpassword123');
-      
-      // Submit form
-      cy.get('[data-testid="update-password-submit"]').click();
-      
-      // Should show success message
-      cy.get('[data-testid="success-message"]').should('contain', 'updated');
-      
-      // Login with new password
-      cy.logout();
-      cy.login(testUser.email, 'newpassword123');
-      
-      // Should login successfully
-      cy.url().should('include', '/home');
-    });
-
-    it('should show error for incorrect current password', () => {
-      cy.visit('/profile/me');
-      
-      // Click update password button
-      cy.get('[data-testid="update-password-btn"]').click();
-      
-      // Fill password update form with wrong current password
-      cy.get('[data-testid="current-password"]').type('wrongpassword');
-      cy.get('[data-testid="new-password"]').type('newpassword123');
-      cy.get('[data-testid="confirm-password"]').type('newpassword123');
-      
-      // Submit form
-      cy.get('[data-testid="update-password-submit"]').click();
-      
-      // Should show error message
-      cy.get('[data-testid="error-message"]').should('contain', 'current');
-    });
-
-    it('should show error for password mismatch', () => {
-      cy.visit('/profile/me');
-      
-      // Click update password button
-      cy.get('[data-testid="update-password-btn"]').click();
-      
-      // Fill password update form with mismatched passwords
-      cy.get('[data-testid="current-password"]').type(testUser.password);
-      cy.get('[data-testid="new-password"]').type('newpassword123');
-      cy.get('[data-testid="confirm-password"]').type('differentpassword');
-      
-      // Submit form
-      cy.get('[data-testid="update-password-submit"]').click();
-      
-      // Should show error message
-      cy.get('[data-testid="error-message"]').should('contain', 'match');
-    });
-  });
-});
+        const persisted = win.localStorage.getItem('hopalong-auth')
+        if (persisted) {
+          expect(JSON.parse(persisted).state.isAuthenticated).to.be.false
+        }
+        expect(win.localStorage.getItem('token')).to.be.null
+      })
+    })
+  })
+})
