@@ -9,7 +9,9 @@ const User = require('../models/User');
  */
 exports.sendRequest = async (req, res, next) => {
   try {
-    const { tripId, message } = req.body;
+    // Accept both `tripId` and `trip` keys (the frontend api.js sends both)
+    const tripId = req.body.tripId || req.body.trip;
+    const { message } = req.body;
 
     // Check if trip exists
     const trip = await Trip.findById(tripId);
@@ -87,29 +89,38 @@ exports.sendRequest = async (req, res, next) => {
  * @route   GET /api/requests/trip/:tripId
  * @access  Private
  */
-exports.getRequestsForTrip = async (req, res, _next) => {
+exports.getRequestsForTrip = async (req, res, next) => {
   try {
     const tripId = req.params.tripId || req.params.id;
 
-    // Just fetch requests without checking if trip exists
-    // This allows requests to be fetched even if trip validation fails
+    // Fetch the trip to enforce organizer-only access (documented access:
+    // "Private (Owner)")
+    const trip = await Trip.findById(tripId);
+    if (!trip) {
+      return res.status(404).json({
+        success: false,
+        error: 'Trip not found',
+      });
+    }
+
+    if (trip.organizer.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        error: 'Not authorized to view requests for this trip',
+      });
+    }
+
     const requests = await JoinRequest.find({ trip: tripId })
       .populate('user', 'name email avatar branch year bio')
-      .sort('-createdAt')
-      .catch(() => []); // Return empty array if query fails
+      .sort('-createdAt');
 
     res.status(200).json({
       success: true,
       count: requests.length,
-      data: requests || [],
+      data: requests,
     });
   } catch (error) {
-    // Return empty requests instead of error
-    res.status(200).json({
-      success: true,
-      count: 0,
-      data: [],
-    });
+    next(error);
   }
 };
 
